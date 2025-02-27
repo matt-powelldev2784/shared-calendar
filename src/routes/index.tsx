@@ -33,8 +33,8 @@ function App() {
     start: startOfMonth(new Date()),
     end: endOfMonth(new Date()),
   }).map((date) => ({
-    dayName: format(date, "EEE"), // Short day name (e.g., Mon, Tue)
-    dayDate: format(date, "d"), // Day of the month (e.g., 1, 2, 3)
+    dayName: format(date, "EEE"), // day of week (e.g., Mon, Tue, Wed)
+    dayDate: format(date, "d"), // day of  month (e.g., 1, 2, 3)
   }));
 
   return (
@@ -65,16 +65,20 @@ function App() {
         <CarouselNext className="mr-2" />
       </Carousel>
 
-      <div className="relative block w-full bg-red-500">
-        <Carousel className="mx-auto mt-2 w-full max-w-8/12">
+      <div className="relative block w-full">
+        <Carousel className="mx-auto mt-2 max-w-8/12 sm:max-w-20/24">
           <CarouselContent>
             {daysInMonth.map((date) => {
               return (
-                <CarouselItem className="basis-1/14 text-center">
-                  <Button variant="dayButton" size="dayButton">
+                <CarouselItem className="flex h-16 w-16 basis-14 items-center justify-center border-1 border-green-500 text-center">
+                  <button className="flex h-full w-full cursor-pointer flex-col items-center justify-center border-1 border-red-500">
+                    <span>{date.dayDate}</span>
+                    <span>{date.dayName}</span>
+                  </button>
+                  {/* <Button variant="dayButton" size="dayButton">
                     <span className="h-2">{date.dayDate}</span>
                     <span>{date.dayName}</span>
-                  </Button>
+                  </Button> */}
                 </CarouselItem>
               );
             })}
