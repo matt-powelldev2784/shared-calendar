@@ -54,6 +54,7 @@ function Carousel({
       ...opts,
       axis: orientation === "horizontal" ? "x" : "y",
       containScroll: "trimSnaps",
+      skipSnaps: true,
     },
     plugins,
   );
