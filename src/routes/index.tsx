@@ -66,12 +66,12 @@ function App() {
       </Carousel>
 
       <div className="relative block w-full">
-        <Carousel className="mx-auto mt-2 max-w-8/12 sm:max-w-20/24">
-          <CarouselContent>
+        <Carousel className="mx-auto mt-2 max-w-8/12 sm:max-w-20/24 lg:max-w-24/24">
+          <CarouselContent className="">
             {daysInMonth.map((date) => {
               return (
-                <CarouselItem className="flex h-16 w-16 basis-14 items-center justify-center border-1 border-green-500 text-center">
-                  <button className="flex h-full w-full cursor-pointer flex-col items-center justify-center border-1 border-red-500">
+                <CarouselItem className="pl-2 flex h-16 basis-13 items-center justify-center border-1 border-green-500 text-center">
+                  <button className="flex h-full w-full cursor-pointer flex-col items-center justify-center border-1 border-red-500 bg-blue-500">
                     <span>{date.dayDate}</span>
                     <span>{date.dayName}</span>
                   </button>
