@@ -20,14 +20,17 @@ const buttonVariants = cva(
         ghost: "hover:bg-accent hover:text-accent-foreground cursor-pointer",
         link: "text-primary underline-offset-4 hover:underline cursor-pointer",
         monthButton:
-          "cursor-pointer border-x-1 border-grey-500 w-full rounded-none text-[11px] sm:text-sm text-wrap",
+          "cursor-pointer border-1 border-grey-500 w-full rounded-none text-[11px] sm:text-sm",
+        dayButton:
+          "cursor-pointer w-full text-[11px] sm:text-sm flex flex-col bg-[#496d96] text-white",
       },
       size: {
         default: "h-9 px-4 py-2 has-[>svg]:px-3",
         sm: "h-8 rounded-md px-3 has-[>svg]:px-2.5",
         lg: "h-10 rounded-md px-6 has-[>svg]:px-4",
         icon: "size-9",
-        monthButton: "h-9 py-2 has-[>svg]:px-3 ",
+        monthButton: "h-9 py-2 has-[>svg]:px-3",
+        dayButton: "h-12 w-8 px-6 has-[>svg]:px-3",
       },
     },
     defaultVariants: {
