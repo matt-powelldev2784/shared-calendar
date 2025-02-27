@@ -20,7 +20,7 @@ const buttonVariants = cva(
         ghost: "hover:bg-accent hover:text-accent-foreground cursor-pointer",
         link: "text-primary underline-offset-4 hover:underline cursor-pointer",
         monthButton:
-          "cursor-pointer border-1 border-grey-500 w-full rounded-none text-[11px] sm:text-sm text-wrap",
+          "cursor-pointer border-x-1 border-grey-500 w-full rounded-none text-[11px] sm:text-sm text-wrap",
       },
       size: {
         default: "h-9 px-4 py-2 has-[>svg]:px-3",
