@@ -8,6 +8,7 @@ import {
   CarouselPrevious,
 } from "@/components/ui/carousel";
 import { eachDayOfInterval, endOfMonth, format, startOfMonth } from "date-fns";
+import { useEffect } from "react";
 
 export const Route = createFileRoute("/")({
   component: App,
@@ -30,12 +31,16 @@ const months = [
 
 function App() {
   const daysInMonth = eachDayOfInterval({
-    start: startOfMonth(new Date()),
-    end: endOfMonth(new Date()),
+    start: startOfMonth(new Date("2022-01-01")),
+    end: endOfMonth(new Date("2022-01-31")),
   }).map((date) => ({
     dayName: format(date, "EEE"), // day of week (e.g., Mon, Tue, Wed)
     dayDate: format(date, "d"), // day of  month (e.g., 1, 2, 3)
   }));
+
+  useEffect(() => {
+    console.log("window.innerWidth:", window.innerWidth);
+  }, []);
 
   return (
     <nav className="flex w-screen flex-col items-center">
@@ -65,28 +70,22 @@ function App() {
         <CarouselNext className="mr-2" />
       </Carousel>
 
-      <div className="relative block w-full">
-        <Carousel className="mx-auto mt-2 max-w-8/12 sm:max-w-20/24 lg:max-w-24/24">
-          <CarouselContent className="">
-            {daysInMonth.map((date) => {
-              return (
-                <CarouselItem className="pl-2 flex h-16 basis-13 items-center justify-center border-1 border-green-500 text-center">
-                  <button className="flex h-full w-full cursor-pointer flex-col items-center justify-center border-1 border-red-500 bg-blue-500">
-                    <span>{date.dayDate}</span>
-                    <span>{date.dayName}</span>
-                  </button>
-                  {/* <Button variant="dayButton" size="dayButton">
-                    <span className="h-2">{date.dayDate}</span>
-                    <span>{date.dayName}</span>
-                  </Button> */}
-                </CarouselItem>
-              );
-            })}
-          </CarouselContent>
-          <CarouselPrevious className="ml-2" />
-          <CarouselNext className="mr-2" />
-        </Carousel>
-      </div>
+      <Carousel className="w-full">
+        <CarouselContent className="wide:justify-center mx-2">
+          {daysInMonth.map((date) => {
+            return (
+              <CarouselItem className="flex h-16 basis-12 items-center justify-center text-center">
+                <button className="flex h-full w-full cursor-pointer flex-col items-center justify-center rounded bg-blue-500 text-white">
+                  <span className="font-bold">{date.dayDate}</span>
+                  <span className="text-xs">{date.dayName}</span>
+                </button>
+              </CarouselItem>
+            );
+          })}
+        </CarouselContent>
+        {/* <CarouselPrevious className="ml-2" />
+          <CarouselNext className="mr-2" /> */}
+      </Carousel>
     </nav>
   );
 }
