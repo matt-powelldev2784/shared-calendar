@@ -75,10 +75,10 @@ function App() {
           {daysInMonth.map((date) => {
             return (
               <CarouselItem className="flex h-16 basis-12 items-center justify-center text-center">
-                <button className="flex h-full w-full cursor-pointer flex-col items-center justify-center rounded bg-blue-500 text-white">
+                <Button variant="dayButtonDefault" size="dayButton">
                   <span className="font-bold">{date.dayDate}</span>
                   <span className="text-xs">{date.dayName}</span>
-                </button>
+                </Button>
               </CarouselItem>
             );
           })}
