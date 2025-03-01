@@ -9,18 +9,18 @@ import {
 import { eachDayOfInterval, endOfMonth, format, startOfMonth } from "date-fns";
 
 const months = [
-  "Jan",
-  "Feb",
-  "Mar",
-  "Apr",
+  "January",
+  "February",
+  "March",
+  "April",
   "May",
-  "Jun",
-  "Jul",
-  "Aug",
-  "Sep",
-  "Oct",
-  "Nov",
-  "Dec",
+  "June",
+  "July",
+  "August",
+  "September",
+  "October",
+  "November",
+  "December",
 ];
 
 export const Calendar = () => {
@@ -37,11 +37,11 @@ export const Calendar = () => {
       <Carousel className="mt-1 mr-2 w-full">
         <CarouselContent className="mx-2">
           {months.map((month) => {
-            if (month === "Jan") {
+            if (month === "January") {
               return (
                 <CarouselItem className="text-center md:basis-1/12">
                   <Button variant="monthButtonSelected" size="monthButton">
-                    {month}
+                    {month.slice(0, 3)}
                   </Button>
                 </CarouselItem>
               );
@@ -49,7 +49,7 @@ export const Calendar = () => {
               return (
                 <CarouselItem className="text-center md:basis-1/12">
                   <Button variant="monthButtonDefault" size="monthButton">
-                    {month}
+                    {month.slice(0, 3)}
                   </Button>
                 </CarouselItem>
               );
