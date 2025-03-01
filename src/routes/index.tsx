@@ -6,5 +6,9 @@ export const Route = createFileRoute("/")({
 });
 
 function App() {
-  return <CalendarNavigation />;
+  return (
+    <>
+      <CalendarNavigation />
+    </>
+  );
 }
