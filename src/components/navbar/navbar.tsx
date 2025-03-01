@@ -1,5 +1,5 @@
 import { Button } from "../ui/button";
-import sharcLogoWhite from "../../assets/logo/sharc_logo_white.png";
+import sharcLogoWhite from "../../assets/logo/sharc_logo_white.svg";
 import downArrow from "../../assets/icons/down_arrow.svg";
 
 export const Navbar = () => {
