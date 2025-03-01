@@ -27,6 +27,7 @@ const buttonVariants = cva(
           "border-muted text-muted flex h-full w-full cursor-pointer flex-col items-center justify-center gap-1 rounded border-2",
         dayButtonSelected:
           "bg-primary text-white h-full w-full flex cursor-pointer flex-col items-center justify-center gap-1 rounded",
+        datePicker: "cursor-pointer",
       },
       size: {
         default: "h-9 px-4 py-2 has-[>svg]:px-3",
