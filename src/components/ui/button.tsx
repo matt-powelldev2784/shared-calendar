@@ -19,10 +19,14 @@ const buttonVariants = cva(
           "bg-secondary text-secondary-foreground shadow-xs hover:bg-secondary/80 cursor-pointer",
         ghost: "hover:bg-accent hover:text-accent-foreground cursor-pointer",
         link: "text-primary underline-offset-4 hover:underline cursor-pointer",
-        monthButton:
-          "cursor-pointer border-1 border-grey-500 w-full rounded-none text-[11px] sm:text-sm",
-        dayButton:
-          "cursor-pointer text-[11px] sm:text-sm flex flex-col bg-[#496d96] text-white",
+        monthButtonDefault:
+          "cursor-pointer border-0 md:border-2 border-muted w-full text-lg md:text-sm text-muted",
+        monthButtonSelected:
+          "cursor-pointer md:bg-primary text-secondary md:text-white border-0 md:border-2 border-primary w-full text-lg md:text-sm bg-none",
+        dayButtonDefault:
+          "border-muted text-muted flex h-full w-full cursor-pointer flex-col items-center justify-center gap-1 rounded border-2",
+        dayButtonSelected:
+          "bg-primary text-white h-full w-full flex cursor-pointer flex-col items-center justify-center gap-1 rounded",
       },
       size: {
         default: "h-9 px-4 py-2 has-[>svg]:px-3",
@@ -30,7 +34,7 @@ const buttonVariants = cva(
         lg: "h-10 rounded-md px-6 has-[>svg]:px-4",
         icon: "size-9",
         monthButton: "h-9 py-2 has-[>svg]:px-3",
-        dayButton: "h-12 w-12 has-[>svg]:px-3",
+        dayButton: "h-12",
       },
     },
     defaultVariants: {
