@@ -34,7 +34,7 @@ export const Calendar = () => {
 
   return (
     <>
-      <Carousel className="mt-2 mr-2 w-full">
+      <Carousel className="mt-1 mr-2 w-full">
         <CarouselContent className="mx-2">
           {months.map((month) => {
             if (month === "Jan") {
