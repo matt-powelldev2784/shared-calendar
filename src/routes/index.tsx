@@ -51,13 +51,23 @@ function App() {
       <Carousel className="mt-2 mr-2 w-full">
         <CarouselContent className="mx-2">
           {months.map((month) => {
-            return (
-              <CarouselItem className="text-center md:basis-1/12">
-                <Button variant="monthButton" size="monthButton">
-                  {month}
-                </Button>
-              </CarouselItem>
-            );
+            if (month === "Jan") {
+              return (
+                <CarouselItem className="text-center md:basis-1/12">
+                  <Button variant="monthButtonSelected" size="monthButton">
+                    {month}
+                  </Button>
+                </CarouselItem>
+              );
+            } else {
+              return (
+                <CarouselItem className="text-center md:basis-1/12">
+                  <Button variant="monthButtonDefault" size="monthButton">
+                    {month}
+                  </Button>
+                </CarouselItem>
+              );
+            }
           })}
         </CarouselContent>
         <CarouselPrevious className="ml-2" />
