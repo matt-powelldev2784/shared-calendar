@@ -1,6 +1,10 @@
 import sharcLogoWhite from "../../assets/logo/sharc_logo_white.svg";
 import crossIconWhite from "../../assets/icons/cross_white.svg";
 import nineDotsIcon from "../../assets/icons/nine_dots.svg";
+import { Calendar as CalendarIcon } from "lucide-react";
+import { LogOut as LogOutIcon } from "lucide-react";
+import { Users as UsersIcon } from "lucide-react";
+import { CalendarPlus as CalendarPlusIcon } from "lucide-react";
 import { useEffect, useState } from "react";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "../../../firebaseConfig";
@@ -20,10 +24,30 @@ export const Navbar = () => {
       : "";
 
   const navItems = [
-    { id: 1, text: "Calendar", route: "/calendar" },
-    { id: 2, text: "Share Calendar", route: "/" },
-    { id: 3, text: "Add Calendar Entry", route: "/" },
-    { id: 4, text: "Sign Out", route: "/signout" },
+    {
+      id: 1,
+      text: "Calendar",
+      route: "/calendar",
+      icon: <CalendarIcon className="mr-2 h-6 w-6" />,
+    },
+    {
+      id: 2,
+      text: "Share Calendar",
+      route: "/",
+      icon: <UsersIcon className="mr-2 h-6 w-6" />,
+    },
+    {
+      id: 3,
+      text: "Add Calendar Entry",
+      route: "/",
+      icon: <CalendarPlusIcon className="mr-2 h-6 w-6" />,
+    },
+    {
+      id: 4,
+      text: "Sign Out",
+      route: "/signout",
+      icon: <LogOutIcon className="mr-2 h-6 w-6" />,
+    },
   ];
 
   // get user information from firebase
@@ -85,19 +109,23 @@ export const Navbar = () => {
       <ul
         className={
           menuIsOpen
-            ? "bg-primary fixed top-12 right-0 hidden max-h-[500px] w-[200px] overflow-hidden duration-500 ease-in-out md:block"
-            : "fixed top-12 right-0 hidden max-h-0 w-[200px] overflow-hidden duration-500 ease-in-out md:block"
+            ? "bg-primary fixed top-12 right-0 hidden max-h-[500px] w-[250px] overflow-hidden duration-500 ease-in-out md:block"
+            : "fixed top-12 right-0 hidden max-h-0 w-[250px] overflow-hidden duration-500 ease-in-out md:block"
         }
       >
         {/* Desktop Navigation Items */}
         {menuIsOpen &&
           navItems.map((item) => (
-            <li key={item.id} className="border-b border-white text-base">
+            <li
+              key={item.id}
+              className="flex items-center justify-center border-b border-white"
+            >
               <Link
                 to={item.route}
                 onClick={() => setMenuIsOpen(!menuIsOpen)}
-                className="block h-full w-full p-4 hover:bg-orange-400"
+                className="flex h-full w-full items-center justify-start p-4 text-base hover:bg-orange-400"
               >
+                {item.icon}
                 {item.text}
               </Link>
             </li>
@@ -126,8 +154,9 @@ export const Navbar = () => {
               <Link
                 to={item.route}
                 onClick={() => setMenuIsOpen(!menuIsOpen)}
-                className="block h-full w-full p-4 hover:bg-orange-400"
+                className="flex h-full w-full items-center justify-start p-4 hover:bg-orange-400"
               >
+                {item.icon}
                 {item.text}
               </Link>
             </li>
