@@ -28,6 +28,8 @@ const buttonVariants = cva(
         dayButtonSelected:
           "bg-primary text-white h-full w-full flex cursor-pointer flex-col items-center justify-center gap-1 rounded",
         datePicker: "cursor-pointer",
+        googleButton:
+          "bg-white text-secondary shadow-xs hover:bg-gray-100 border-2 border-secondary text-lg font-bold",
       },
       size: {
         default: "h-9 px-4 py-2 has-[>svg]:px-3",

@@ -2,21 +2,31 @@ import { signInWithPopup } from "firebase/auth";
 import { GoogleAuthProvider } from "firebase/auth";
 import { auth, db } from "../../../firebaseConfig";
 import { doc, getDoc, setDoc, updateDoc } from "firebase/firestore";
+import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import googleGIcon from "@/assets/icons/google_g_logo.svg";
 
 export const SignIn = () => {
   return (
-    <div className="mt-4 flex flex-row gap-2">
-      <button
-        type="button"
-        data-te-ripple-init
-        data-te-ripple-color="light"
-        className="mb-2 flex rounded px-6 py-2.5 text-xs leading-normal font-medium text-white uppercase shadow-md transition duration-150 ease-in-out hover:shadow-lg focus:shadow-lg focus:ring-0 focus:outline-none active:shadow-lg"
-        style={{ backgroundColor: "#ea4335" }}
-        onClick={SignUpWithGoogle}
-      >
-        Google
-      </button>
-    </div>
+    <Card className="mx-auto mt-4 w-[95%] max-w-[400px]">
+      <CardHeader>
+        <CardTitle>Sign In</CardTitle>
+      </CardHeader>
+
+      <CardContent className="h-12">
+        <Button
+          onClick={SignUpWithGoogle}
+          variant={"googleButton"}
+          className="h-full w-full"
+        >
+          <img src={googleGIcon} alt="Google Icon" className="h-6" />
+
+          <span className="flex-grow font-medium text-gray-800">
+            Sign in with Google
+          </span>
+        </Button>
+      </CardContent>
+    </Card>
   );
 };
 
