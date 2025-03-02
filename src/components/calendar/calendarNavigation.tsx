@@ -11,9 +11,15 @@ import { useState } from "react";
 
 export const CalendarNavigation = () => {
   const [date, setDate] = useState<Date | undefined>(new Date());
+  const [isCalendarOpen, setIsCalendarOpen] = useState(false);
+
+  const handleDateSelect = (selectedDate: Date) => {
+    setDate(selectedDate);
+    setIsCalendarOpen(false);
+  };
 
   return (
-    <Popover>
+    <Popover open={isCalendarOpen} onOpenChange={setIsCalendarOpen}>
       <PopoverTrigger asChild>
         <Button variant="datePicker" size="lg">
           <CalendarIcon className="mr-2 h-4 w-4" />
@@ -24,7 +30,7 @@ export const CalendarNavigation = () => {
         <Calendar
           mode="single"
           selected={date}
-          onSelect={setDate}
+          onDateSelect={handleDateSelect}
           initialFocus
         />
       </PopoverContent>
