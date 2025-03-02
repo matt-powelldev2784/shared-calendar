@@ -21,7 +21,7 @@ export const CalendarNavigation = () => {
   return (
     <Popover open={isCalendarOpen} onOpenChange={setIsCalendarOpen}>
       <PopoverTrigger asChild>
-        <Button variant="datePicker" size="lg">
+        <Button variant="datePicker" size="xl">
           <CalendarIcon className="mr-2 h-4 w-4" />
           {date ? format(date, "dd MMMM yyyy") : <span>Pick a date</span>}
         </Button>

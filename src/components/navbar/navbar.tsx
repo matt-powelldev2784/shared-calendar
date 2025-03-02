@@ -42,7 +42,7 @@ export const Navbar = () => {
   // if user is not logged in, display only the logo
   if (!userInfo) {
     return (
-      <nav className="bg-primary flex h-12 w-full items-center justify-between px-2 py-2 text-xl font-bold text-white md:px-4">
+      <nav className="bg-primary flex h-14 w-full items-center justify-between px-2 py-2 text-xl font-bold text-white md:h-12 md:px-4">
         <Link to="/" aria-label="Home">
           <img src={sharcLogoWhite} alt="sharc logo" className="h-8" />
         </Link>
@@ -51,7 +51,7 @@ export const Navbar = () => {
   }
 
   return (
-    <nav className="bg-primary flex h-12 w-full items-center justify-between px-2 text-xl font-bold text-white md:px-4">
+    <nav className="bg-primary flex h-14 w-full items-center justify-between px-2 text-xl font-bold text-white md:h-12 md:px-4">
       <div className="flex items-center">
         {/* Avatar */}
         <Link to="/signout" className="mr-2 ml-0 md:ml-1" aria-label="Sign out">
