@@ -23,8 +23,9 @@ function App() {
   }, [navigate]);
 
   return (
-    <>
+    <section className="flex h-full w-full items-center">
       <SignIn />
-    </>
+    </section>
   );
 }
+
