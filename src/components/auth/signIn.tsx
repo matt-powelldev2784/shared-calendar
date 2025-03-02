@@ -1,7 +1,7 @@
 import { signInWithPopup } from "firebase/auth";
 import { GoogleAuthProvider } from "firebase/auth";
 import { auth, db } from "../../../firebaseConfig";
-import { doc, setDoc } from "firebase/firestore";
+import { arrayUnion, doc, getDoc, setDoc, updateDoc } from "firebase/firestore";
 
 export const SignIn = () => {
   return (
@@ -35,19 +35,31 @@ const SignUpWithGoogle = async () => {
     const user = result.user;
     console.log(user, token);
 
-    // Store a document for the authenticated user
+    // get user document
     const userDocRef = doc(db, "users", user.uid);
-    await setDoc(userDocRef, {
-      name: user.displayName,
-      email: user.email,
-      createdAt: new Date(),
-    });
+    const userDoc = await getDoc(userDocRef);
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    console.log("user.uid", user.uid);
+
+    if (userDoc.exists()) {
+      // Update the user details on each login
+      await updateDoc(userDocRef, {
+        name: user.displayName,
+        email: user.email,
+      });
+    } else {
+      // Create a new user document if it doesn't exist
+      await setDoc(userDocRef, {
+        name: user.displayName,
+        email: user.email,
+        createdAt: new Date(),
+      });
+    }
   } catch (error: any) {
+    console.error("Error during sign-in:", error);
     const errorCode = error.code;
     const errorMessage = error.message;
-    const email = error.customData.email;
+    const email = error.customData?.email;
     const credential = GoogleAuthProvider.credentialFromError(error);
     console.log("errorCode", errorCode);
     console.log("errorMessage", errorMessage);

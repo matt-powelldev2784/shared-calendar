@@ -1,5 +1,5 @@
-import { CalendarNavigation } from "@/components/calendar/calendarNavigation";
 import { createFileRoute } from "@tanstack/react-router";
+import { SignIn } from "@/components/auth/signIn";
 
 export const Route = createFileRoute("/")({
   component: App,
@@ -8,7 +8,7 @@ export const Route = createFileRoute("/")({
 function App() {
   return (
     <>
-      <CalendarNavigation />
+      <SignIn />
     </>
   );
 }

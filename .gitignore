@@ -5,3 +5,4 @@ dist-ssr
 *.local
 _trash
 .env
+firestore.rules
