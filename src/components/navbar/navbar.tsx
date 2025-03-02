@@ -5,12 +5,19 @@ import { useEffect, useState } from "react";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "../../../firebaseConfig";
 import type { UserInfo } from "firebase/auth";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Link } from "@tanstack/react-router";
 
 export const Navbar = () => {
   const [navIsOpen, setNavIsOpen] = useState(false);
   const [userInfo, setUserInfo] = useState<UserInfo[] | undefined>();
+  const userInitials =
+    userInfo && userInfo[0].displayName
+      ? userInfo[0].displayName
+          ?.split(" ")
+          .map((name) => name[0].slice(0))
+          .join("")
+      : "";
 
   const handleNav = () => {
     setNavIsOpen(!navIsOpen);
@@ -36,20 +43,6 @@ export const Navbar = () => {
     return () => unsubscribe();
   }, []);
 
-  const test =
-    userInfo && userInfo[0]?.displayName
-      ? userInfo[0].displayName
-          ?.split(" ")
-          .map((name) => name[0].slice(0))
-          .join("")[0]
-      : "";
-
-  const test1 =
-    userInfo && userInfo[0]?.photoURL ? userInfo[0]?.photoURL : undefined;
-
-  console.log("test", test);
-  console.log("test1", test1);
-
   // if user is not logged in, display only the logo
   if (!userInfo) {
     return (
@@ -64,15 +57,11 @@ export const Navbar = () => {
   return (
     <nav className="bg-primary flex h-12 w-full items-center justify-between px-2 text-xl font-bold text-white md:px-4">
       <div className="flex items-center">
-        {}
+        {/* Avatar */}
         <Link to="/signout" className="mr-2 ml-0 md:ml-1">
           <Avatar className="h-9 w-9">
-            <AvatarImage src={userInfo[0]?.photoURL || undefined} />
             <AvatarFallback className="-translate-y-0.4 text-sm">
-              {userInfo[0].displayName
-                ?.split(" ")
-                .map((name) => name[0].slice(0))
-                .join("")}
+              {userInitials}
             </AvatarFallback>
           </Avatar>
         </Link>
@@ -123,7 +112,7 @@ export const Navbar = () => {
         {navItems.map((item) => (
           <li
             key={item.id}
-            className="cursor-pointer border-b border-white p-4 text-base duration-300 active:bg-orange-200"
+            className="cursor-pointer border-b border-white p-4 text-base duration-300 hover:bg-orange-400"
           >
             {item.text}
           </li>
