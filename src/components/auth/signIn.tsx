@@ -10,14 +10,15 @@ export const SignIn = () => {
   return (
     <Card className="mx-auto mt-4 w-[95%] max-w-[400px]">
       <CardHeader>
-        <CardTitle>Sign In</CardTitle>
+        <CardTitle className="text-center">Sign In</CardTitle>
       </CardHeader>
 
       <CardContent className="h-12">
         <Button
           onClick={SignUpWithGoogle}
-          variant={"googleButton"}
-          className="h-full w-full"
+          className="w-full"
+          variant="googleButton"
+          size="xl"
         >
           <img src={googleGIcon} alt="Google Icon" className="h-6" />
 

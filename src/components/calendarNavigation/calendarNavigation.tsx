@@ -1,7 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { format } from "date-fns";
 import { Calendar as CalendarIcon } from "lucide-react";
-import { cn } from "@/lib/utils";
 import { Calendar } from "@/components/ui/calendar";
 import {
   Popover,
@@ -12,25 +11,27 @@ import { useState } from "react";
 
 export const CalendarNavigation = () => {
   const [date, setDate] = useState<Date | undefined>(new Date());
+  const [isCalendarOpen, setIsCalendarOpen] = useState(false);
+
+  const handleDateSelect = (selectedDate: Date) => {
+    setDate(selectedDate);
+    setIsCalendarOpen(false);
+  };
 
   return (
-    <Popover>
+    <Popover open={isCalendarOpen} onOpenChange={setIsCalendarOpen}>
       <PopoverTrigger asChild>
-        <Button
-          variant={"datePicker"}
-          className={cn(
-            "border-secondary text-secondary mt-2 flex w-[96%] justify-center border-2 px-2 text-center font-bold md:max-w-96",
-          )}
-        >
+        <Button variant="datePicker" size="lg">
           <CalendarIcon className="mr-2 h-4 w-4" />
           {date ? format(date, "dd MMMM yyyy") : <span>Pick a date</span>}
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-auto p-0">
+
+      <PopoverContent className="w-auto">
         <Calendar
           mode="single"
           selected={date}
-          onSelect={setDate}
+          onDateSelect={handleDateSelect}
           initialFocus
         />
       </PopoverContent>

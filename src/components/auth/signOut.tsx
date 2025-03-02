@@ -1,5 +1,7 @@
 import { signOut as signoutFirebase } from "firebase/auth";
 import { auth } from "../../../firebaseConfig";
+import { Button } from "@/components/ui/button";
+import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 
 export const signOut = async () => {
   try {
@@ -12,17 +14,21 @@ export const signOut = async () => {
 
 export const SignOut = () => {
   return (
-    <div className="mt-4 flex flex-row gap-2">
-      <button
-        type="button"
-        data-te-ripple-init
-        data-te-ripple-color="light"
-        className="mb-2 flex rounded px-6 py-2.5 text-xs leading-normal font-medium text-white uppercase shadow-md transition duration-150 ease-in-out hover:shadow-lg focus:shadow-lg focus:ring-0 focus:outline-none active:shadow-lg"
-        style={{ backgroundColor: "#ea4335" }}
-        onClick={signOut}
-      >
-        Sign Out
-      </button>
-    </div>
+    <Card className="mx-auto mt-4 w-[95%] max-w-[400px]">
+      <CardHeader>
+        <CardTitle className="text-center">Sign Out</CardTitle>
+      </CardHeader>
+
+      <CardContent className="h-12">
+        <Button
+          onClick={signOut}
+          className="w-full"
+          variant="googleButton"
+          size="xl"
+        >
+          Sign Out
+        </Button>
+      </CardContent>
+    </Card>
   );
 };
