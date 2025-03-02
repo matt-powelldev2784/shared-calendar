@@ -9,7 +9,7 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Link } from "@tanstack/react-router";
 
 export const Navbar = () => {
-  const [navIsOpen, setNavIsOpen] = useState(false);
+  const [menuIsOpen, setMenuIsOpen] = useState(false);
   const [userInfo, setUserInfo] = useState<UserInfo[] | undefined>();
   const userInitials =
     userInfo && userInfo[0].displayName
@@ -18,10 +18,6 @@ export const Navbar = () => {
           .map((name) => name[0].slice(0))
           .join("")
       : "";
-
-  const handleNav = () => {
-    setNavIsOpen(!navIsOpen);
-  };
 
   const navItems = [
     { id: 1, text: "Calendar", route: "/calendar" },
@@ -74,11 +70,11 @@ export const Navbar = () => {
 
       {/* Desktop Navigation Icon */}
       <button
-        onClick={handleNav}
+        onClick={() => setMenuIsOpen(!menuIsOpen)}
         className="z-50 hidden md:block"
-        aria-label={navIsOpen ? "Close menu" : "Open menu"}
+        aria-label={menuIsOpen ? "Close menu" : "Open menu"}
       >
-        {navIsOpen ? (
+        {menuIsOpen ? (
           <img src={crossIconWhite} className="h-4 pr-3" alt="Close menu" />
         ) : (
           <img
@@ -92,30 +88,32 @@ export const Navbar = () => {
       {/* Desktop Navigation Menu */}
       <ul
         className={
-          navIsOpen
+          menuIsOpen
             ? "bg-primary fixed top-12 right-0 hidden max-h-[500px] w-[200px] overflow-hidden duration-500 ease-in-out md:block"
             : "fixed top-12 right-0 hidden max-h-0 w-[200px] overflow-hidden duration-500 ease-in-out md:block"
         }
       >
         {/* Desktop Navigation Items */}
-        {navIsOpen &&
+        {menuIsOpen &&
           navItems.map((item) => (
             <li
               key={item.id}
               className="z-190 cursor-pointer border-b border-white p-4 text-base duration-300 hover:bg-orange-400"
             >
-              <Link to={item.route}>{item.text}</Link>
+              <Link to={item.route} onClick={() => setMenuIsOpen(!menuIsOpen)}>
+                {item.text}
+              </Link>
             </li>
           ))}
       </ul>
 
       {/* Mobile Navigation Icon */}
       <button
-        onClick={handleNav}
+        onClick={() => setMenuIsOpen(!menuIsOpen)}
         className="z-50 block md:hidden"
-        aria-label={navIsOpen ? "Close menu" : "Open menu"}
+        aria-label={menuIsOpen ? "Close menu" : "Open menu"}
       >
-        {navIsOpen ? (
+        {menuIsOpen ? (
           <img src={crossIconWhite} className="h-4 pr-3" />
         ) : (
           <img src={nineDotsIcon} className="h-6 pr-2 md:hidden" />
@@ -125,7 +123,7 @@ export const Navbar = () => {
       {/* Mobile Navigation Menu */}
       <ul
         className={
-          navIsOpen
+          menuIsOpen
             ? "bg-primary fixed top-0 right-0 h-full w-full duration-500 ease-in-out md:hidden"
             : "fixed top-0 bottom-0 left-[-100%] w-[10%] duration-500 ease-in-out md:hidden"
         }
@@ -139,13 +137,15 @@ export const Navbar = () => {
 
         {/* Mobile Navigation Items */}
 
-        {navIsOpen &&
+        {menuIsOpen &&
           navItems.map((item) => (
             <li
               key={item.id}
               className="cursor-pointer border-b border-white p-4 text-base duration-300 hover:bg-orange-400"
             >
-              <Link to={item.route}>{item.text}</Link>
+              <Link to={item.route} onClick={() => setMenuIsOpen(!menuIsOpen)}>
+                {item.text}
+              </Link>
             </li>
           ))}
       </ul>
