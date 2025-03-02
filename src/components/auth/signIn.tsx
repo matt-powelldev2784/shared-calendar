@@ -39,7 +39,6 @@ const SignUpWithGoogle = async () => {
     const userDocRef = doc(db, "users", user.uid);
     const userDoc = await getDoc(userDocRef);
 
-    console.log("user.uid", user.uid);
 
     if (userDoc.exists()) {
       // Update the user details on each login
