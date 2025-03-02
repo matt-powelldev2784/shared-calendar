@@ -8,5 +8,12 @@
   "files.readonlyInclude": {
     "**/routeTree.gen.ts": true
   },
-  "cSpell.words": ["shadcn", "Sharc"]
+  "cSpell.words": [
+    "firebaseapp",
+    "firebasestorage",
+    "Firestore",
+    "shadcn",
+    "Sharc",
+    "VITE"
+  ]
 }

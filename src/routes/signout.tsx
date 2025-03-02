@@ -1,30 +1,26 @@
+import { SignOut } from "@/components/auth/signOut";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { useEffect } from "react";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "../../firebaseConfig";
-import { SignIn } from "@/components/auth/signIn";
+import { useEffect } from "react";
 
-export const Route = createFileRoute("/")({
-  component: App,
+export const Route = createFileRoute("/signout")({
+  component: SignOutPage,
 });
 
-function App() {
+function SignOutPage() {
   const navigate = useNavigate();
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
-      if (user) {
-        // if the user is signed in, redirect to the calendar
-        navigate({ to: "/calendar" });
+      if (!user) {
+        // if the user is not signed in, redirect to the home page
+        navigate({ to: "/" });
       }
     });
 
     return () => unsubscribe();
   }, [navigate]);
 
-  return (
-    <>
-      <SignIn />
-    </>
-  );
+  return <SignOut />;
 }
