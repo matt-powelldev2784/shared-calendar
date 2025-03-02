@@ -24,10 +24,10 @@ export const Navbar = () => {
   };
 
   const navItems = [
-    { id: 1, text: "Calendar" },
-    { id: 2, text: "Share Calendar" },
-    { id: 3, text: "Add Calendar Entry" },
-    { id: 4, text: "Contact" },
+    { id: 1, text: "Calendar", route: "/calendar" },
+    { id: 2, text: "Share Calendar", route: "/" },
+    { id: 3, text: "Add Calendar Entry", route: "/" },
+    { id: 4, text: "Sign Out", route: "/signout" },
   ];
 
   // get user information from firebase
@@ -104,7 +104,7 @@ export const Navbar = () => {
               key={item.id}
               className="z-190 cursor-pointer border-b border-white p-4 text-base duration-300 hover:bg-orange-400"
             >
-              <Link to="/">{item.text}</Link>
+              <Link to={item.route}>{item.text}</Link>
             </li>
           ))}
       </ul>
@@ -145,7 +145,7 @@ export const Navbar = () => {
               key={item.id}
               className="cursor-pointer border-b border-white p-4 text-base duration-300 hover:bg-orange-400"
             >
-              <Link to="/">{item.text}</Link>
+              <Link to={item.route}>{item.text}</Link>
             </li>
           ))}
       </ul>
