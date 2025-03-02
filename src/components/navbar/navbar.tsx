@@ -1,6 +1,6 @@
 import sharcLogoWhite from "../../assets/logo/sharc_logo_white.svg";
-import burgerIconWhite from "../../assets/icons/burger_icon_white.svg";
 import crossIconWhite from "../../assets/icons/cross_white.svg";
+import nineDotsIcon from "../../assets/icons/nine_dots.svg";
 import { useEffect, useState } from "react";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "../../../firebaseConfig";
@@ -46,7 +46,7 @@ export const Navbar = () => {
   // if user is not logged in, display only the logo
   if (!userInfo) {
     return (
-      <nav className="bg-primary flex w-full items-center justify-between px-2 py-2 text-xl font-bold text-white md:px-4">
+      <nav className="bg-primary flex h-12 w-full items-center justify-between px-2 py-2 text-xl font-bold text-white md:px-4">
         <Link to="/">
           <img src={sharcLogoWhite} alt="sharc logo" className="h-8" />
         </Link>
@@ -55,7 +55,7 @@ export const Navbar = () => {
   }
 
   return (
-    <nav className="bg-primary flex h-12 w-full items-center justify-between px-2 text-xl font-bold text-white md:px-4">
+    <nav className="bg-primary z-200 flex h-12 w-full items-center justify-between px-2 text-xl font-bold text-white md:px-4">
       <div className="flex items-center">
         {/* Avatar */}
         <Link to="/signout" className="mr-2 ml-0 md:ml-1">
@@ -66,18 +66,34 @@ export const Navbar = () => {
           </Avatar>
         </Link>
 
-        {/* Sharc Logo  */}
+        {/* Sharc Logo */}
         <Link to="/">
           <img src={sharcLogoWhite} alt="sharc logo" className="h-8" />
         </Link>
       </div>
 
-      {/* Desktop Navigation */}
-      <ul className="hidden flex-grow items-center justify-end md:flex">
+      {/* Desktop Navigation Icon */}
+      <div onClick={handleNav} className="z-50 hidden md:block">
+        {navIsOpen ? (
+          <img src={crossIconWhite} className="h-4 pr-3" />
+        ) : (
+          <img src={nineDotsIcon} className="hidden h-6 pr-2 md:block" />
+        )}
+      </div>
+
+      {/* Desktop Navigation Menu */}
+      <ul
+        className={
+          navIsOpen
+            ? "bg-primary fixed top-12 right-0 hidden max-h-[500px] w-[200px] overflow-hidden duration-500 ease-in-out md:block"
+            : "fixed top-12 right-0 hidden max-h-0 w-[200px] overflow-hidden duration-500 ease-in-out md:block"
+        }
+      >
+        {/* Desktop Navigation Items */}
         {navItems.map((item) => (
           <li
             key={item.id}
-            className="mx-2 cursor-pointer rounded-xl px-2 text-base font-normal duration-300"
+            className="z-190 cursor-pointer border-b border-white p-4 text-base duration-300 hover:bg-orange-400"
           >
             {item.text}
           </li>
@@ -87,9 +103,9 @@ export const Navbar = () => {
       {/* Mobile Navigation Icon */}
       <div onClick={handleNav} className="z-50 block md:hidden">
         {navIsOpen ? (
-          <img src={crossIconWhite} className="h-6 pr-2" />
+          <img src={crossIconWhite} className="h-4 pr-3" />
         ) : (
-          <img src={burgerIconWhite} className="h-6 pr-2 md:hidden" />
+          <img src={nineDotsIcon} className="h-6 pr-2 md:hidden" />
         )}
       </div>
 
@@ -97,7 +113,7 @@ export const Navbar = () => {
       <ul
         className={
           navIsOpen
-            ? "bg-primary fixed top-0 right-0 h-full w-full border-r border-r-gray-900 duration-500 ease-in-out md:hidden"
+            ? "bg-primary fixed top-0 right-0 h-full w-full duration-500 ease-in-out md:hidden"
             : "fixed top-0 bottom-0 left-[-100%] w-[10%] duration-500 ease-in-out md:hidden"
         }
       >
