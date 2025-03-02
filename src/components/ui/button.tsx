@@ -30,7 +30,6 @@ const buttonVariants = cva(
         lg: "h-10 rounded-md px-6 has-[>svg]:px-4",
         xl: "h-12 rounded-md px-6 has-[>svg]:px-4",
         icon: "size-9",
-        dayButton: "h-12",
       },
     },
     defaultVariants: {
