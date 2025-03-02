@@ -47,7 +47,7 @@ export const Navbar = () => {
   if (!userInfo) {
     return (
       <nav className="bg-primary flex h-12 w-full items-center justify-between px-2 py-2 text-xl font-bold text-white md:px-4">
-        <Link to="/">
+        <Link to="/" aria-label="Home">
           <img src={sharcLogoWhite} alt="sharc logo" className="h-8" />
         </Link>
       </nav>
@@ -58,7 +58,7 @@ export const Navbar = () => {
     <nav className="bg-primary z-200 flex h-12 w-full items-center justify-between px-2 text-xl font-bold text-white md:px-4">
       <div className="flex items-center">
         {/* Avatar */}
-        <Link to="/signout" className="mr-2 ml-0 md:ml-1">
+        <Link to="/signout" className="mr-2 ml-0 md:ml-1" aria-label="Sign out">
           <Avatar className="h-9 w-9">
             <AvatarFallback className="-translate-y-0.4 text-sm">
               {userInitials}
@@ -67,19 +67,27 @@ export const Navbar = () => {
         </Link>
 
         {/* Sharc Logo */}
-        <Link to="/">
+        <Link to="/" aria-label="Home">
           <img src={sharcLogoWhite} alt="sharc logo" className="h-8" />
         </Link>
       </div>
 
       {/* Desktop Navigation Icon */}
-      <div onClick={handleNav} className="z-50 hidden md:block">
+      <button
+        onClick={handleNav}
+        className="z-50 hidden md:block"
+        aria-label={navIsOpen ? "Close menu" : "Open menu"}
+      >
         {navIsOpen ? (
-          <img src={crossIconWhite} className="h-4 pr-3" />
+          <img src={crossIconWhite} className="h-4 pr-3" alt="Close menu" />
         ) : (
-          <img src={nineDotsIcon} className="hidden h-6 pr-2 md:block" />
+          <img
+            src={nineDotsIcon}
+            className="hidden h-6 pr-2 md:block"
+            alt="Open menu"
+          />
         )}
-      </div>
+      </button>
 
       {/* Desktop Navigation Menu */}
       <ul
@@ -90,24 +98,29 @@ export const Navbar = () => {
         }
       >
         {/* Desktop Navigation Items */}
-        {navItems.map((item) => (
-          <li
-            key={item.id}
-            className="z-190 cursor-pointer border-b border-white p-4 text-base duration-300 hover:bg-orange-400"
-          >
-            {item.text}
-          </li>
-        ))}
+        {navIsOpen &&
+          navItems.map((item) => (
+            <li
+              key={item.id}
+              className="z-190 cursor-pointer border-b border-white p-4 text-base duration-300 hover:bg-orange-400"
+            >
+              <Link to="/">{item.text}</Link>
+            </li>
+          ))}
       </ul>
 
       {/* Mobile Navigation Icon */}
-      <div onClick={handleNav} className="z-50 block md:hidden">
+      <button
+        onClick={handleNav}
+        className="z-50 block md:hidden"
+        aria-label={navIsOpen ? "Close menu" : "Open menu"}
+      >
         {navIsOpen ? (
           <img src={crossIconWhite} className="h-4 pr-3" />
         ) : (
           <img src={nineDotsIcon} className="h-6 pr-2 md:hidden" />
         )}
-      </div>
+      </button>
 
       {/* Mobile Navigation Menu */}
       <ul
@@ -125,14 +138,16 @@ export const Navbar = () => {
         />
 
         {/* Mobile Navigation Items */}
-        {navItems.map((item) => (
-          <li
-            key={item.id}
-            className="cursor-pointer border-b border-white p-4 text-base duration-300 hover:bg-orange-400"
-          >
-            {item.text}
-          </li>
-        ))}
+
+        {navIsOpen &&
+          navItems.map((item) => (
+            <li
+              key={item.id}
+              className="cursor-pointer border-b border-white p-4 text-base duration-300 hover:bg-orange-400"
+            >
+              <Link to="/">{item.text}</Link>
+            </li>
+          ))}
       </ul>
     </nav>
   );
