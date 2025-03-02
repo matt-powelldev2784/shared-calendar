@@ -92,11 +92,12 @@ export const Navbar = () => {
         {/* Desktop Navigation Items */}
         {menuIsOpen &&
           navItems.map((item) => (
-            <li
-              key={item.id}
-              className="z-190 cursor-pointer border-b border-white p-4 text-base duration-300 hover:bg-orange-400"
-            >
-              <Link to={item.route} onClick={() => setMenuIsOpen(!menuIsOpen)}>
+            <li key={item.id} className="border-b border-white text-base">
+              <Link
+                to={item.route}
+                onClick={() => setMenuIsOpen(!menuIsOpen)}
+                className="block h-full w-full p-4 hover:bg-orange-400"
+              >
                 {item.text}
               </Link>
             </li>
@@ -121,11 +122,12 @@ export const Navbar = () => {
         {/* Mobile Navigation Items */}
         {menuIsOpen &&
           navItems.map((item) => (
-            <li
-              key={item.id}
-              className="cursor-pointer border-b border-white p-4 text-base duration-300 hover:bg-orange-400"
-            >
-              <Link to={item.route} onClick={() => setMenuIsOpen(!menuIsOpen)}>
+            <li key={item.id} className="border-b border-white">
+              <Link
+                to={item.route}
+                onClick={() => setMenuIsOpen(!menuIsOpen)}
+                className="block h-full w-full p-4 hover:bg-orange-400"
+              >
                 {item.text}
               </Link>
             </li>
