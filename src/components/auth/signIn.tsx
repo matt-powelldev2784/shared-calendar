@@ -1,7 +1,7 @@
 import { signInWithPopup } from "firebase/auth";
 import { GoogleAuthProvider } from "firebase/auth";
 import { auth, db } from "../../../firebaseConfig";
-import { arrayUnion, doc, getDoc, setDoc, updateDoc } from "firebase/firestore";
+import { doc, getDoc, setDoc, updateDoc } from "firebase/firestore";
 
 export const SignIn = () => {
   return (
