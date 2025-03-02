@@ -7,7 +7,6 @@ https://sharc-shared-calendar.netlify.app
 
 Create shared calendar app with Tanstack CRA with file router, Tailwind, shadcn/ui and Firebase.
  
-- User can create an account
 - User can login with Google oAuth Provider
 - User add events to the calendar
 - User can see entries in a calendar
