@@ -32,7 +32,9 @@ export const Navbar = () => {
     },
     {
       id: 2,
-      text: "Share Calendar",
+      text: "Link Calendars",
+      description:
+        "Link your calendar with other users' accounts to view all linked calendars in a single, merged view. This allows you to easily manage and coordinate schedules across multiple users.",
       route: "/",
       icon: <UsersIcon className="mr-2 h-6 w-6" />,
     },
@@ -123,10 +125,18 @@ export const Navbar = () => {
               <Link
                 to={item.route}
                 onClick={() => setMenuIsOpen(!menuIsOpen)}
-                className="flex h-full w-full items-center justify-start p-4 text-base hover:bg-orange-400"
+                className="flex h-full w-full flex-col p-4 text-base hover:bg-orange-400"
               >
-                {item.icon}
-                {item.text}
+                <div className="flex items-center">
+                  {item.icon}
+                  {item.text}
+                </div>
+
+                {item.description && (
+                  <span className="text-grey-400 mt-2 text-xs font-medium">
+                    {item.description}
+                  </span>
+                )}
               </Link>
             </li>
           ))}
@@ -150,14 +160,25 @@ export const Navbar = () => {
         {/* Mobile Navigation Items */}
         {menuIsOpen &&
           navItems.map((item) => (
-            <li key={item.id} className="border-b border-white">
+            <li
+              key={item.id}
+              className="flex items-center justify-center border-b border-white"
+            >
               <Link
                 to={item.route}
                 onClick={() => setMenuIsOpen(!menuIsOpen)}
-                className="flex h-full w-full items-center justify-start p-4 hover:bg-orange-400"
+                className="flex h-full w-full flex-col p-4 text-base hover:bg-orange-400"
               >
-                {item.icon}
-                {item.text}
+                <div className="flex items-center">
+                  {item.icon}
+                  {item.text}
+                </div>
+
+                {item.description && (
+                  <span className="text-grey-400 mt-2 text-xs font-medium">
+                    {item.description}
+                  </span>
+                )}
               </Link>
             </li>
           ))}
