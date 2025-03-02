@@ -18,5 +18,5 @@ Create shared calendar app with Tanstack CRA with file router, Tailwind, shadcn/
 
 - npm install
 - npm start
-- project requires environment variable for firebase database
+- project requires environment variables for firebase database and authentication
 - project requires the authorized domain to be added to firebase for authentication
