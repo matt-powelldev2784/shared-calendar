@@ -26,6 +26,7 @@ export const CalendarNavigation = () => {
           {date ? format(date, "dd MMMM yyyy") : <span>Pick a date</span>}
         </Button>
       </PopoverTrigger>
+
       <PopoverContent className="w-auto">
         <Calendar
           mode="single"

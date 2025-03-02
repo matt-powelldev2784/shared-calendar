@@ -1,6 +1,5 @@
-import { CalendarNavigation } from "@/components/calendar/calendarNavigation";
+import { CalendarNavigation } from "@/components/calendarNavigation/calendarNavigation";
 import { createFileRoute } from "@tanstack/react-router";
-
 
 export const Route = createFileRoute("/calendar")({
   component: CalendarPage,
