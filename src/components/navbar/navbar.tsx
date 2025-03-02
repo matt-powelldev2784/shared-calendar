@@ -51,7 +51,7 @@ export const Navbar = () => {
   }
 
   return (
-    <nav className="bg-primary z-200 flex h-12 w-full items-center justify-between px-2 text-xl font-bold text-white md:px-4">
+    <nav className="bg-primary flex h-12 w-full items-center justify-between px-2 text-xl font-bold text-white md:px-4">
       <div className="flex items-center">
         {/* Avatar */}
         <Link to="/signout" className="mr-2 ml-0 md:ml-1" aria-label="Sign out">
@@ -71,17 +71,13 @@ export const Navbar = () => {
       {/* Desktop Navigation Icon */}
       <button
         onClick={() => setMenuIsOpen(!menuIsOpen)}
-        className="z-50 hidden md:block"
+        className="z-50"
         aria-label={menuIsOpen ? "Close menu" : "Open menu"}
       >
         {menuIsOpen ? (
           <img src={crossIconWhite} className="h-4 pr-3" alt="Close menu" />
         ) : (
-          <img
-            src={nineDotsIcon}
-            className="hidden h-6 pr-2 md:block"
-            alt="Open menu"
-          />
+          <img src={nineDotsIcon} className="h-6 pr-2" alt="Open menu" />
         )}
       </button>
 
@@ -107,19 +103,6 @@ export const Navbar = () => {
           ))}
       </ul>
 
-      {/* Mobile Navigation Icon */}
-      <button
-        onClick={() => setMenuIsOpen(!menuIsOpen)}
-        className="z-50 block md:hidden"
-        aria-label={menuIsOpen ? "Close menu" : "Open menu"}
-      >
-        {menuIsOpen ? (
-          <img src={crossIconWhite} className="h-4 pr-3" />
-        ) : (
-          <img src={nineDotsIcon} className="h-6 pr-2 md:hidden" />
-        )}
-      </button>
-
       {/* Mobile Navigation Menu */}
       <ul
         className={
@@ -136,7 +119,6 @@ export const Navbar = () => {
         />
 
         {/* Mobile Navigation Items */}
-
         {menuIsOpen &&
           navItems.map((item) => (
             <li
