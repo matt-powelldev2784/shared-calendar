@@ -2,7 +2,13 @@ import { signInWithPopup } from "firebase/auth";
 import { GoogleAuthProvider } from "firebase/auth";
 import { auth, db } from "../../../firebaseConfig";
 import { doc, getDoc, setDoc, updateDoc } from "firebase/firestore";
-import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardContent,
+  CardDescription,
+} from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import googleGIcon from "@/assets/icons/google_g_logo.svg";
 
@@ -11,6 +17,9 @@ export const SignIn = () => {
     <Card className="mx-auto mt-4 w-[95%] max-w-[400px]">
       <CardHeader>
         <CardTitle className="text-center">Sign In</CardTitle>
+        <CardDescription className="text-center">
+          Click the button below to sign in.
+        </CardDescription>
       </CardHeader>
 
       <CardContent className="h-12">

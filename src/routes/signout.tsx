@@ -22,5 +22,9 @@ function SignOutPage() {
     return () => unsubscribe();
   }, [navigate]);
 
-  return <SignOut />;
+  return (
+    <section className="flex h-full w-full items-center">
+      <SignOut />
+    </section>
+  );
 }
