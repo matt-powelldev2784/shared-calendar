@@ -1,7 +1,15 @@
 import { signInWithPopup } from "firebase/auth";
 import { GoogleAuthProvider } from "firebase/auth";
 import { auth, db } from "../../../firebaseConfig";
-import { doc, getDoc, setDoc, updateDoc } from "firebase/firestore";
+import {
+  addDoc,
+  arrayUnion,
+  collection,
+  doc,
+  getDoc,
+  setDoc,
+  updateDoc,
+} from "firebase/firestore";
 import {
   Card,
   CardHeader,
@@ -43,9 +51,7 @@ export const SignIn = () => {
 const SignUpWithGoogle = async () => {
   try {
     const provider = new GoogleAuthProvider();
-
     const result = await signInWithPopup(auth, provider);
-
     const credential = GoogleAuthProvider.credentialFromResult(result);
     if (!credential) {
       console.error("Error in user Credential");
@@ -59,19 +65,31 @@ const SignUpWithGoogle = async () => {
     const userDocRef = doc(db, "users", user.uid);
     const userDoc = await getDoc(userDocRef);
 
-
     if (userDoc.exists()) {
       // Update the user details on each login
       await updateDoc(userDocRef, {
         name: user.displayName,
-        email: user.email,
       });
     } else {
-      // Create a new user document if it doesn't exist
+      // Create a new user document
       await setDoc(userDocRef, {
-        name: user.displayName,
+        displayName: user.displayName,
         email: user.email,
-        createdAt: new Date(),
+        subscribedCalendars: [],
+      });
+
+      // create a default calendar for the new user
+      const defaultCalendarRef = await addDoc(collection(db, "calendars"), {
+        name: `${user.displayName} Main`,
+        description: "This is your default calendar.",
+        ownerIds: [user.uid],
+        subscribers: [user.uid],
+        pendingRequests: [],
+      });
+
+      // add the default calendar to the user's subscribedCalendars array
+      await updateDoc(userDocRef, {
+        subscribedCalendars: arrayUnion(defaultCalendarRef.id),
       });
     }
   } catch (error: any) {
