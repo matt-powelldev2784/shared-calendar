@@ -7,7 +7,7 @@ export const Route = createFileRoute("/calendar")({
 
 function CalendarPage() {
   return (
-    <section className="flex h-full w-full items-center justify-center">
+    <section className="flex h-full w-full flex-col items-center justify-center">
       <CalendarNavigation />
     </section>
   );
