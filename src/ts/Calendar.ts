@@ -1,4 +1,4 @@
-export type CalendarEntry = {
+export type CalendarEntryInput = {
   title: string;
   description?: string;
   dateTime: Date;
@@ -6,4 +6,8 @@ export type CalendarEntry = {
   ownerIds: string[];
   subscribers: string[];
   pendingRequests: string[];
+};
+
+export type CalendarEntryOutput = CalendarEntryInput & {
+  id: string;
 };
