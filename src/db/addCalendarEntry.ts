@@ -15,7 +15,7 @@ const addCalendarEntry = async (entry: CalendarEntryInput) => {
     const subscribers = entry.subscribers || [];
     const pendingRequests = entry.pendingRequests || [];
 
-    // Validate for uniqueness
+    // validate for uniqueness
     if (hasDuplicates(ownerIds)) {
       throw new CustomError(400, "Owner IDs must be unique");
     }
