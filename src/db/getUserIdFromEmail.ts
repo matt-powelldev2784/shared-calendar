@@ -1,9 +1,12 @@
 import { collection, query, where, getDocs } from "firebase/firestore";
 import { db } from "../../firebaseConfig";
 import { CustomError } from "@/ts/errorClass";
+import checkAuth from "./checkAuth";
 
 export const getUserIdFromEmail = async (email: string) => {
   try {
+    checkAuth();
+
     const publicUsersRef = collection(db, "publicUsers");
     const userIdQuery = query(publicUsersRef, where("email", "==", email));
     const userIdQuerySnapshot = await getDocs(userIdQuery);
