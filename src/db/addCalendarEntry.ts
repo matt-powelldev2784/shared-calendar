@@ -3,9 +3,18 @@ import { db } from "../../firebaseConfig";
 import { CustomError } from "@/ts/errorClass";
 import checkAuth from "./checkAuth";
 import { hasDuplicates } from "@/lib/hasDuplicates";
-import type { CalendarEntryInput } from "../ts/Calendar";
 
-const addCalendarEntry = async (entry: CalendarEntryInput) => {
+export type AddCalendarEntry = {
+  title: string;
+  description?: string;
+  dateTime: Date;
+  calendarId: string;
+  ownerIds: string[];
+  subscribers: string[];
+  pendingRequests: string[];
+};
+
+const addCalendarEntry = async (entry: AddCalendarEntry) => {
   try {
     const currentUser = checkAuth();
 

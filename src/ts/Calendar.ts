@@ -1,4 +1,5 @@
-export type CalendarEntryInput = {
+export type CalendarEntry = {
+  id: string;
   title: string;
   description?: string;
   dateTime: Date;
@@ -8,6 +9,3 @@ export type CalendarEntryInput = {
   pendingRequests: string[];
 };
 
-export type CalendarEntryOutput = CalendarEntryInput & {
-  id: string;
-};
