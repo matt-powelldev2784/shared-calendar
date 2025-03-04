@@ -32,7 +32,7 @@ export const SignIn = () => {
 
       <CardContent className="h-12">
         <Button
-          onClick={SignUpWithGoogle}
+          onClick={SignInWithGoogle}
           className="w-full"
           variant="googleButton"
           size="xl"
@@ -48,7 +48,7 @@ export const SignIn = () => {
   );
 };
 
-const SignUpWithGoogle = async () => {
+const SignInWithGoogle = async () => {
   try {
     const provider = new GoogleAuthProvider();
     const result = await signInWithPopup(auth, provider);
@@ -61,21 +61,24 @@ const SignUpWithGoogle = async () => {
     const user = result.user;
     console.log(user, token);
 
-    // get user document
+    // Check if the user is signing in for the first time
     const userDocRef = doc(db, "users", user.uid);
     const userDoc = await getDoc(userDocRef);
 
-    if (userDoc.exists()) {
-      // Update the user details on each login
-      await updateDoc(userDocRef, {
-        name: user.displayName,
-      });
-    } else {
+    if (!userDoc.exists()) {
       // Create a new user document
       await setDoc(userDocRef, {
         displayName: user.displayName,
         email: user.email,
         subscribedCalendars: [],
+      });
+
+      // create a public user document
+      // this is used to share calendars and entries with other users
+      const publicUserDocRef = doc(db, "publicUsers", user.uid);
+      await setDoc(publicUserDocRef, {
+        email: user.email,
+        userId: user.uid,
       });
 
       // create a default calendar for the new user
