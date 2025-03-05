@@ -1,5 +1,4 @@
-import { CalendarView } from "@/components/calendar/calendarView";
-import { CalendarNavigation } from "@/components/calendarNavigation/calendarNavigation";
+import { CalendarView } from "@/components/calenderView/calendarView";
 import { createFileRoute } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/calendar")({
@@ -9,7 +8,6 @@ export const Route = createFileRoute("/calendar")({
 function CalendarPage() {
   return (
     <section className="flex h-full w-full flex-col items-center justify-center">
-      <CalendarNavigation />
       <CalendarView />
     </section>
   );
