@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { format } from "date-fns";
+import { addDays, format } from "date-fns";
 import { Calendar as CalendarIcon } from "lucide-react";
 import { Calendar } from "@/components/ui/calendar";
 import {
@@ -16,27 +16,32 @@ import { startOfDay, endOfDay } from "date-fns";
 type FetchCalendarEntriesInput = {
   date: Date;
   calendarId: string;
+  daysVisible: number;
 };
 
 const fetchCalendarEntries = async ({
   date,
   calendarId,
-}: FetchCalendarEntriesInput) => {
+  daysVisible,
+}: FetchCalendarEntriesInput): Promise<CalendarEntry[]> => {
+  const startDate = startOfDay(date);
+  const endDate = endOfDay(addDays(date, daysVisible - 1));
   return getCalendarEntries({
     calendarIds: [calendarId],
-    startDate: startOfDay(date),
-    endDate: endOfDay(date),
+    startDate,
+    endDate,
   });
 };
 
 export const CalendarView = () => {
   const [date, setDate] = useState<Date>(new Date());
   const [isSelectDateOpen, setIsSelectDateOpen] = useState(false);
+  const [daysVisible, setDaysVisible] = useState(7);
   const calendarId = "yw1klS3kMHGXHFHeqaJ4";
 
   const { data, error, isLoading } = useQuery({
-    queryKey: ["calendarEntries", calendarId, date.toISOString()],
-    queryFn: () => fetchCalendarEntries({ date, calendarId }),
+    queryKey: ["calendarEntries", calendarId, date.toISOString(), daysVisible],
+    queryFn: () => fetchCalendarEntries({ date, calendarId, daysVisible }),
   });
 
   if (isLoading) {
@@ -53,7 +58,7 @@ export const CalendarView = () => {
   };
 
   return (
-    <div>
+    <div className="flex flex-col items-center justify-center">
       <Popover open={isSelectDateOpen} onOpenChange={setIsSelectDateOpen}>
         <PopoverTrigger asChild>
           <Button variant="datePicker" size="xl">
