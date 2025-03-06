@@ -14,13 +14,13 @@ const buttonVariants = cva(
         destructive:
           "bg-destructive text-white shadow-xs hover:bg-destructive/90 focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40 cursor-pointer",
         outline:
-          "border-white border-2 shadow-xs cursor-pointer text-white font-bold",
+          "border-white border-2 border-secondary shadow-xs cursor-pointer text-secondary font-bold",
         secondary:
           "bg-secondary text-secondary-foreground shadow-xs hover:bg-secondary/80 cursor-pointer",
         ghost: "hover:bg-accent hover:text-accent-foreground cursor-pointer",
         link: "text-primary underline-offset-4 hover:underline cursor-pointer",
         datePicker:
-          "cursor-pointer border-secondary text-secondary mt-2 flex w-[96%] justify-center border-2 px-2 text-center text-lg font-bold md:max-w-96",
+          "cursor-pointer border-secondary text-secondary flex w-[96%] justify-between border-2 px-2 text-center text-lg font-bold md:max-w-96",
         googleButton:
           "bg-white text-secondary shadow-xs hover:bg-gray-100 border-2 border-secondary text-lg font-bold",
       },

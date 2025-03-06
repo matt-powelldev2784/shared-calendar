@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { addDays, format } from "date-fns";
-import { Calendar as CalendarIcon } from "lucide-react";
+import CalendarIcon from '../../assets/icons/cal_icon.svg'
+import DownIcon from '../../assets/icons/down_icon.svg'
 import { Calendar } from "@/components/ui/calendar";
 import {
   Popover,
@@ -23,7 +24,7 @@ const fetchCalendarEntries = async ({
   date,
   calendarId,
   daysVisible,
-}: FetchCalendarEntriesInput): Promise<CalendarEntry[]> => {
+}: FetchCalendarEntriesInput) => {
   const startDate = startOfDay(date);
   const endDate = endOfDay(addDays(date, daysVisible - 1));
   return getCalendarEntries({
@@ -33,10 +34,13 @@ const fetchCalendarEntries = async ({
   });
 };
 
+const VIEW_DAY = 1;
+const VIEW_WEEK = 7;
+
 export const CalendarView = () => {
   const [date, setDate] = useState<Date>(new Date());
   const [isSelectDateOpen, setIsSelectDateOpen] = useState(false);
-  const [daysVisible, setDaysVisible] = useState(7);
+  const [daysVisible, setDaysVisible] = useState(VIEW_WEEK);
   const calendarId = "yw1klS3kMHGXHFHeqaJ4";
 
   const { data, error, isLoading } = useQuery({
@@ -58,24 +62,53 @@ export const CalendarView = () => {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center">
-      <Popover open={isSelectDateOpen} onOpenChange={setIsSelectDateOpen}>
-        <PopoverTrigger asChild>
-          <Button variant="datePicker" size="xl">
-            <CalendarIcon className="mr-2 h-4 w-4" />
-            {date ? format(date, "dd MMMM yyyy") : <span>Pick a date</span>}
-          </Button>
-        </PopoverTrigger>
+    <div className="flex w-full flex-col items-center justify-center">
+      <div className="bg-primary/25 flex w-full items-center justify-center gap-4 p-2">
+        <Popover open={isSelectDateOpen} onOpenChange={setIsSelectDateOpen}>
+          <PopoverTrigger asChild>
+            <Button variant="datePicker" size="sm">
+              <img
+                src={CalendarIcon}
+                alt="calendar"
+                className="-w-5 mr-2 h-5"
+              />
 
-        <PopoverContent className="w-auto">
-          <Calendar
-            mode="single"
-            selected={date}
-            onDateSelect={handleDateSelect}
-            initialFocus
-          />
-        </PopoverContent>
-      </Popover>
+              {date ? format(date, "dd MMMM yyyy") : <span>Pick a date</span>}
+
+              <img src={DownIcon} alt="down" className="-w-5 h-5" />
+            </Button>
+          </PopoverTrigger>
+
+          <PopoverContent className="w-auto">
+            <Calendar
+              mode="single"
+              selected={date}
+              onDateSelect={handleDateSelect}
+              initialFocus
+            />
+          </PopoverContent>
+
+          <div className="absolute right-4 flex gap-2">
+            <Button
+              variant="outline"
+              size="sm"
+              className="hidden md:block"
+              onClick={() => setDaysVisible(VIEW_DAY)}
+            >
+              Day View
+            </Button>
+
+            <Button
+              variant="outline"
+              size="sm"
+              className="hidden md:block"
+              onClick={() => setDaysVisible(VIEW_WEEK)}
+            >
+              Week View
+            </Button>
+          </div>
+        </Popover>
+      </div>
 
       {data && data.length > 0 ? (
         data.map((entry: CalendarEntry) => (
