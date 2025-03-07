@@ -10,6 +10,21 @@
   --breakpoint-lg: 1300px;
 }
 
+@theme {
+  --font-display: "Satoshi", "sans-serif";
+  --breakpoint-3xl: 120rem;
+  --color-lightPink: #ffb3cc;
+  --color-lightGreen: #ccffdd;
+  --color-lightPurple: #e0bfff;
+  --color-lightBlue: #cce6ff;
+  --color-lightYellow: #fff9e6;
+  --color-darkPink: #f6017b;
+  --color-darkGreen: #006400;
+  --color-darkPurple: #7c01f6;
+  --color-darkBlue: #017bf6;
+  --color-darkYellow: #8b6508;
+}
+
 body {
   @apply m-0;
   font-family: "Roboto", -apple-system, BlinkMacSystemFont, "Segoe UI", "Oxygen",

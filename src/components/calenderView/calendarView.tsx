@@ -13,6 +13,7 @@ import { useQuery } from "@tanstack/react-query";
 import getCalendarEntries from "@/db/getCalendarEntries";
 import type { CalendarEntry } from "@/ts/Calendar";
 import { startOfDay, endOfDay } from "date-fns";
+import { CalendarCard } from "../ui/calendarCard";
 
 type FetchCalendarEntriesInput = {
   date: Date;
@@ -55,6 +56,8 @@ export const CalendarView = () => {
   if (error) {
     return <div>Error: {error.message}</div>;
   }
+
+  
 
   const handleDateSelect = (selectedDate: Date) => {
     setDate(selectedDate);
@@ -110,17 +113,14 @@ export const CalendarView = () => {
         </Popover>
       </div>
 
-      {data && data.length > 0 ? (
-        data.map((entry: CalendarEntry) => (
-          <div key={entry.id}>
-            <h3>{entry.title}</h3>
-            <p>{entry.description}</p>
-            <p>{entry.dateTime.toString()}</p>
-          </div>
-        ))
-      ) : (
-        <div>No entries found.</div>
-      )}
+      <div className="flex flex-wrap gap-4 mt-2 w-full p-2">
+        {data &&
+          data.map((entry: CalendarEntry) => (
+            <CalendarCard key={entry.id} entry={entry} variant="purple"/>
+          ))}
+      </div>
+
+      {!data?.length && <div>No entries found</div>}
     </div>
   );
 };
