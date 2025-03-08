@@ -13,7 +13,7 @@ import { useQuery } from '@tanstack/react-query';
 import getCalendarEntries from '@/db/getCalendarEntries';
 import type { CalendarEntry } from '@/ts/Calendar';
 import { startOfDay, endOfDay } from 'date-fns';
-import { CalendarCard } from '../ui/calendarCard';
+import {  CalendarCard } from '../ui/calendarCard';
 import getFormattedCalendarData from '@/lib/getFormattedCalendarData';
 
 type FetchCalendarEntriesInput = {
@@ -62,8 +62,6 @@ export const CalendarView = () => {
     daysVisible,
     calendarData: data || [],
   });
-  console.log('calendarData', calendarData);
-
 
   const handleDateSelect = (selectedDate: Date) => {
     setDate(selectedDate);
@@ -119,11 +117,20 @@ export const CalendarView = () => {
         </Popover>
       </div>
 
-      <div className="mt-2 flex w-full flex-wrap gap-2 sm:px-4">
-        {data &&
-          data.map((entry: CalendarEntry) => (
-            <CalendarCard key={entry.id} entry={entry} variant="purple" />
-          ))}
+      <div className="mt-2 grid auto-cols-[minmax(100px,1fr)] grid-flow-col gap-2 mx-4">
+        {calendarData &&
+          calendarData.map((entries, index) => {
+            return (
+              <section
+                key={index}
+                className="flex flex-col gap-2 border-2 border-red-500"
+              >
+                {entries.map((entry: CalendarEntry) => (
+                  <CalendarCard key={entry.id} entry={entry} variant="purple" />
+                ))}
+              </section>
+            );
+          })}
       </div>
 
       {!data?.length && <div>No entries found</div>}

@@ -4,11 +4,11 @@
 
 @custom-variant dark (&:is(.dark *));
 
-@theme {
+/* @theme {
   --breakpoint-sm: 700px;
   --breakpoint-md: 900px;
   --breakpoint-lg: 1300px;
-}
+} */
 
 @theme {
   --font-display: "Satoshi", "sans-serif";
