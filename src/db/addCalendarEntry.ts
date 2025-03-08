@@ -3,13 +3,15 @@ import { db } from "../../firebaseConfig";
 import { CustomError } from "@/ts/errorClass";
 import checkAuth from "./checkAuth";
 import { hasDuplicates } from "@/lib/hasDuplicates";
+import { isValidStartEndDates } from "@/lib/validateStartEndDates";
 
 export type AddCalendarEntry = {
   title: string;
   description?: string;
-  dateTime: Date;
+  startDate: Date;
+  endDate: Date;
   calendarId: string;
-  ownerIds: string[];
+  ownerIds?: string[];
   subscribers: string[];
   pendingRequests: string[];
 };
@@ -24,22 +26,33 @@ const addCalendarEntry = async (entry: AddCalendarEntry) => {
     const subscribers = entry.subscribers || [];
     const pendingRequests = entry.pendingRequests || [];
 
-    // validate for uniqueness
+    // validate data
+    if (!entry.title || !entry.calendarId) {
+      throw new CustomError(403, "Title and calendar Id is required");
+    }
+
+    // // validate start and end dates
+    if (!isValidStartEndDates(entry.startDate, entry.endDate)) {
+      throw new CustomError(403, "Invalid start and end dates");
+    }
+
+    // validate arrays for uniqueness
     if (hasDuplicates(ownerIds)) {
-      throw new CustomError(400, "Owner IDs must be unique");
+      throw new CustomError(403, "Owner IDs must be unique");
     }
     if (hasDuplicates(subscribers)) {
-      throw new CustomError(400, "Subscriber IDs must be unique");
+      throw new CustomError(403, "Subscriber IDs must be unique");
     }
     if (hasDuplicates(pendingRequests)) {
-      throw new CustomError(400, "Pending Requests must be unique");
+      throw new CustomError(403, "Pending Requests must be unique");
     }
 
     // add calendar entry
     const entriesRef = collection(db, "entries");
     const newEntry = {
       ...entry,
-      dateTime: Timestamp.fromDate(entry.dateTime),
+      startDate: Timestamp.fromDate(entry.startDate),
+      endDate: Timestamp.fromDate(entry.endDate),
       ownerIds,
       subscribers,
       pendingRequests,
