@@ -1,25 +1,28 @@
 import type { CalendarEntry } from '@/ts/Calendar';
-import { format } from 'date-fns';
+import { addDays, format } from 'date-fns';
 
 type GetDatesToDisplay = {
   daysVisible: number;
   calendarData: CalendarEntry[];
+  firstDateToDisplay: Date;
 };
 
 const getFormattedCalendarData = ({
   daysVisible,
   calendarData,
+  firstDateToDisplay,
 }: GetDatesToDisplay) => {
-  const startDates =
-    calendarData.map((entry) => {
-      return Number(format(entry.startDate, 'd'));
-    }) || [];
+  const datesFromCalendar =
+    calendarData
+      .map((entry) => {
+        return Number(format(entry.startDate, 'd'));
+      })
+      .sort() || [];
 
-  const uniqueDates = new Set(startDates);
+  const firstUniqueDate = Number(format(firstDateToDisplay, 'd'));
+  const uniqueDates = new Set(datesFromCalendar);
   const uniqueDateArray = [...uniqueDates];
-  const sequentialUniqueDates: number[] = [];
-
-  if (uniqueDateArray.length === 0) return [];
+  const sequentialUniqueDates: number[] = [firstUniqueDate];
 
   for (let i = 0; i < daysVisible - 1; i++) {
     if (sequentialUniqueDates.length === 0) {
@@ -39,12 +42,19 @@ const getFormattedCalendarData = ({
     }
   }
 
-  const calendarEntries = sequentialUniqueDates.map((date) => {
+  const dateTitles = Array.from({ length: daysVisible }, (_, i) => {
+    const date = addDays(firstDateToDisplay, i);
+    return format(date, 'dd MMMM yyyy');
+  });
+
+  const calendarEntries = sequentialUniqueDates.map((date, index) => {
     const entries = calendarData.filter((entry) => {
       return Number(format(entry.startDate, 'd')) === date;
     });
 
-    return entries.length > 0 ? [...entries] : [];
+    return entries.length > 0
+      ? { date: dateTitles[index], entries: [...entries] }
+      : { date: dateTitles[index], entries: [] };
   });
 
   return calendarEntries;

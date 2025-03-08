@@ -36,13 +36,10 @@ const fetchCalendarEntries = async ({
   });
 };
 
-const VIEW_DAY = 1;
-const VIEW_WEEK = 7;
-
 export const CalendarView = () => {
   const [date, setDate] = useState<Date>(new Date());
   const [isSelectDateOpen, setIsSelectDateOpen] = useState(false);
-  const [daysVisible, setDaysVisible] = useState(VIEW_WEEK);
+  const daysVisible = 7;
   const calendarId = 'yw1klS3kMHGXHFHeqaJ4';
 
   const { data, error, isLoading } = useQuery({
@@ -61,6 +58,7 @@ export const CalendarView = () => {
   const calendarData = getFormattedCalendarData({
     daysVisible,
     calendarData: data || [],
+    firstDateToDisplay: date,
   });
 
   const handleDateSelect = (selectedDate: Date) => {
@@ -95,41 +93,34 @@ export const CalendarView = () => {
             />
           </PopoverContent>
 
-          <div className="absolute right-4 flex gap-2">
-            <Button
-              variant="outline"
-              size="sm"
-              className="hidden md:block"
-              onClick={() => setDaysVisible(VIEW_DAY)}
-            >
-              Day View
-            </Button>
-
-            <Button
-              variant="outline"
-              size="sm"
-              className="hidden md:block"
-              onClick={() => setDaysVisible(VIEW_WEEK)}
-            >
-              Week View
-            </Button>
-          </div>
         </Popover>
       </div>
 
-      <section className="m-auto mx-4 mt-2 grid w-full grid-flow-row auto-row-[minmax(100px,1fr)] lg:auto-cols-[minmax(100px,1fr)] lg:grid-flow-col gap-2 px-4">
-        {calendarData.map((entries, index) => {
-          console.log('entries[0]', entries);
-          
+      <section className="auto-row-[minmax(100px,1fr)] m-auto mx-4 mt-2 grid w-full grid-flow-row gap-2 px-4 lg:auto-cols-[minmax(100px,1fr)] lg:grid-flow-col">
+        {calendarData.map((calendarData, index) => {
+          const { entries, date } = calendarData;
           return (
             <div
               key={index}
-              className="flex flex-col flex-nowrap gap-2 lg:flex-col"
+              className="mb-2 flex flex-col flex-nowrap gap-1 lg:flex-col"
             >
-              <p className="bg-zinc-400 p-2">{'test'}</p>
-              {entries.map((entry: CalendarEntry) => (
-                <CalendarCard key={entry.id} entry={entry} variant="purple" />
-              ))}
+              <div className="flex h-11 flex-col justify-center bg-zinc-400 p-2 text-center font-bold text-white">
+                <p className="h-4.5 text-[14px] lg:text-[13px] xl:text-[14px]">{format(date, 'EEEE')}</p>
+                <p className="text-[15px] lg:hidden xl:block">{date}</p>
+                <p className="text-[14px] hidden lg:block xl:hidden">{format(date, 'dd MMM yy')}</p>
+              </div>
+
+              {!entries.length && (
+                <p className="flex h-14 -translate-y-1 items-center justify-center bg-zinc-100 p-2 text-center text-sm">
+                  No calendar entries today
+                </p>
+              )}
+
+              {entries.map((entry: CalendarEntry) => {
+                return (
+                  <CalendarCard key={entry.id} entry={entry} variant="purple" />
+                );
+              })}
             </div>
           );
         })}
