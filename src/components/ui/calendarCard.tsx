@@ -2,7 +2,7 @@ import { format } from "date-fns";
 import { ClockIcon } from "lucide-react";
 
 const variantClasses = {
-  default: 'w-full flex flex-row gap-2 h-20 items-center sm:rounded-md text-sm',
+  default: 'w-full flex flex-row gap-1 h-14 items-center cursor-pointer',
   pink: 'bg-lightPink text-darkPink',
   green: 'bg-lightGreen  text-darkGreen',
   purple: 'bg-lightPurple text-darkPurple',
@@ -12,7 +12,7 @@ const variantClasses = {
 
 const dateIconClasses = {
   default:
-    'text-white w-14 h-14 flex flex-col items-center justify-center rounded-full ml-2',
+    'text-white w-8 h-8 min-w-8 min-h-8 flex-col items-center justify-center rounded-full ml-3 flex lg:hidden xl:flex',
   pink: 'bg-darkPink',
   green: 'bg-darkGreen',
   purple: 'bg-darkPurple',
@@ -33,21 +33,24 @@ interface CalendarCardProps {
 const CalendarCard = ({ entry, variant }: CalendarCardProps) => {
   const { title, startDate, endDate } = entry;
   return (
-    <article className={`${variantClasses.default} ${variantClasses[variant]}`}>
+    <button className={`${variantClasses.default} ${variantClasses[variant]}`}>
       <div className={`${dateIconClasses.default} ${dateIconClasses[variant]}`}>
-        <p className="h-4 text-sm">{format(startDate, 'dd')}</p>
-        <p className="text-sm">{format(startDate, 'MMM')}</p>
+        MP
+        {/* <p className="text h-4">{format(startDate, 'dd')}</p>
+        <p className="text-xs">{format(startDate, 'MMM')}</p> */}
       </div>
 
-      <div>
-        <h3 className={'text-lg font-bold'}>{title}</h3>
+      <div className="ml-1 flex -translate-y-0.75 flex-col items-start justify-center gap-1.5 overflow-hidden p-2 lg:gap-2">
+        <p className="text-md flex h-5 w-full translate-y-1 items-center truncate">
+          {title}
+        </p>
 
-        <p className={'flex flex-row items-center gap-2'}>
-          <ClockIcon size={16} />
-          {format(startDate, 'HH:mm')} - {format(endDate, 'HH:mm')}
+        <p className={'flex flex-row items-center gap-1 text-[11px] lg:gap-2'}>
+          <ClockIcon size={13} />
+          {format(startDate, 'HH:mm')}-{format(endDate, 'HH:mm')}
         </p>
       </div>
-    </article>
+    </button>
   );
 };
 

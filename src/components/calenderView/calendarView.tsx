@@ -13,7 +13,7 @@ import { useQuery } from '@tanstack/react-query';
 import getCalendarEntries from '@/db/getCalendarEntries';
 import type { CalendarEntry } from '@/ts/Calendar';
 import { startOfDay, endOfDay } from 'date-fns';
-import {  CalendarCard } from '../ui/calendarCard';
+import { CalendarCard } from '../ui/calendarCard';
 import getFormattedCalendarData from '@/lib/getFormattedCalendarData';
 
 type FetchCalendarEntriesInput = {
@@ -117,21 +117,23 @@ export const CalendarView = () => {
         </Popover>
       </div>
 
-      <div className="mt-2 grid auto-cols-[minmax(100px,1fr)] grid-flow-col gap-2 mx-4">
-        {calendarData &&
-          calendarData.map((entries, index) => {
-            return (
-              <section
-                key={index}
-                className="flex flex-col gap-2 border-2 border-red-500"
-              >
-                {entries.map((entry: CalendarEntry) => (
-                  <CalendarCard key={entry.id} entry={entry} variant="purple" />
-                ))}
-              </section>
-            );
-          })}
-      </div>
+      <section className="m-auto mx-4 mt-2 grid w-full grid-flow-row auto-row-[minmax(100px,1fr)] lg:auto-cols-[minmax(100px,1fr)] lg:grid-flow-col gap-2 px-4">
+        {calendarData.map((entries, index) => {
+          console.log('entries[0]', entries);
+          
+          return (
+            <div
+              key={index}
+              className="flex flex-col flex-nowrap gap-2 lg:flex-col"
+            >
+              <p className="bg-zinc-400 p-2">{'test'}</p>
+              {entries.map((entry: CalendarEntry) => (
+                <CalendarCard key={entry.id} entry={entry} variant="purple" />
+              ))}
+            </div>
+          );
+        })}
+      </section>
 
       {!data?.length && <div>No entries found</div>}
     </div>
