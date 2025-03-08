@@ -1,7 +1,15 @@
 import { signInWithPopup } from "firebase/auth";
 import { GoogleAuthProvider } from "firebase/auth";
 import { auth, db } from "../../../firebaseConfig";
-import { doc, getDoc, setDoc, updateDoc } from "firebase/firestore";
+import {
+  addDoc,
+  arrayUnion,
+  collection,
+  doc,
+  getDoc,
+  setDoc,
+  updateDoc,
+} from "firebase/firestore";
 import {
   Card,
   CardHeader,
@@ -24,7 +32,7 @@ export const SignIn = () => {
 
       <CardContent className="h-12">
         <Button
-          onClick={SignUpWithGoogle}
+          onClick={SignInWithGoogle}
           className="w-full"
           variant="googleButton"
           size="xl"
@@ -40,12 +48,10 @@ export const SignIn = () => {
   );
 };
 
-const SignUpWithGoogle = async () => {
+const SignInWithGoogle = async () => {
   try {
     const provider = new GoogleAuthProvider();
-
     const result = await signInWithPopup(auth, provider);
-
     const credential = GoogleAuthProvider.credentialFromResult(result);
     if (!credential) {
       console.error("Error in user Credential");
@@ -55,23 +61,38 @@ const SignUpWithGoogle = async () => {
     const user = result.user;
     console.log(user, token);
 
-    // get user document
+    // Check if the user is signing in for the first time
     const userDocRef = doc(db, "users", user.uid);
     const userDoc = await getDoc(userDocRef);
 
-
-    if (userDoc.exists()) {
-      // Update the user details on each login
-      await updateDoc(userDocRef, {
-        name: user.displayName,
-        email: user.email,
-      });
-    } else {
-      // Create a new user document if it doesn't exist
+    if (!userDoc.exists()) {
+      // Create a new user document
       await setDoc(userDocRef, {
-        name: user.displayName,
+        displayName: user.displayName,
         email: user.email,
-        createdAt: new Date(),
+        subscribedCalendars: [],
+      });
+
+      // create a public user document
+      // this is used to share calendars and entries with other users
+      const publicUserDocRef = doc(db, "publicUsers", user.uid);
+      await setDoc(publicUserDocRef, {
+        email: user.email,
+        userId: user.uid,
+      });
+
+      // create a default calendar for the new user
+      const defaultCalendarRef = await addDoc(collection(db, "calendars"), {
+        name: `${user.displayName} Main`,
+        description: "This is your default calendar.",
+        ownerIds: [user.uid],
+        subscribers: [user.uid],
+        pendingRequests: [],
+      });
+
+      // add the default calendar to the user's subscribedCalendars array
+      await updateDoc(userDocRef, {
+        subscribedCalendars: arrayUnion(defaultCalendarRef.id),
       });
     }
   } catch (error: any) {

@@ -18,16 +18,6 @@ const firebaseConfig = {
   measurementId: import.meta.env.VITE_APP_MEASUREMENT_ID,
 };
 
-// const firebaseConfig = {
-//   apiKey: "AIzaSyD26RI79EQQ9FdV8lQYa-TH-Ec08FqJyA0",
-//   authDomain: "shared-calendar-e3059.firebaseapp.com",
-//   projectId: "shared-calendar-e3059",
-//   storageBucket: "shared-calendar-e3059.firebasestorage.app",
-//   messagingSenderId: "379377310232",
-//   appId: "1:379377310232:web:882cf51124c0112a14816d",
-//   measurementId: "G-YMFGCMY5JC",
-// };
-
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 export const analytics = getAnalytics(app);
