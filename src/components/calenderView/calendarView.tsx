@@ -113,7 +113,7 @@ export const CalendarView = () => {
         </Popover>
       </div>
 
-      <div className="flex flex-wrap gap-4 mt-2 w-full p-2">
+      <div className="flex flex-wrap gap-2 mt-2 w-full sm:px-4">
         {data &&
           data.map((entry: CalendarEntry) => (
             <CalendarCard key={entry.id} entry={entry} variant="purple"/>
