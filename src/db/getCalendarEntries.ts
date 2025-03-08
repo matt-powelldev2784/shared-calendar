@@ -8,6 +8,7 @@ import {
 import { db } from "../../firebaseConfig";
 import type { CalendarEntry } from "@/ts/Calendar";
 import { CustomError } from "@/ts/errorClass";
+import { isValidStartEndDates } from "@/lib/validateStartEndDates";
 
 interface GetCalendarEntriesInput {
   calendarIds: string[];
@@ -21,6 +22,16 @@ const getCalendarEntries = async ({
   endDate,
 }: GetCalendarEntriesInput) => {
   try {
+    // validate text inputs
+    if (!calendarIds || !calendarIds.length) {
+      throw new CustomError(403, "Calendar Ids are required");
+    }
+
+    // validate start and end dates
+    if (!isValidStartEndDates(startDate, endDate)) {
+      throw new CustomError(403, "Invalid start and end dates");
+    }
+
     const entriesRef = collection(db, "entries");
     const startTimestamp = Timestamp.fromDate(startDate);
     const endTimestamp = Timestamp.fromDate(endDate);
@@ -28,8 +39,8 @@ const getCalendarEntries = async ({
     const entriesQuery = query(
       entriesRef,
       where("calendarId", "in", calendarIds),
-      where("dateTime", ">=", startTimestamp),
-      where("dateTime", "<=", endTimestamp),
+      where("startDate", ">=", startTimestamp),
+      where("endDate", "<=", endTimestamp),
     );
 
     const entriesQuerySnapshot = await getDocs(entriesQuery);
@@ -45,7 +56,8 @@ const getCalendarEntries = async ({
         id: doc.id,
         title: data.title,
         description: data.description,
-        dateTime: data.dateTime.toDate(),
+        startDate: data.startDate.toDate(),
+        endDate: data.endDate.toDate(),
         calendarId: data.calendarId,
         ownerIds: data.ownerIds,
         subscribers: data.subscribers,

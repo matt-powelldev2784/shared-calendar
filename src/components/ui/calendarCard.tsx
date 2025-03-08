@@ -24,18 +24,19 @@ interface CalendarCardProps {
   entry: {
     title: string;
     description?: string;
-    dateTime: Date;
+    startDate: Date;
+    endDate: Date;
   };
   variant: keyof typeof variantClasses;
 }
 
 const CalendarCard = ({ entry, variant }: CalendarCardProps) => {
-  const { title, dateTime } = entry;
+  const { title, startDate, endDate } = entry;
   return (
     <article className={`${variantClasses.default} ${variantClasses[variant]}`}>
       <div className={`${dateIconClasses.default} ${dateIconClasses[variant]}`}>
-        <p className="h-4 text-sm">{format(dateTime, "dd")}</p>
-        <p className="text-sm">{format(dateTime, "MMM")}</p>
+        <p className="h-4 text-sm">{format(startDate, "dd")}</p>
+        <p className="text-sm">{format(startDate, "MMM")}</p>
       </div>
 
       <div>
@@ -43,7 +44,7 @@ const CalendarCard = ({ entry, variant }: CalendarCardProps) => {
 
         <p className={"flex flex-row items-center gap-2"}>
           <ClockIcon size={16} />
-          {format(dateTime, "HH:mm")}
+          {format(startDate, "HH:mm")} - {format(endDate, "HH:mm")}
         </p>
       </div>
     </article>
