@@ -1,19 +1,20 @@
-import { Button } from "@/components/ui/button";
-import { addDays, format } from "date-fns";
-import CalendarIcon from '../../assets/icons/cal_icon.svg'
-import DownIcon from '../../assets/icons/down_icon.svg'
-import { Calendar } from "@/components/ui/calendar";
+import { Button } from '@/components/ui/button';
+import { addDays, format } from 'date-fns';
+import CalendarIcon from '../../assets/icons/cal_icon.svg';
+import DownIcon from '../../assets/icons/down_icon.svg';
+import { Calendar } from '@/components/ui/calendar';
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@/components/ui/popover";
-import { useState } from "react";
-import { useQuery } from "@tanstack/react-query";
-import getCalendarEntries from "@/db/getCalendarEntries";
-import type { CalendarEntry } from "@/ts/Calendar";
-import { startOfDay, endOfDay } from "date-fns";
-import { CalendarCard } from "../ui/calendarCard";
+} from '@/components/ui/popover';
+import { useState } from 'react';
+import { useQuery } from '@tanstack/react-query';
+import getCalendarEntries from '@/db/getCalendarEntries';
+import type { CalendarEntry } from '@/ts/Calendar';
+import { startOfDay, endOfDay } from 'date-fns';
+import { CalendarCard } from '../ui/calendarCard';
+import getFormattedCalendarData from '@/lib/getFormattedCalendarData';
 
 type FetchCalendarEntriesInput = {
   date: Date;
@@ -42,10 +43,10 @@ export const CalendarView = () => {
   const [date, setDate] = useState<Date>(new Date());
   const [isSelectDateOpen, setIsSelectDateOpen] = useState(false);
   const [daysVisible, setDaysVisible] = useState(VIEW_WEEK);
-  const calendarId = "yw1klS3kMHGXHFHeqaJ4";
+  const calendarId = 'yw1klS3kMHGXHFHeqaJ4';
 
   const { data, error, isLoading } = useQuery({
-    queryKey: ["calendarEntries", calendarId, date.toISOString(), daysVisible],
+    queryKey: ['calendarEntries', calendarId, date.toISOString(), daysVisible],
     queryFn: () => fetchCalendarEntries({ date, calendarId, daysVisible }),
   });
 
@@ -57,7 +58,12 @@ export const CalendarView = () => {
     return <div>Error: {error.message}</div>;
   }
 
-  
+  const calendarData = getFormattedCalendarData({
+    daysVisible,
+    calendarData: data || [],
+  });
+  console.log('calendarData', calendarData);
+
 
   const handleDateSelect = (selectedDate: Date) => {
     setDate(selectedDate);
@@ -76,7 +82,7 @@ export const CalendarView = () => {
                 className="-w-5 mr-2 h-5"
               />
 
-              {date ? format(date, "dd MMMM yyyy") : <span>Pick a date</span>}
+              {date ? format(date, 'dd MMMM yyyy') : <span>Pick a date</span>}
 
               <img src={DownIcon} alt="down" className="-w-5 h-5" />
             </Button>
@@ -113,10 +119,10 @@ export const CalendarView = () => {
         </Popover>
       </div>
 
-      <div className="flex flex-wrap gap-2 mt-2 w-full sm:px-4">
+      <div className="mt-2 flex w-full flex-wrap gap-2 sm:px-4">
         {data &&
           data.map((entry: CalendarEntry) => (
-            <CalendarCard key={entry.id} entry={entry} variant="purple"/>
+            <CalendarCard key={entry.id} entry={entry} variant="purple" />
           ))}
       </div>
 
