@@ -13,7 +13,7 @@ const sortCalendarEntriesByDate = ({
   firstDateToDisplay,
 }: GetDatesToDisplay) => {
   // initialize and fill an array of dates
-  // this cam be used to display the calendar day titles
+  // this cam be used to display the calendar day titles{}
   const dateTitles: Date[] = [];
   for (let i = 0; i < daysToReturn; i++) {
     // push first date in to date titles array and move to next iteration
