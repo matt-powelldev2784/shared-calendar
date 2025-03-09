@@ -15,6 +15,7 @@ import type { CalendarEntry } from '@/ts/Calendar';
 import { startOfDay, endOfDay } from 'date-fns';
 import { CalendarCard } from '../ui/calendarCard';
 import sortCalendarEntriesByDate from '@/lib/sortCalendarEntriesByDate';
+import { Loading } from '../ui/loading';
 
 type FetchCalendarEntriesInput = {
   date: Date;
@@ -48,7 +49,7 @@ export const CalendarView = () => {
   });
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return <Loading classNames="mt-4"/>;
   }
 
   if (error) {
