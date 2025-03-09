@@ -4,7 +4,7 @@ type LoadingProps = {
   classNames: string;
 };
 
-export const Loading = ({ classNames }: LoadingProps) => {
+const Loading = ({ classNames }: LoadingProps) => {
   return (
     <img
       src={LoadingSpinner}
@@ -13,3 +13,5 @@ export const Loading = ({ classNames }: LoadingProps) => {
     />
   );
 };
+
+export default Loading;
