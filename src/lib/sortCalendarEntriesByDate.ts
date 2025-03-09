@@ -7,48 +7,37 @@ type GetDatesToDisplay = {
   firstDateToDisplay: Date;
 };
 
-interface DayPlusDateString {
-  dayNumber: number;
-  date: Date;
-}
-
 const sortCalendarEntriesByDate = ({
   daysToReturn,
   calendarData,
   firstDateToDisplay,
 }: GetDatesToDisplay) => {
-  // format the first day object with a date string and day in a number format
-  const firstDay: DayPlusDateString = {
-    date: firstDateToDisplay,
-    dayNumber: Number(format(firstDateToDisplay, 'd')),
-  };
-
   // initialize and fill an array of dates
   // this cam be used to display the calendar day titles
-  const dateTitles: DayPlusDateString[] = [];
-  for (let i = 0; i < daysToReturn - 1; i++) {
+  const dateTitles: Date[] = [];
+  for (let i = 0; i < daysToReturn; i++) {
+    // push first date in to date titles array and move to next iteration
     if (i === 0) {
-      dateTitles.push(firstDay);
+      dateTitles.push(firstDateToDisplay);
+      continue;
     }
 
-    const previousDate = dateTitles[dateTitles.length - 1].date;
+    // push the next date in to the date titles array
+    const previousDate = dateTitles[dateTitles.length - 1];
     const nextDate = addDays(previousDate, 1);
-    dateTitles.push({
-      dayNumber: Number(format(nextDate, 'd')),
-      date: nextDate,
-    });
+    dateTitles.push(nextDate);
   }
 
   // return an array of objects with the date and the calendar entries for that date
-  // date without entries will will return an array with a date but no entries
-  const calendarEntries = dateTitles.map((dateTitle, index) => {
+  // dates without entries will will return an array with a date but no entries
+  const calendarEntries = dateTitles.map((date, index) => {
     const entries = calendarData.filter((entry) => {
-      return format(dateTitle.date, 'd') === format(entry.startDate, 'd');
+      return format(date, 'd') === format(entry.startDate, 'd');
     });
 
     return entries.length > 0
-      ? { date: dateTitles[index].date, entries: [...entries] }
-      : { date: dateTitles[index].date, entries: [] };
+      ? { date: dateTitles[index], entries: [...entries] }
+      : { date: dateTitles[index], entries: [] };
   });
 
   return calendarEntries;

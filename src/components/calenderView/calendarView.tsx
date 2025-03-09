@@ -61,8 +61,6 @@ export const CalendarView = () => {
     firstDateToDisplay: date,
   });
 
-  console.log('calendarData',calendarData)
-
   const handleDateSelect = (selectedDate: Date) => {
     setDate(selectedDate);
     setIsSelectDateOpen(false);
