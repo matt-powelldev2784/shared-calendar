@@ -1,3 +1,15 @@
+// Querying entries from the database only returns a group of entries
+// To render the calendar view, the following is required:
+// - Calendar entries sorted into arrays by date
+// - A date title for each day which is used to display a header row
+//
+// This function will return the calendar entries in a 2D array with the date title merged in.
+// The 2D array will have the following structure:
+// [
+//   { date: Date, entries: CalendarEntry[] },
+//   { date: Date, entries: CalendarEntry[] },
+// ]
+
 import type { CalendarEntry } from '@/ts/Calendar';
 import { addDays, format } from 'date-fns';
 
