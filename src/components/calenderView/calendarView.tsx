@@ -14,7 +14,7 @@ import getCalendarEntries from '@/db/getCalendarEntries';
 import type { CalendarEntry } from '@/ts/Calendar';
 import { startOfDay, endOfDay } from 'date-fns';
 import { CalendarCard } from '../ui/calendarCard';
-import getFormattedCalendarData from '@/lib/getFormattedCalendarData';
+import sortCalendarEntriesByDate from '@/lib/sortCalendarEntriesByDate';
 
 type FetchCalendarEntriesInput = {
   date: Date;
@@ -55,8 +55,8 @@ export const CalendarView = () => {
     return <div>Error: {error.message}</div>;
   }
 
-  const calendarData = getFormattedCalendarData({
-    daysVisible,
+  const calendarData = sortCalendarEntriesByDate({
+    daysToReturn: daysVisible,
     calendarData: data || [],
     firstDateToDisplay: date,
   });
@@ -68,7 +68,7 @@ export const CalendarView = () => {
 
   return (
     <div className="flex w-full flex-col items-center justify-center">
-      <div className="bg-primary/25 flex w-full items-center justify-center gap-4 p-2">
+      <div className="relative bg-primary/25 flex w-full items-center justify-center gap-4 p-2 z-100s">
         <Popover open={isSelectDateOpen} onOpenChange={setIsSelectDateOpen}>
           <PopoverTrigger asChild>
             <Button variant="datePicker" size="sm">
@@ -92,7 +92,6 @@ export const CalendarView = () => {
               initialFocus
             />
           </PopoverContent>
-
         </Popover>
       </div>
 
@@ -105,9 +104,13 @@ export const CalendarView = () => {
               className="mb-2 flex flex-col flex-nowrap gap-1 lg:flex-col"
             >
               <div className="flex h-11 flex-col justify-center bg-zinc-400 p-2 text-center font-bold text-white">
-                <p className="h-4.5 text-[14px] lg:text-[13px] xl:text-[14px]">{format(date, 'EEEE')}</p>
-                <p className="text-[15px] lg:hidden xl:block">{date}</p>
-                <p className="text-[14px] hidden lg:block xl:hidden">{format(date, 'dd MMM yy')}</p>
+                <p className="h-4.5 text-[14px] lg:text-[13px] xl:text-[14px]">
+                  {format(date, 'EEEE')}
+                </p>
+                <p className="text-[15px] lg:hidden xl:block">{format(date,'dd MMMM yyyy')}</p>
+                <p className="hidden text-[14px] lg:block xl:hidden">
+                  {format(date, 'dd MMM yy')}
+                </p>
               </div>
 
               {!entries.length && (
