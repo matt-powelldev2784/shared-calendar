@@ -4,11 +4,12 @@ import {
   where,
   getDocs,
   Timestamp,
-} from "firebase/firestore";
-import { db } from "../../firebaseConfig";
-import type { CalendarEntry } from "@/ts/Calendar";
-import { CustomError } from "@/ts/errorClass";
-import { isValidStartEndDates } from "@/lib/validateStartEndDates";
+} from 'firebase/firestore';
+import { db } from '../../firebaseConfig';
+import type { CalendarEntry } from '@/ts/Calendar';
+import { CustomError } from '@/ts/errorClass';
+import { isValidStartEndDates } from '@/lib/validateStartEndDates';
+import checkAuth from './checkAuth';
 
 interface GetCalendarEntriesInput {
   calendarIds: string[];
@@ -22,6 +23,8 @@ const getCalendarEntries = async ({
   endDate,
 }: GetCalendarEntriesInput) => {
   try {
+    await checkAuth();
+
     // validate text inputs
     if (!calendarIds || !calendarIds.length) {
       throw new CustomError(403, 'Calendar Ids are required');
@@ -73,8 +76,8 @@ const getCalendarEntries = async ({
 
     return calendarEntries;
   } catch (error) {
-    console.error("Error getting calendar entries: ", error);
-    throw new CustomError(500, "Failed to get calendar entries");
+    console.error('Error getting calendar entries: ', error);
+    throw new CustomError(500, 'Failed to get calendar entries');
   }
 };
 

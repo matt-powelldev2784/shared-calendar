@@ -18,7 +18,7 @@ export type AddCalendarEntry = {
 
 const addCalendarEntry = async (entry: AddCalendarEntry) => {
   try {
-    const currentUser = checkAuth();
+    const currentUser = await checkAuth();
 
     const ownerIds = entry.ownerIds
       ? entry.ownerIds.concat(currentUser.uid)
