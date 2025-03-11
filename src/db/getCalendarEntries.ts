@@ -35,10 +35,7 @@ const getCalendarEntries = async ({
       throw new CustomError(403, 'Invalid start and end dates');
     }
 
-    // get a reference to the entries collection
     const entriesRef = collection(db, 'entries');
-
-    // convert dates to firestore timestamps
     const startTimestamp = Timestamp.fromDate(startDate);
     const endTimestamp = Timestamp.fromDate(endDate);
 
@@ -58,7 +55,6 @@ const getCalendarEntries = async ({
       return [];
     }
 
-    // map the documents to an array of calendar entries
     const calendarEntries = entriesQuerySnapshot.docs.map((doc) => {
       const data = doc.data();
       return {
