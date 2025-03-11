@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { onAuthStateChanged } from 'firebase/auth';
-import { auth } from '../../../firebaseConfig';
+import { auth } from '@/db/firebaseConfig';
 import type { UserInfo } from 'firebase/auth';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Link } from '@tanstack/react-router';

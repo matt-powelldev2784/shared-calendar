@@ -1,5 +1,5 @@
 import { collection, addDoc, Timestamp } from "firebase/firestore";
-import { db } from "../../firebaseConfig";
+import { db } from '@/db/firebaseConfig';
 import { CustomError } from "@/ts/errorClass";
 import checkAuth from "./checkAuth";
 import { hasDuplicates } from "@/lib/hasDuplicates";

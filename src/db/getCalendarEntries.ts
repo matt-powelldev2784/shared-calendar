@@ -5,7 +5,7 @@ import {
   getDocs,
   Timestamp,
 } from 'firebase/firestore';
-import { db } from '../../firebaseConfig';
+import { db } from '@/db//firebaseConfig';
 import type { CalendarEntry } from '@/ts/Calendar';
 import { CustomError } from '@/ts/errorClass';
 import { isValidStartEndDates } from '@/lib/validateStartEndDates';

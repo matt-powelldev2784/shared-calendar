@@ -1,5 +1,5 @@
 import { CustomError } from '@/ts/errorClass';
-import { auth } from '../../firebaseConfig';
+import { auth } from '@/db/firebaseConfig';
 import { onAuthStateChanged, type User } from 'firebase/auth';
 
 const checkAuth = (): Promise<User> => {

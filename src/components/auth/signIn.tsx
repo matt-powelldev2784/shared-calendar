@@ -1,6 +1,6 @@
 import { signInWithPopup } from "firebase/auth";
 import { GoogleAuthProvider } from "firebase/auth";
-import { auth, db } from "../../../firebaseConfig";
+import { auth, db } from '@/db/firebaseConfig';
 import {
   addDoc,
   arrayUnion,

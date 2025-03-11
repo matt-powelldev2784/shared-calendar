@@ -7,7 +7,7 @@ import {
   getDoc,
 } from 'firebase/firestore';
 import { CustomError } from '@/ts/errorClass';
-import { db } from '../../firebaseConfig';
+import { db } from './firebaseConfig';
 import checkAuth from './checkAuth';
 import { type Calendar } from '@/ts/Calendar';
 
