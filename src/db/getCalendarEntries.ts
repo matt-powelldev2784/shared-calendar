@@ -77,7 +77,7 @@ const getCalendarEntries = async ({
     return calendarEntries;
   } catch (error) {
     console.error('Error getting calendar entries: ', error);
-    throw new CustomError(500, 'Failed to get calendar entries');
+    throw error;
   }
 };
 
