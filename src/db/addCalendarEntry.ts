@@ -61,7 +61,7 @@ const addCalendarEntry = async (entry: AddCalendarEntry) => {
     return entryDocRef.id;
   } catch (error) {
     console.error("Error adding calendar entry: ", error);
-    throw new CustomError(500, "Failed to add calendar entry");
+    throw error;
   }
 };
 
