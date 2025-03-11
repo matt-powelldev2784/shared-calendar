@@ -22,16 +22,17 @@ import Loading from '../ui/loading';
 import Error from '../ui/error';
 import type { CustomError } from '@/ts/errorClass';
 import { useQuery } from '@tanstack/react-query';
+import { Input } from '../ui/input';
 
 const formSchema = z.object({
   calendarId: z.string().nonempty(),
   title: z.string().nonempty(),
-  description: z.string().optional(),
-  startDate: z.date(),
-  endDate: z.date(),
-  ownerIds: z.array(z.string()).nonempty(),
-  subscribers: z.array(z.string()),
-  pendingRequests: z.array(z.string()),
+  // description: z.string().optional(),
+  // startDate: z.date(),
+  // endDate: z.date(),
+  // ownerIds: z.array(z.string()).nonempty(),
+  // subscribers: z.array(z.string()),
+  // pendingRequests: z.array(z.string()),
 });
 
 const AddEntry = () => {
@@ -49,14 +50,16 @@ const AddEntry = () => {
     defaultValues: {
       calendarId: '',
       title: '',
-      description: '',
-      startDate: new Date(),
-      endDate: new Date(),
-      ownerIds: [],
-      subscribers: [],
-      pendingRequests: [],
+      // description: '',
+      // startDate: new Date(),
+      // endDate: new Date(),
+      // ownerIds: [],
+      // subscribers: [],
+      // pendingRequests: [],
     },
   });
+
+  console.log('form', form.formState.errors);
 
   if (!calendars || isLoading) {
     return <Loading classNames="mt-4 w-full mx-auto" />;
@@ -64,12 +67,10 @@ const AddEntry = () => {
 
   if (error) return <Error error={error as CustomError} />;
 
-  console.log('calendars', calendars);
-
   const onSubmit = (values: z.infer<typeof formSchema>) => {
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
-    console.log(values);
+    console.log('values', values);
   };
 
   return (
@@ -83,9 +84,12 @@ const AddEntry = () => {
           name="calendarId"
           render={({ field }) => (
             <FormItem className="w-full max-w-[700px]">
-              <FormLabel className="ml-1">Choose Calendar</FormLabel>
+              <FormLabel>Choose Calendar</FormLabel>
               <FormControl>
-                <Select>
+                <Select
+                  onValueChange={field.onChange}
+                  defaultValue={field.value}
+                >
                   <SelectTrigger className="w-full">
                     <SelectValue placeholder="Choose Calendar" />
                   </SelectTrigger>
@@ -102,6 +106,21 @@ const AddEntry = () => {
             </FormItem>
           )}
         />
+
+        <FormField
+          control={form.control}
+          name="title"
+          render={({ field }) => (
+            <FormItem className="m-4 w-full max-w-[700px]">
+              <FormLabel>Title</FormLabel>
+              <FormControl>
+                <Input placeholder="Title" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
         <Button type="submit">Submit</Button>
       </form>
     </Form>
