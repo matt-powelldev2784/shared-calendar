@@ -12,8 +12,8 @@ export type AddCalendarEntry = {
   endDate: Date;
   calendarId: string;
   ownerIds?: string[];
-  subscribers: string[];
-  pendingRequests: string[];
+  subscribers?: string[];
+  pendingRequests?: string[];
 };
 
 const addCalendarEntry = async (entry: AddCalendarEntry) => {
