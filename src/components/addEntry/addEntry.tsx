@@ -24,6 +24,14 @@ import type { CustomError } from '@/ts/errorClass';
 import { useQuery } from '@tanstack/react-query';
 import { Input } from '../ui/input';
 import { Textarea } from '../ui/textarea';
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from '@/components/ui/popover';
+import { Calendar } from '../ui/calendar';
+import { format } from 'date-fns';
+import CalendarIcon from '../../assets/icons/cal_icon.svg';
 
 const formSchema = z.object({
   calendarId: z.string().nonempty(),
@@ -35,6 +43,12 @@ const formSchema = z.object({
   endDateHour: z.number().min(0).max(23),
   endDateTenMinIntervals: z.number().min(0).max(5),
   endDateOneMinIntervals: z.number().min(0).max(9),
+  date: z
+    .date()
+    .nullable()
+    .refine((date) => date !== null, {
+      message: 'Date is required',
+    }),
   // ownerIds: z.array(z.string()).nonempty(),
   // subscribers: z.array(z.string()),
   // pendingRequests: z.array(z.string()),
@@ -62,13 +76,12 @@ const AddEntry = () => {
       endDateHour: 10,
       endDateTenMinIntervals: 0,
       endDateOneMinIntervals: 0,
+      date: undefined,
       // ownerIds: [],
       // subscribers: [],
       // pendingRequests: [],
     },
   });
-
-  console.log('form', form.formState.errors);
 
   if (!calendars || isLoading) {
     return <Loading classNames="mt-4 w-full mx-auto" />;
@@ -91,7 +104,7 @@ const AddEntry = () => {
         <FormField
           control={form.control}
           name="calendarId"
-          render={({ field }) => (
+          render={({ field, fieldState }) => (
             <FormItem className="w-full max-w-[700px]">
               <FormLabel>Choose Calendar</FormLabel>
               <FormControl>
@@ -99,7 +112,10 @@ const AddEntry = () => {
                   onValueChange={field.onChange}
                   defaultValue={field.value}
                 >
-                  <SelectTrigger className="w-full">
+                  <SelectTrigger
+                    aria-invalid={!!fieldState.error}
+                    className="w-full"
+                  >
                     <SelectValue placeholder="Choose Calendar" />
                   </SelectTrigger>
                   <SelectContent>
@@ -120,7 +136,7 @@ const AddEntry = () => {
           control={form.control}
           name="title"
           render={({ field }) => (
-            <FormItem className="m-4 w-full max-w-[700px]">
+            <FormItem className="mt-5 w-full max-w-[700px]">
               <FormLabel>Title</FormLabel>
               <FormControl>
                 <Input placeholder="Title" {...field} />
@@ -134,7 +150,7 @@ const AddEntry = () => {
           control={form.control}
           name="description"
           render={({ field }) => (
-            <FormItem className="m-4 w-full max-w-[700px]">
+            <FormItem className="mt-5 w-full max-w-[700px]">
               <FormLabel>Description</FormLabel>
               <FormControl>
                 <Textarea placeholder="Description" {...field} />
@@ -144,7 +160,49 @@ const AddEntry = () => {
           )}
         />
 
-        <div className="sm:gap:0 flex w-full max-w-[700px] flex-col items-center justify-between gap-4 sm:flex-row">
+        <FormField
+          control={form.control}
+          name="date"
+          render={({ field }) => (
+            <FormItem className="w-full max-w-[700px]">
+              <FormLabel>Date</FormLabel>
+              <Popover>
+                <PopoverTrigger asChild>
+                  <FormControl>
+                    <Button
+                      variant="outlineThin"
+                      size="sm"
+                      className="w-full border-zinc-200"
+                    >
+                      <img
+                        src={CalendarIcon}
+                        alt="calendar"
+                        className="-w-5 mr-2 h-5"
+                      />
+                      {form.getValues('date')
+                        ? format(form.getValues('date'), 'dd MMMM yyyy')
+                        : 'Pick a date'}
+                    </Button>
+                  </FormControl>
+                </PopoverTrigger>
+                <PopoverContent>
+                  <Calendar
+                    mode="single"
+                    selected={field.value}
+                    onSelect={field.onChange}
+                    disabled={(date) =>
+                      date > new Date() || date < new Date('1900-01-01')
+                    }
+                    initialFocus
+                  />
+                </PopoverContent>
+              </Popover>
+              <FormMessage className="text-destructive-foreground absolute top-16 -translate-x-0.5 -translate-y-3 text-sm" />
+            </FormItem>
+          )}
+        />
+
+        <div className="sm:gap:0 mt-3 flex w-full max-w-[700px] flex-col items-center justify-between gap-4 sm:flex-row">
           <div className="max-w-screen sm:max-w-none">
             <FormLabel className="mb-2 pl-4 sm:pl-0">Start Time</FormLabel>
             <div className="flex w-full max-w-screen flex-row px-4 sm:px-0">
@@ -185,7 +243,7 @@ const AddEntry = () => {
                     </FormLabel>
                     <FormControl>
                       <Input
-                        placeholder="Start Minute in 10 minute intervals"
+                        placeholder="Start Minute 1"
                         className="text-center"
                         type="number"
                         min="0"
@@ -212,7 +270,7 @@ const AddEntry = () => {
                     </FormLabel>
                     <FormControl>
                       <Input
-                        placeholder="Start Minute in 10 minute intervals"
+                        placeholder="Start Minute 2"
                         className="text-center"
                         type="number"
                         min="0"
@@ -272,7 +330,7 @@ const AddEntry = () => {
                     </FormLabel>
                     <FormControl>
                       <Input
-                        placeholder="Start Minute in 10 minute intervals"
+                        placeholder="Start Minute 1"
                         className="text-center"
                         type="number"
                         min="0"
@@ -299,7 +357,7 @@ const AddEntry = () => {
                     </FormLabel>
                     <FormControl>
                       <Input
-                        placeholder="Start Minute in 10 minute intervals"
+                        placeholder="Start Minute 2"
                         className="text-center"
                         type="number"
                         min="0"
