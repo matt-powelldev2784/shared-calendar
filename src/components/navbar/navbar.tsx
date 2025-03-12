@@ -30,7 +30,7 @@ const navItems = [
   {
     id: 3,
     text: 'Add Calendar Entry',
-    route: '/',
+    route: '/addentry',
     icon: <CalendarPlusIcon className="mr-2 h-6 w-6" />,
   },
   {
