@@ -1,4 +1,4 @@
-import { collection, addDoc, Timestamp } from 'firebase/firestore';
+import { collection, addDoc, Timestamp, doc, getDoc } from 'firebase/firestore';
 import { db } from '@/db/firebaseConfig';
 import { CustomError } from '@/ts/errorClass';
 import checkAuth from './checkAuth';
@@ -20,12 +20,6 @@ const addCalendarEntry = async (entry: AddCalendarEntry) => {
   try {
     const currentUser = await checkAuth();
 
-    const ownerIds = entry.ownerIds
-      ? entry.ownerIds.concat(currentUser.uid)
-      : [currentUser.uid];
-    const subscribers = entry.subscribers || [];
-    const pendingRequests = entry.pendingRequests || [];
-
     // validate data
     if (!entry.title || !entry.calendarId) {
       throw new CustomError(403, 'Title and calendar Id is required');
@@ -35,6 +29,25 @@ const addCalendarEntry = async (entry: AddCalendarEntry) => {
     if (!isValidStartEndDates(entry.startDate, entry.endDate)) {
       throw new CustomError(403, 'Invalid start and end dates');
     }
+
+    // get entry subscribers from calendar subscribers
+    const calendarDoc = doc(db, 'calendars', entry.calendarId);
+    if (!calendarDoc) {
+      throw new CustomError(404, 'Error adding entry, calendar does not exist');
+    }
+
+    const calendarDocData = (await getDoc(calendarDoc)).data();
+    if (!calendarDocData) {
+      throw new CustomError(404, 'Error adding entry, calendar does not exist');
+    }
+    const calenderSubscribers = calendarDocData.subscribers || [];
+
+    // define entry data
+    const ownerIds = entry.ownerIds
+      ? entry.ownerIds.concat(currentUser.uid)
+      : [currentUser.uid];
+    const subscribers = calenderSubscribers;
+    const pendingRequests = entry.pendingRequests || [];
 
     // validate arrays for uniqueness
     if (hasDuplicates(ownerIds)) {

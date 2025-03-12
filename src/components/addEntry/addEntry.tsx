@@ -32,6 +32,7 @@ import {
 import { Calendar } from '../ui/calendar';
 import { format } from 'date-fns';
 import CalendarIcon from '../../assets/icons/cal_icon.svg';
+import addCalendarEntry, { type AddCalendarEntry } from '@/db/addCalendarEntry';
 
 const convertFormValuesToEntry = (values: z.infer<typeof formSchema>) => {
   const startDateMinutes = parseInt(
@@ -50,7 +51,13 @@ const convertFormValuesToEntry = (values: z.infer<typeof formSchema>) => {
   const endDate = new Date(values.date);
   endDate.setHours(values.endDateHour, endDateMinutes);
 
-  const updatedEntry = { ...values, startDate, endDate };
+  const updatedEntry: AddCalendarEntry = {
+    title: values.title,
+    description: values.description,
+    startDate,
+    endDate,
+    calendarId: values.calendarId,
+  };
 
   return updatedEntry;
 };
@@ -115,8 +122,9 @@ const AddEntry = () => {
 
   if (error) return <Error error={error as CustomError} />;
 
-  const onSubmit = (values: z.infer<typeof formSchema>) => {
+  const onSubmit = async (values: z.infer<typeof formSchema>) => {
     const entry = convertFormValuesToEntry(values);
+    await addCalendarEntry(entry);
 
     console.log('entry', entry);
   };
