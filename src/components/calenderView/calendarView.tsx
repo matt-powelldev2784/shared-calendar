@@ -2,7 +2,7 @@ import { Button } from '@/components/ui/button';
 import { addDays, format } from 'date-fns';
 import CalendarIcon from '../../assets/icons/cal_icon.svg';
 import DownIcon from '../../assets/icons/down_icon.svg';
-import { Calendar } from '@/components/ui/calendar';
+import { Calendar } from '@/components/ui/customCalendar';
 import {
   Popover,
   PopoverContent,
