@@ -1,9 +1,9 @@
-import { collection, addDoc, Timestamp } from "firebase/firestore";
+import { collection, addDoc, Timestamp } from 'firebase/firestore';
 import { db } from '@/db/firebaseConfig';
-import { CustomError } from "@/ts/errorClass";
-import checkAuth from "./checkAuth";
-import { hasDuplicates } from "@/lib/hasDuplicates";
-import { isValidStartEndDates } from "@/lib/validateStartEndDates";
+import { CustomError } from '@/ts/errorClass';
+import checkAuth from './checkAuth';
+import { hasDuplicates } from '@/lib/hasDuplicates';
+import { isValidStartEndDates } from '@/lib/validateStartEndDates';
 
 export type AddCalendarEntry = {
   title: string;
@@ -28,27 +28,27 @@ const addCalendarEntry = async (entry: AddCalendarEntry) => {
 
     // validate data
     if (!entry.title || !entry.calendarId) {
-      throw new CustomError(403, "Title and calendar Id is required");
+      throw new CustomError(403, 'Title and calendar Id is required');
     }
 
     // // validate start and end dates
     if (!isValidStartEndDates(entry.startDate, entry.endDate)) {
-      throw new CustomError(403, "Invalid start and end dates");
+      throw new CustomError(403, 'Invalid start and end dates');
     }
 
     // validate arrays for uniqueness
     if (hasDuplicates(ownerIds)) {
-      throw new CustomError(403, "Owner IDs must be unique");
+      throw new CustomError(403, 'Owner IDs must be unique');
     }
     if (hasDuplicates(subscribers)) {
-      throw new CustomError(403, "Subscriber IDs must be unique");
+      throw new CustomError(403, 'Subscriber IDs must be unique');
     }
     if (hasDuplicates(pendingRequests)) {
-      throw new CustomError(403, "Pending Requests must be unique");
+      throw new CustomError(403, 'Pending Requests must be unique');
     }
 
     // add calendar entry
-    const entriesRef = collection(db, "entries");
+    const entriesRef = collection(db, 'entries');
     const newEntry = {
       ...entry,
       startDate: Timestamp.fromDate(entry.startDate),
@@ -60,7 +60,7 @@ const addCalendarEntry = async (entry: AddCalendarEntry) => {
     const entryDocRef = await addDoc(entriesRef, newEntry);
     return entryDocRef.id;
   } catch (error) {
-    console.error("Error adding calendar entry: ", error);
+    console.error('Error adding calendar entry: ', error);
     throw error;
   }
 };

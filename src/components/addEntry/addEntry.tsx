@@ -33,6 +33,28 @@ import { Calendar } from '../ui/calendar';
 import { format } from 'date-fns';
 import CalendarIcon from '../../assets/icons/cal_icon.svg';
 
+const convertFormValuesToEntry = (values: z.infer<typeof formSchema>) => {
+  const startDateMinutes = parseInt(
+    values.startDateTenMinIntervals.toString() +
+      values.startDateOneMinIntervals.toString(),
+  );
+
+  const endDateMinutes = Number(
+    values.endDateTenMinIntervals.toString() +
+      values.endDateOneMinIntervals.toString(),
+  );
+
+  const startDate = new Date(values.date);
+  startDate.setHours(values.startDateHour, startDateMinutes);
+
+  const endDate = new Date(values.date);
+  endDate.setHours(values.endDateHour, endDateMinutes);
+
+  const updatedEntry = { ...values, startDate, endDate };
+
+  return updatedEntry;
+};
+
 const formSchema = z.object({
   calendarId: z.string().nonempty(),
   title: z.string().nonempty(),
@@ -49,6 +71,8 @@ const formSchema = z.object({
     .refine((date) => date !== null, {
       message: 'Date is required',
     }),
+  startDate: z.undefined(),
+  endDate: z.undefined(),
   // ownerIds: z.array(z.string()).nonempty(),
   // subscribers: z.array(z.string()),
   // pendingRequests: z.array(z.string()),
@@ -77,6 +101,8 @@ const AddEntry = () => {
       endDateTenMinIntervals: 0,
       endDateOneMinIntervals: 0,
       date: undefined,
+      startDate: undefined,
+      endDate: undefined,
       // ownerIds: [],
       // subscribers: [],
       // pendingRequests: [],
@@ -90,9 +116,9 @@ const AddEntry = () => {
   if (error) return <Error error={error as CustomError} />;
 
   const onSubmit = (values: z.infer<typeof formSchema>) => {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
-    console.log('values', values);
+    const entry = convertFormValuesToEntry(values);
+
+    console.log('entry', entry);
   };
 
   return (
