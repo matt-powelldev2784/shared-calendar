@@ -1,7 +1,7 @@
 import { SignOut } from "@/components/auth/signOut";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { onAuthStateChanged } from "firebase/auth";
-import { auth } from "../../firebaseConfig";
+import { auth } from '@/db/firebaseConfig';
 import { useEffect } from "react";
 
 export const Route = createFileRoute("/signout")({

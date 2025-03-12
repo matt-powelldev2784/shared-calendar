@@ -46,8 +46,8 @@ code {
   --muted-foreground: #8c8c8c;
   --accent: #f2f2f2;
   --accent-foreground: #363636;
-  --destructive: #b34a00;
-  --destructive-foreground: #b34a00;
+  --destructive: #f01010;
+  --destructive-foreground: #e80a0a;
   --border: #ebebeb;
   --input: #ebebeb;
   --ring: #dedede;
@@ -82,8 +82,8 @@ code {
   --muted-foreground: #b4b4b4;
   --accent: #464646;
   --accent-foreground: #fafafa;
-  --destructive: #653600;
-  --destructive-foreground: #a23c00;
+  --destructive: #d50000;
+  --destructive-foreground: #d50000;
   --border: #464646;
   --input: #464646;
   --ring: #707070;

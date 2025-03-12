@@ -1,9 +1,9 @@
-import { collection, addDoc, Timestamp } from "firebase/firestore";
-import { db } from "../../firebaseConfig";
-import { CustomError } from "@/ts/errorClass";
-import checkAuth from "./checkAuth";
-import { hasDuplicates } from "@/lib/hasDuplicates";
-import { isValidStartEndDates } from "@/lib/validateStartEndDates";
+import { collection, addDoc, Timestamp, doc, getDoc } from 'firebase/firestore';
+import { db } from '@/db/firebaseConfig';
+import { CustomError } from '@/ts/errorClass';
+import checkAuth from './checkAuth';
+import { hasDuplicates } from '@/lib/hasDuplicates';
+import { isValidStartEndDates } from '@/lib/validateStartEndDates';
 
 export type AddCalendarEntry = {
   title: string;
@@ -12,43 +12,56 @@ export type AddCalendarEntry = {
   endDate: Date;
   calendarId: string;
   ownerIds?: string[];
-  subscribers: string[];
-  pendingRequests: string[];
+  subscribers?: string[];
+  pendingRequests?: string[];
 };
 
 const addCalendarEntry = async (entry: AddCalendarEntry) => {
   try {
-    const currentUser = checkAuth();
-
-    const ownerIds = entry.ownerIds
-      ? entry.ownerIds.concat(currentUser.uid)
-      : [currentUser.uid];
-    const subscribers = entry.subscribers || [];
-    const pendingRequests = entry.pendingRequests || [];
+    const currentUser = await checkAuth();
 
     // validate data
     if (!entry.title || !entry.calendarId) {
-      throw new CustomError(403, "Title and calendar Id is required");
+      throw new CustomError(403, 'Title and calendar Id is required');
     }
 
     // // validate start and end dates
     if (!isValidStartEndDates(entry.startDate, entry.endDate)) {
-      throw new CustomError(403, "Invalid start and end dates");
+      throw new CustomError(403, 'Invalid start and end dates');
     }
+
+    // get entry subscribers from calendar subscribers
+    const calendarDoc = doc(db, 'calendars', entry.calendarId);
+    if (!calendarDoc) {
+      throw new CustomError(404, 'Error adding entry, calendar does not exist');
+    }
+
+    const calendarDocData = (await getDoc(calendarDoc)).data();
+    if (!calendarDocData) {
+      throw new CustomError(404, 'Error adding entry, calendar does not exist');
+    }
+    const calenderSubscribers = calendarDocData.subscribers || [];
+
+    // define entry data
+    const ownerIds = entry.ownerIds
+      ? entry.ownerIds.concat(currentUser.uid)
+      : [currentUser.uid];
+    const subscribers = calenderSubscribers;
+    const pendingRequests = entry.pendingRequests || [];
 
     // validate arrays for uniqueness
     if (hasDuplicates(ownerIds)) {
-      throw new CustomError(403, "Owner IDs must be unique");
+      throw new CustomError(403, 'Owner IDs must be unique');
     }
     if (hasDuplicates(subscribers)) {
-      throw new CustomError(403, "Subscriber IDs must be unique");
+      throw new CustomError(403, 'Subscriber IDs must be unique');
     }
     if (hasDuplicates(pendingRequests)) {
-      throw new CustomError(403, "Pending Requests must be unique");
+      throw new CustomError(403, 'Pending Requests must be unique');
     }
 
     // add calendar entry
-    const entriesRef = collection(db, "entries");
+    const entriesRef = collection(db, 'entries');
     const newEntry = {
       ...entry,
       startDate: Timestamp.fromDate(entry.startDate),
@@ -60,8 +73,8 @@ const addCalendarEntry = async (entry: AddCalendarEntry) => {
     const entryDocRef = await addDoc(entriesRef, newEntry);
     return entryDocRef.id;
   } catch (error) {
-    console.error("Error adding calendar entry: ", error);
-    throw new CustomError(500, "Failed to add calendar entry");
+    console.error('Error adding calendar entry: ', error);
+    throw error;
   }
 };
 

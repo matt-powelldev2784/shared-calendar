@@ -4,11 +4,12 @@ import {
   where,
   getDocs,
   Timestamp,
-} from "firebase/firestore";
-import { db } from "../../firebaseConfig";
-import type { CalendarEntry } from "@/ts/Calendar";
-import { CustomError } from "@/ts/errorClass";
-import { isValidStartEndDates } from "@/lib/validateStartEndDates";
+} from 'firebase/firestore';
+import { db } from '@/db//firebaseConfig';
+import type { CalendarEntry } from '@/ts/Calendar';
+import { CustomError } from '@/ts/errorClass';
+import { isValidStartEndDates } from '@/lib/validateStartEndDates';
+import checkAuth from './checkAuth';
 
 interface GetCalendarEntriesInput {
   calendarIds: string[];
@@ -22,6 +23,8 @@ const getCalendarEntries = async ({
   endDate,
 }: GetCalendarEntriesInput) => {
   try {
+    await checkAuth();
+
     // validate text inputs
     if (!calendarIds || !calendarIds.length) {
       throw new CustomError(403, 'Calendar Ids are required');
@@ -32,10 +35,7 @@ const getCalendarEntries = async ({
       throw new CustomError(403, 'Invalid start and end dates');
     }
 
-    // get a reference to the entries collection
     const entriesRef = collection(db, 'entries');
-
-    // convert dates to firestore timestamps
     const startTimestamp = Timestamp.fromDate(startDate);
     const endTimestamp = Timestamp.fromDate(endDate);
 
@@ -55,7 +55,6 @@ const getCalendarEntries = async ({
       return [];
     }
 
-    // map the documents to an array of calendar entries
     const calendarEntries = entriesQuerySnapshot.docs.map((doc) => {
       const data = doc.data();
       return {
@@ -73,8 +72,8 @@ const getCalendarEntries = async ({
 
     return calendarEntries;
   } catch (error) {
-    console.error("Error getting calendar entries: ", error);
-    throw new CustomError(500, "Failed to get calendar entries");
+    console.error('Error getting calendar entries: ', error);
+    throw error;
   }
 };
 

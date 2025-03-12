@@ -1,5 +1,5 @@
 import { signOut as signoutFirebase } from "firebase/auth";
-import { auth } from "../../../firebaseConfig";
+import { auth } from '@/db/firebaseConfig';
 import { Button } from "@/components/ui/button";
 import {
   Card,

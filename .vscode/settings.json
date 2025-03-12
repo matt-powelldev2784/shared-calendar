@@ -9,6 +9,7 @@
     "**/routeTree.gen.ts": true
   },
   "cSpell.words": [
+    "addentry",
     "Embla",
     "firebaseapp",
     "firebasestorage",

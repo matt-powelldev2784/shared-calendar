@@ -10,3 +10,15 @@ export type CalendarEntry = {
   pendingRequests: string[];
 };
 
+export type Calendar = {
+  id: string;
+  // the calendar id is a duplicate of the id field
+  // this was required to get the firebase rules to work
+  calendarId: string;
+  name: string;
+  description?: string;
+  ownerIds: string[];
+  subscribers: string[];
+  pendingRequests: string[];
+};
+
