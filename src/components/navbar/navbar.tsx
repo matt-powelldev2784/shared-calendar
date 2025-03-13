@@ -48,7 +48,7 @@ export const Navbar = () => {
 
   return (
     <nav className="bg-primary z-1100 flex h-14 w-full items-center justify-between px-2 text-xl font-bold text-white md:h-12 md:px-4">
-      <div className="flex items-center">
+      <div className="ml-2 flex items-center sm:ml-1">
         {/* Avatar */}
         <UserAvatar />
 
@@ -59,24 +59,24 @@ export const Navbar = () => {
       </div>
 
       {/* Main Navigation Icons */}
-      <div className="flex items-center gap-4 sm:gap-4">
-        {!menuIsOpen && (
-          <>
-            <NavIcon
-              linkTo="/calendar"
-              icon={<CalendarIcon color="#FFFF" size="26" />}
-              visibleRoutes="/addentry"
-              ariaLabel="Go to calendar page"
-            />
+      <div className="mr-2 flex items-center gap-6 sm:mr-0 sm:gap-4">
+        <>
+          <NavIcon
+            linkTo="/calendar"
+            icon={<CalendarIcon color="#FFFF" size="26" />}
+            visibleRoutes={['/addentry', '/signout']}
+            ariaLabel="Go to calendar page"
+            className={`${menuIsOpen ? 'hidden md:block' : 'block'}`}
+          />
 
-            <NavIcon
-              linkTo="/addentry"
-              icon={<CirclePlus color="#FFFF" size="28" />}
-              visibleRoutes="/calendar"
-              ariaLabel="Go to add entry page"
-            />
-          </>
-        )}
+          <NavIcon
+            linkTo="/addentry"
+            icon={<CirclePlus color="#FFFF" size="28" />}
+            visibleRoutes={['/calendar']}
+            ariaLabel="Go to add entry page"
+            className={`${menuIsOpen ? 'hidden md:block' : 'block'}`}
+          />
+        </>
 
         <NavIcon
           linkTo="/calendar"

@@ -4,7 +4,7 @@ import type { JSX } from 'react';
 interface NavIconProps {
   linkTo: string;
   icon?: JSX.Element;
-  visibleRoutes?: string;
+  visibleRoutes?: string[];
   onClick?: () => void;
   children?: JSX.Element;
   ariaLabel?: string;
@@ -52,5 +52,6 @@ const NavIcon = ({
       </Link>
     );
 };
+
 
 export default NavIcon;
