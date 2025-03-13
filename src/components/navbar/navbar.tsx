@@ -6,8 +6,9 @@ import { LogOut as LogOutIcon } from 'lucide-react';
 import { Users as UsersIcon } from 'lucide-react';
 import { CalendarPlus as CalendarPlusIcon } from 'lucide-react';
 import { lazy, useState } from 'react';
-import { Link, useLocation } from '@tanstack/react-router';
+import { Link } from '@tanstack/react-router';
 import NavIcon from '../ui/navIcon';
+import NavItem from './navItem';
 
 // firebase auth uses over 300kb of data
 // lazy loading the UserAvatar component will reduce the initial bundle size
@@ -44,8 +45,6 @@ const navItems = [
 
 export const Navbar = () => {
   const [menuIsOpen, setMenuIsOpen] = useState(false);
-  const { pathname } = useLocation();
-  console.log('pathname', pathname);
 
   return (
     <nav className="bg-primary z-1100 flex h-14 w-full items-center justify-between px-2 text-xl font-bold text-white md:h-12 md:px-4">
@@ -60,29 +59,38 @@ export const Navbar = () => {
       </div>
 
       {/* Main Navigation Icons */}
-      <div className="flex items-center gap-2 sm:gap-4">
-        <NavIcon
-          linkTo="/calendar"
-          icon={<CalendarIcon color="#FFFF" size="26" />}
-          visibleRoutes="/addentry"
-          ariaLabel="Go to calendar page"
-        />
+      <div className="flex items-center gap-4 sm:gap-4">
+        {!menuIsOpen && (
+          <>
+            <NavIcon
+              linkTo="/calendar"
+              icon={<CalendarIcon color="#FFFF" size="26" />}
+              visibleRoutes="/addentry"
+              ariaLabel="Go to calendar page"
+            />
 
-        <NavIcon
-          linkTo="/addentry"
-          icon={<CirclePlus color="#FFFF" size="28" />}
-          visibleRoutes="/calendar"
-          ariaLabel="Go to add entry page"
-        />
+            <NavIcon
+              linkTo="/addentry"
+              icon={<CirclePlus color="#FFFF" size="28" />}
+              visibleRoutes="/calendar"
+              ariaLabel="Go to add entry page"
+            />
+          </>
+        )}
 
         <NavIcon
           linkTo="/calendar"
           onClick={() => setMenuIsOpen(!menuIsOpen)}
           alwaysVisible={true}
           ariaLabel={menuIsOpen ? 'Close menu' : 'Open menu'}
+          className="mr-2"
         >
           {menuIsOpen ? (
-            <img src={crossIconWhite} className="h-4 w-4" alt="Close menu" />
+            <img
+              src={crossIconWhite}
+              className="h-6 w-6 p-1"
+              alt="Close menu"
+            />
           ) : (
             <img src={nineDotsIcon} className="h-6 w-6" alt="Open menu" />
           )}
@@ -100,27 +108,11 @@ export const Navbar = () => {
         {/* Desktop Navigation Items */}
         {menuIsOpen &&
           navItems.map((item) => (
-            <li
+            <NavItem
               key={item.id}
-              className="flex items-center justify-center border-b border-white"
-            >
-              <Link
-                to={item.route}
-                onClick={() => setMenuIsOpen(!menuIsOpen)}
-                className="flex h-full w-full flex-col p-4 text-base hover:bg-orange-400"
-              >
-                <div className="flex items-center">
-                  {item.icon}
-                  {item.text}
-                </div>
-
-                {item.description && (
-                  <span className="text-grey-400 mt-2 text-xs font-medium">
-                    {item.description}
-                  </span>
-                )}
-              </Link>
-            </li>
+              {...item}
+              onClick={() => setMenuIsOpen(!menuIsOpen)}
+            />
           ))}
       </ul>
 
@@ -132,7 +124,6 @@ export const Navbar = () => {
             : '`z-1200 fixed top-0 bottom-0 left-[-100%] w-[10%] duration-500 ease-in-out md:hidden'
         }
       >
-        {/* Mobile Navigation Logo */}
         <img
           src={sharcLogoWhite}
           alt="sharc logo"
@@ -142,27 +133,11 @@ export const Navbar = () => {
         {/* Mobile Navigation Items */}
         {menuIsOpen &&
           navItems.map((item) => (
-            <li
+            <NavItem
               key={item.id}
-              className="z-1300 flex items-center justify-center border-b border-white"
-            >
-              <Link
-                to={item.route}
-                onClick={() => setMenuIsOpen(!menuIsOpen)}
-                className="flex h-full w-full flex-col p-4 text-base hover:bg-orange-400"
-              >
-                <div className="flex items-center">
-                  {item.icon}
-                  {item.text}
-                </div>
-
-                {item.description && (
-                  <span className="text-grey-400 mt-2 text-xs font-medium">
-                    {item.description}
-                  </span>
-                )}
-              </Link>
-            </li>
+              {...item}
+              onClick={() => setMenuIsOpen(!menuIsOpen)}
+            />
           ))}
       </ul>
     </nav>

@@ -9,6 +9,7 @@ interface NavIconProps {
   children?: JSX.Element;
   ariaLabel?: string;
   alwaysVisible?: boolean;
+  className?: string;
 }
 
 const NavIcon = ({
@@ -19,6 +20,7 @@ const NavIcon = ({
   children,
   ariaLabel,
   alwaysVisible,
+  className,
 }: NavIconProps) => {
   const { pathname } = useLocation();
 
@@ -27,7 +29,7 @@ const NavIcon = ({
       <Link
         onClick={onClick}
         to={linkTo}
-        className="flex items-center justify-center"
+        className={`z-1400 flex items-center justify-center ${className}`}
         aria-label={ariaLabel}
       >
         {icon && icon}
@@ -41,7 +43,7 @@ const NavIcon = ({
       <Link
         onClick={onClick}
         to={linkTo}
-        className="flex items-center justify-center"
+        className={`z-1400 flex items-center justify-center ${className}`}
         aria-label={ariaLabel}
       >
         {(visibleRoutes?.includes(pathname) && icon) || null}
