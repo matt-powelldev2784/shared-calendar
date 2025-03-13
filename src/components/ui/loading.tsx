@@ -11,7 +11,6 @@ const variants = {
 };
 
 const Loading = ({ classNames, variant }: LoadingProps) => {
-  console.log('variant', variant);
   return (
     <img
       src={LoadingSpinner}
