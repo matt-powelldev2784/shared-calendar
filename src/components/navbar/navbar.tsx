@@ -60,23 +60,23 @@ export const Navbar = () => {
 
       {/* Main Navigation Icons */}
       <div className="flex items-center gap-4 sm:gap-4">
-        {!menuIsOpen && (
-          <>
-            <NavIcon
-              linkTo="/calendar"
-              icon={<CalendarIcon color="#FFFF" size="26" />}
-              visibleRoutes="/addentry"
-              ariaLabel="Go to calendar page"
-            />
+        <>
+          <NavIcon
+            linkTo="/calendar"
+            icon={<CalendarIcon color="#FFFF" size="26" />}
+            visibleRoutes="/addentry"
+            ariaLabel="Go to calendar page"
+            className={`${menuIsOpen ? 'hidden md:block' : 'block'}`}
+          />
 
-            <NavIcon
-              linkTo="/addentry"
-              icon={<CirclePlus color="#FFFF" size="28" />}
-              visibleRoutes="/calendar"
-              ariaLabel="Go to add entry page"
-            />
-          </>
-        )}
+          <NavIcon
+            linkTo="/addentry"
+            icon={<CirclePlus color="#FFFF" size="28" />}
+            visibleRoutes="/calendar"
+            ariaLabel="Go to add entry page"
+            className={`${menuIsOpen ? 'hidden md:block' : 'block'}`}
+          />
+        </>
 
         <NavIcon
           linkTo="/calendar"
