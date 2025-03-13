@@ -415,7 +415,11 @@ const AddEntry = () => {
           </div>
         </div>
 
-        <Button type="submit" className="m-4 mt-8" size="lg">
+        <Button
+          type="submit"
+          className="m-4 mt-8 w-full max-w-[700px]"
+          size="lg"
+        >
           {mutation.isPending ? <Loading variant="sm" /> : 'Submit'}
         </Button>
       </form>
