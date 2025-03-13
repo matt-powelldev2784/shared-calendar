@@ -66,7 +66,7 @@ export const CalendarView = () => {
       <div className="bg-primary/25 z-100s relative flex w-full items-center justify-center gap-4 p-2">
         <Popover open={isSelectDateOpen} onOpenChange={setIsSelectDateOpen}>
           <PopoverTrigger asChild>
-            <Button variant="datePicker" size="sm">
+            <Button variant="datePicker" className='w-96'>
               <img
                 src={CalendarIcon}
                 alt="calendar"

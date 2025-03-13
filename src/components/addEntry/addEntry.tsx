@@ -128,6 +128,7 @@ const AddEntry = () => {
   }
 
   if (error) return <Error error={error as CustomError} />;
+  if (mutation.isError) return <Error error={mutation.error as CustomError} />;
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     mutation.mutate(values);
