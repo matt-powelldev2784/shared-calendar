@@ -64,7 +64,7 @@ export const Navbar = () => {
           <NavIcon
             linkTo="/calendar"
             icon={<CalendarIcon color="#FFFF" size="26" />}
-            visibleRoutes="/addentry"
+            visibleRoutes={['/addentry', '/signout']}
             ariaLabel="Go to calendar page"
             className={`${menuIsOpen ? 'hidden md:block' : 'block'}`}
           />
@@ -72,7 +72,7 @@ export const Navbar = () => {
           <NavIcon
             linkTo="/addentry"
             icon={<CirclePlus color="#FFFF" size="28" />}
-            visibleRoutes="/calendar"
+            visibleRoutes={['/calendar']}
             ariaLabel="Go to add entry page"
             className={`${menuIsOpen ? 'hidden md:block' : 'block'}`}
           />
