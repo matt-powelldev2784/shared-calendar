@@ -1,12 +1,13 @@
 import sharcLogoWhite from "../../assets/logo/sharc_logo_white.svg";
 import crossIconWhite from "../../assets/icons/cross_white.svg";
 import nineDotsIcon from "../../assets/icons/nine_dots.svg";
-import { Calendar as CalendarIcon } from "lucide-react";
-import { LogOut as LogOutIcon } from "lucide-react";
-import { Users as UsersIcon } from "lucide-react";
-import { CalendarPlus as CalendarPlusIcon } from "lucide-react";
+import { Calendar as CalendarIcon, CirclePlus } from 'lucide-react';
+import { LogOut as LogOutIcon } from 'lucide-react';
+import { Users as UsersIcon } from 'lucide-react';
+import { CalendarPlus as CalendarPlusIcon } from 'lucide-react';
 import { lazy, useState } from 'react';
-import { Link } from '@tanstack/react-router';
+import { Link, useLocation } from '@tanstack/react-router';
+import NavIcon from '../ui/navIcon';
 
 // firebase auth uses over 300kb of data
 // lazy loading the UserAvatar component will reduce the initial bundle size
@@ -43,6 +44,8 @@ const navItems = [
 
 export const Navbar = () => {
   const [menuIsOpen, setMenuIsOpen] = useState(false);
+  const { pathname } = useLocation();
+  console.log('pathname', pathname);
 
   return (
     <nav className="bg-primary z-1100 flex h-14 w-full items-center justify-between px-2 text-xl font-bold text-white md:h-12 md:px-4">
@@ -56,18 +59,35 @@ export const Navbar = () => {
         </Link>
       </div>
 
-      {/* Desktop Navigation Icon */}
-      <button
-        onClick={() => setMenuIsOpen(!menuIsOpen)}
-        className="z-1400"
-        aria-label={menuIsOpen ? 'Close menu' : 'Open menu'}
-      >
-        {menuIsOpen ? (
-          <img src={crossIconWhite} className="h-4 pr-3" alt="Close menu" />
-        ) : (
-          <img src={nineDotsIcon} className="h-6 pr-2" alt="Open menu" />
-        )}
-      </button>
+      {/* Main Navigation Icons */}
+      <div className="flex items-center gap-2 sm:gap-4">
+        <NavIcon
+          linkTo="/calendar"
+          icon={<CalendarIcon color="#FFFF" size="26" />}
+          visibleRoutes="/addentry"
+          ariaLabel="Go to calendar page"
+        />
+
+        <NavIcon
+          linkTo="/addentry"
+          icon={<CirclePlus color="#FFFF" size="28" />}
+          visibleRoutes="/calendar"
+          ariaLabel="Go to add entry page"
+        />
+
+        <NavIcon
+          linkTo="/calendar"
+          onClick={() => setMenuIsOpen(!menuIsOpen)}
+          alwaysVisible={true}
+          ariaLabel={menuIsOpen ? 'Close menu' : 'Open menu'}
+        >
+          {menuIsOpen ? (
+            <img src={crossIconWhite} className="h-4 w-4" alt="Close menu" />
+          ) : (
+            <img src={nineDotsIcon} className="h-6 w-6" alt="Open menu" />
+          )}
+        </NavIcon>
+      </div>
 
       {/* Desktop Navigation Menu */}
       <ul
