@@ -21,7 +21,7 @@ import getSubscribedCalendars from '@/db/getSubscribedCalendars';
 import Loading from '../ui/loading';
 import Error from '../ui/error';
 import type { CustomError } from '@/ts/errorClass';
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import { Input } from '../ui/input';
 import { Textarea } from '../ui/textarea';
 import {
@@ -95,6 +95,13 @@ const AddEntry = () => {
     queryFn: async () => await getSubscribedCalendars(),
   });
 
+  const mutation = useMutation({
+    mutationFn: async (values: z.infer<typeof formSchema>) => {
+      const entry = convertFormValuesToEntry(values);
+      return await addCalendarEntry(entry);
+    },
+  });
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -121,12 +128,10 @@ const AddEntry = () => {
   }
 
   if (error) return <Error error={error as CustomError} />;
+  if (mutation.isError) return <Error error={mutation.error as CustomError} />;
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    const entry = convertFormValuesToEntry(values);
-    await addCalendarEntry(entry);
-
-    console.log('entry', entry);
+    mutation.mutate(values);
   };
 
   return (
@@ -224,9 +229,7 @@ const AddEntry = () => {
                     mode="single"
                     selected={field.value}
                     onSelect={field.onChange}
-                    disabled={(date) =>
-                      date > new Date() || date < new Date('1900-01-01')
-                    }
+                    disabled={(date) => date < new Date('1900-01-01')}
                     initialFocus
                   />
                 </PopoverContent>
@@ -412,8 +415,8 @@ const AddEntry = () => {
           </div>
         </div>
 
-        <Button type="submit" className="m-4">
-          Submit
+        <Button type="submit" className="m-4 mt-8" size="lg">
+          {mutation.isPending ? <Loading variant="sm" /> : 'Submit'}
         </Button>
       </form>
     </Form>
