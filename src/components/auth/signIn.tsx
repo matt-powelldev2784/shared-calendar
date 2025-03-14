@@ -2,14 +2,13 @@ import { signInWithPopup } from "firebase/auth";
 import { GoogleAuthProvider } from "firebase/auth";
 import { auth, db } from '@/db/firebaseConfig';
 import {
-  addDoc,
   arrayUnion,
   collection,
   doc,
   getDoc,
   setDoc,
   updateDoc,
-} from "firebase/firestore";
+} from 'firebase/firestore';
 import {
   Card,
   CardHeader,
@@ -75,16 +74,18 @@ const SignInWithGoogle = async () => {
 
       // create a public user document
       // this is used to share calendars and entries with other users
-      const publicUserDocRef = doc(db, "publicUsers", user.uid);
+      const publicUserDocRef = doc(db, 'publicUsers', user.uid);
       await setDoc(publicUserDocRef, {
         email: user.email,
         userId: user.uid,
       });
 
       // create a default calendar for the new user
-      const defaultCalendarRef = await addDoc(collection(db, "calendars"), {
+      const calendarDocRef = doc(collection(db, 'calendars'));
+      await setDoc(calendarDocRef, {
+        calendarId: calendarDocRef.id,
         name: `${user.displayName} Main`,
-        description: "This is your default calendar.",
+        description: 'This is your default calendar.',
         ownerIds: [user.uid],
         subscribers: [user.uid],
         pendingRequests: [],
@@ -92,7 +93,7 @@ const SignInWithGoogle = async () => {
 
       // add the default calendar to the user's subscribedCalendars array
       await updateDoc(userDocRef, {
-        subscribedCalendars: arrayUnion(defaultCalendarRef.id),
+        subscribedCalendars: arrayUnion(calendarDocRef.id),
       });
     }
   } catch (error: any) {

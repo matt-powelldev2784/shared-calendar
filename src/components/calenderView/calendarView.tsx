@@ -18,42 +18,43 @@ import sortCalendarEntriesByDate from '@/lib/sortCalendarEntriesByDate';
 import Loading from '../ui/loading';
 import Error from '../ui/error';
 import type { CustomError } from '@/ts/errorClass';
+import getSubscribedCalendars from '@/db/getSubscribedCalendars';
 
 type FetchCalendarEntriesInput = {
   date: Date;
-  calendarId: string;
+  calendarId?: string;
   daysVisible: number;
 };
 
-const fetchCalendarEntries = async ({
+const fetchCalendarData = async ({
   date,
   calendarId,
   daysVisible,
 }: FetchCalendarEntriesInput) => {
   const startDate = startOfDay(date);
   const endDate = endOfDay(addDays(date, daysVisible - 1));
-  return getCalendarEntries({
-    calendarIds: [calendarId],
+
+  const calendars = await getSubscribedCalendars();
+  const calendarEntries = await getCalendarEntries({
+    calendarIds: [calendarId || calendars[0].id],
     startDate,
     endDate,
   });
+
+  return { calendars, calendarEntries };
 };
 
 export const CalendarView = () => {
   const [date, setDate] = useState<Date>(new Date());
   const [isSelectDateOpen, setIsSelectDateOpen] = useState(false);
   const daysVisible = 7;
-  const calendarId = 'yw1klS3kMHGXHFHeqaJ4';
+  // TO DO
+  // Add a param to specify the calendar to display
+  const calendarId = undefined;
 
   const { data, error, isLoading } = useQuery({
     queryKey: ['calendarEntries', calendarId, date.toISOString(), daysVisible],
-    queryFn: () => fetchCalendarEntries({ date, calendarId, daysVisible }),
-  });
-
-  const calendarData = sortCalendarEntriesByDate({
-    daysToReturn: daysVisible,
-    calendarData: data || [],
-    firstDateToDisplay: date,
+    queryFn: () => fetchCalendarData({ date, calendarId, daysVisible }),
   });
 
   const handleDateSelect = (selectedDate: Date) => {
@@ -61,12 +62,18 @@ export const CalendarView = () => {
     setIsSelectDateOpen(false);
   };
 
+  const calendarData = sortCalendarEntriesByDate({
+    daysToReturn: daysVisible,
+    calendarData: data?.calendarEntries || [],
+    firstDateToDisplay: date,
+  });
+
   return (
     <div className="flex w-full flex-col items-center justify-center">
       <div className="bg-primary/25 z-100s relative flex w-full items-center justify-center gap-4 p-2">
         <Popover open={isSelectDateOpen} onOpenChange={setIsSelectDateOpen}>
           <PopoverTrigger asChild>
-            <Button variant="datePicker" className='w-96'>
+            <Button variant="datePicker" className="w-96">
               <img
                 src={CalendarIcon}
                 alt="calendar"
