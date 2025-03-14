@@ -33,6 +33,7 @@ import { Calendar } from '../ui/calendar';
 import { format } from 'date-fns';
 import CalendarIcon from '../../assets/icons/cal_icon.svg';
 import addCalendarEntry, { type AddCalendarEntry } from '@/db/addCalendarEntry';
+import { useNavigate } from '@tanstack/react-router';
 
 const convertFormValuesToEntry = (values: z.infer<typeof formSchema>) => {
   const startDateMinutes = parseInt(
@@ -86,6 +87,9 @@ const formSchema = z.object({
 });
 
 const AddEntry = () => {
+  const navigate = useNavigate();
+
+  // get calendar list for drop down menu
   const {
     data: calendars,
     error,
@@ -95,12 +99,20 @@ const AddEntry = () => {
     queryFn: async () => await getSubscribedCalendars(),
   });
 
+  // submit calendar entry and navigate to calendar
   const mutation = useMutation({
     mutationFn: async (values: z.infer<typeof formSchema>) => {
       const entry = convertFormValuesToEntry(values);
-      return await addCalendarEntry(entry);
+      const calendarEntry = await addCalendarEntry(entry);
+
+      if (calendarEntry) navigate({ to: '/calendar' });
+      return calendarEntry;
     },
   });
+
+  const onSubmit = async (values: z.infer<typeof formSchema>) => {
+    mutation.mutate(values);
+  };
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -129,10 +141,6 @@ const AddEntry = () => {
 
   if (error) return <Error error={error as CustomError} />;
   if (mutation.isError) return <Error error={mutation.error as CustomError} />;
-
-  const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    mutation.mutate(values);
-  };
 
   return (
     <Form {...form}>
