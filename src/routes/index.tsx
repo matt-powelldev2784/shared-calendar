@@ -4,7 +4,7 @@ import { onAuthStateChanged } from "firebase/auth";
 import { auth } from '@/db/firebaseConfig';
 import { SignIn } from "@/components/auth/signIn";
 
-export const Route = createFileRoute("/")({
+export const Route = createFileRoute('/')({
   component: App,
 });
 
@@ -15,7 +15,7 @@ function App() {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
         // if the user is signed in, redirect to the calendar
-        navigate({ to: "/calendar" });
+        navigate({ to: '/calendar' });
       }
     });
 
