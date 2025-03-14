@@ -23,7 +23,6 @@ const getSubscribedCalendars = async () => {
     }
 
     const subscribedCalendars = userDoc.data().subscribedCalendars || [];
-    console.log('subscribedCalendars', subscribedCalendars);
 
     if (!subscribedCalendars.length) {
       return [];
@@ -39,8 +38,6 @@ const getSubscribedCalendars = async () => {
       id: doc.id,
       ...doc.data(),
     })) as Calendar[];
-
-    console.log('calendars', calendars);
 
     return calendars;
   } catch (error) {
