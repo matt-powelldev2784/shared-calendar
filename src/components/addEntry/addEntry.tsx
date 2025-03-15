@@ -52,7 +52,7 @@ const convertFormValuesToEntry = (values: z.infer<typeof formSchema>) => {
   const endDate = new Date(values.date);
   endDate.setHours(values.endDateHour, endDateMinutes);
 
-  const updatedEntry: AddCalendarEntry = {
+  const entry: AddCalendarEntry = {
     title: values.title,
     description: values.description,
     startDate,
@@ -60,7 +60,7 @@ const convertFormValuesToEntry = (values: z.infer<typeof formSchema>) => {
     calendarId: values.calendarId,
   };
 
-  return updatedEntry;
+  return entry;
 };
 
 const formSchema = z.object({
