@@ -53,7 +53,13 @@ export const CalendarView = () => {
   const calendarId = undefined;
 
   const { data, error, isLoading } = useQuery({
-    queryKey: ['calendarEntries', calendarId, date.toISOString(), daysVisible],
+    queryKey: [
+      'getSubscribedCalendars',
+      'calendarEntries',
+      calendarId,
+      date.toISOString(),
+      daysVisible,
+    ],
     queryFn: () => fetchCalendarData({ date, calendarId, daysVisible }),
   });
 
