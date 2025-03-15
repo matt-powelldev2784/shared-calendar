@@ -105,7 +105,13 @@ const AddEntry = () => {
       const entry = convertFormValuesToEntry(values);
       const calendarEntry = await addCalendarEntry(entry);
 
-      if (calendarEntry) navigate({ to: '/calendar' });
+      const calendarId = values.calendarId;
+      const startDate = format(entry.startDate, 'yyyy-MM-dd');
+
+      if (calendarEntry)
+        navigate({
+          to: `/get-calendar?calendarId=${calendarId}&startDate=${startDate}&daysToView=7`,
+        });
       return calendarEntry;
     },
   });

@@ -1,10 +1,11 @@
+import type { FileRoutesByTo } from '@/routeTree.gen';
 import { Link, useLocation } from '@tanstack/react-router';
 import type { JSX } from 'react';
 
 interface NavIconProps {
-  linkTo: string;
+  linkTo: keyof FileRoutesByTo;
   icon?: JSX.Element;
-  visibleRoutes?: string[];
+  visibleRoutes?: (keyof FileRoutesByTo)[];
   onClick?: () => void;
   children?: JSX.Element;
   ariaLabel?: string;
@@ -38,7 +39,7 @@ const NavIcon = ({
       </Link>
     );
 
-  if (visibleRoutes?.includes(pathname))
+  if (visibleRoutes?.includes(pathname as keyof FileRoutesByTo))
     return (
       <Link
         onClick={onClick}
@@ -46,12 +47,12 @@ const NavIcon = ({
         className={`z-1400 flex items-center justify-center ${className}`}
         aria-label={ariaLabel}
       >
-        {(visibleRoutes?.includes(pathname) && icon) || null}
+        {(visibleRoutes?.includes(pathname as keyof FileRoutesByTo) && icon) ||
+          null}
 
         {children}
       </Link>
     );
 };
-
 
 export default NavIcon;

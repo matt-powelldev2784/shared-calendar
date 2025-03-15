@@ -62,24 +62,24 @@ export const Navbar = () => {
       <div className="mr-2 flex items-center gap-6 sm:mr-0 sm:gap-4">
         <>
           <NavIcon
-            linkTo="/calendar"
+            linkTo="/default-calendar"
             icon={<CalendarIcon color="#FFFF" size="26" />}
-            visibleRoutes={['/addentry', '/signout']}
+            visibleRoutes={['/add-entry', '/signout']}
             ariaLabel="Go to calendar page"
             className={`${menuIsOpen ? 'hidden md:block' : 'block'}`}
           />
 
           <NavIcon
-            linkTo="/addentry"
+            linkTo="/add-entry"
             icon={<CirclePlus color="#FFFF" size="28" />}
-            visibleRoutes={['/calendar']}
+            visibleRoutes={['/default-calendar', '/get-calendar', '/signout']}
             ariaLabel="Go to add entry page"
             className={`${menuIsOpen ? 'hidden md:block' : 'block'}`}
           />
         </>
 
         <NavIcon
-          linkTo="/calendar"
+          linkTo="/default-calendar"
           onClick={() => setMenuIsOpen(!menuIsOpen)}
           alwaysVisible={true}
           ariaLabel={menuIsOpen ? 'Close menu' : 'Open menu'}

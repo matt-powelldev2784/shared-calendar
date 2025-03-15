@@ -1,7 +1,7 @@
 import AddEntry from '@/components/addEntry/addEntry';
 import { createFileRoute } from '@tanstack/react-router';
 
-export const Route = createFileRoute('/addEntry')({
+export const Route = createFileRoute('/add-entry')({
   component: AddEntry,
 });
 
