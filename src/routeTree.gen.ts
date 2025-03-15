@@ -12,6 +12,7 @@
 
 import { Route as rootRoute } from './routes/__root'
 import { Route as SignoutImport } from './routes/signout'
+import { Route as GetCalendarImport } from './routes/getCalendar'
 import { Route as CalendarImport } from './routes/calendar'
 import { Route as AddEntryImport } from './routes/addEntry'
 import { Route as IndexImport } from './routes/index'
@@ -21,6 +22,12 @@ import { Route as IndexImport } from './routes/index'
 const SignoutRoute = SignoutImport.update({
   id: '/signout',
   path: '/signout',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const GetCalendarRoute = GetCalendarImport.update({
+  id: '/getCalendar',
+  path: '/getCalendar',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -67,6 +74,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CalendarImport
       parentRoute: typeof rootRoute
     }
+    '/getCalendar': {
+      id: '/getCalendar'
+      path: '/getCalendar'
+      fullPath: '/getCalendar'
+      preLoaderRoute: typeof GetCalendarImport
+      parentRoute: typeof rootRoute
+    }
     '/signout': {
       id: '/signout'
       path: '/signout'
@@ -83,6 +97,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/addEntry': typeof AddEntryRoute
   '/calendar': typeof CalendarRoute
+  '/getCalendar': typeof GetCalendarRoute
   '/signout': typeof SignoutRoute
 }
 
@@ -90,6 +105,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/addEntry': typeof AddEntryRoute
   '/calendar': typeof CalendarRoute
+  '/getCalendar': typeof GetCalendarRoute
   '/signout': typeof SignoutRoute
 }
 
@@ -98,15 +114,16 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/addEntry': typeof AddEntryRoute
   '/calendar': typeof CalendarRoute
+  '/getCalendar': typeof GetCalendarRoute
   '/signout': typeof SignoutRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/addEntry' | '/calendar' | '/signout'
+  fullPaths: '/' | '/addEntry' | '/calendar' | '/getCalendar' | '/signout'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/addEntry' | '/calendar' | '/signout'
-  id: '__root__' | '/' | '/addEntry' | '/calendar' | '/signout'
+  to: '/' | '/addEntry' | '/calendar' | '/getCalendar' | '/signout'
+  id: '__root__' | '/' | '/addEntry' | '/calendar' | '/getCalendar' | '/signout'
   fileRoutesById: FileRoutesById
 }
 
@@ -114,6 +131,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AddEntryRoute: typeof AddEntryRoute
   CalendarRoute: typeof CalendarRoute
+  GetCalendarRoute: typeof GetCalendarRoute
   SignoutRoute: typeof SignoutRoute
 }
 
@@ -121,6 +139,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AddEntryRoute: AddEntryRoute,
   CalendarRoute: CalendarRoute,
+  GetCalendarRoute: GetCalendarRoute,
   SignoutRoute: SignoutRoute,
 }
 
@@ -137,6 +156,7 @@ export const routeTree = rootRoute
         "/",
         "/addEntry",
         "/calendar",
+        "/getCalendar",
         "/signout"
       ]
     },
@@ -148,6 +168,9 @@ export const routeTree = rootRoute
     },
     "/calendar": {
       "filePath": "calendar.tsx"
+    },
+    "/getCalendar": {
+      "filePath": "getCalendar.tsx"
     },
     "/signout": {
       "filePath": "signout.tsx"
