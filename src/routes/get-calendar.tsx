@@ -68,4 +68,3 @@ function GetCalendarPage() {
   );
 }
 
-export default GetCalendarPage;
