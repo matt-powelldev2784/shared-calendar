@@ -1,5 +1,5 @@
 import { Button } from '@/components/ui/button';
-import {  format } from 'date-fns';
+import { format } from 'date-fns';
 import CalendarIcon from '../../assets/icons/cal_icon.svg';
 import DownIcon from '../../assets/icons/down_icon.svg';
 import { Calendar } from '@/components/ui/customCalendar';
@@ -11,18 +11,23 @@ import {
 import { useState } from 'react';
 import type { CalendarEntry, CalendarViewData } from '@/ts/Calendar';
 import { CalendarCard } from '../ui/calendarCard';
+import { useSearch, useNavigate } from '@tanstack/react-router';
 
 type CalendarViewProps = {
   calendarData: CalendarViewData[];
-}
+};
 
 export const CalendarView = ({ calendarData }: CalendarViewProps) => {
-  const [date, setDate] = useState<Date>(calendarData[0].date);
+  const { calendarId, startDate } = useSearch({ from: '/get-calendar' });
+  const date = new Date(startDate);
+  const navigate = useNavigate();
   const [isSelectDateOpen, setIsSelectDateOpen] = useState(false);
 
   const handleDateSelect = (selectedDate: Date) => {
-    setDate(selectedDate);
     setIsSelectDateOpen(false);
+    navigate({
+      to: `/get-calendar?calendarId=${calendarId}&startDate=${format(selectedDate, 'yyyy-MM-dd')}&daysToView=7`,
+    });
   };
 
   return (
