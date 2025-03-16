@@ -139,7 +139,7 @@ const AddEntry = () => {
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="flex flex-col items-center p-4"
+        className="flex w-full flex-col items-center p-4"
       >
         <FormField
           control={form.control}
