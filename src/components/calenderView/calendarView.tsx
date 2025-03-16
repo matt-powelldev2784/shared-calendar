@@ -32,7 +32,7 @@ export const CalendarView = ({ calendarData }: CalendarViewProps) => {
 
   return (
     <div className="flex w-full flex-col items-center justify-center">
-      <div className="bg-primary/25 z-100s relative flex w-full items-center justify-center gap-4 p-2">
+      <div className="bg-primary/25 z-100s relative flex w-full items-center justify-center gap-4 p-2 h-13">
         <Popover open={isSelectDateOpen} onOpenChange={setIsSelectDateOpen}>
           <PopoverTrigger asChild>
             <Button variant="datePicker" className="w-96">

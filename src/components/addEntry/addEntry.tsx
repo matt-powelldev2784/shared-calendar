@@ -137,6 +137,10 @@ const AddEntry = () => {
 
   return (
     <Form {...form}>
+      <div className="bg-primary/25 z-100s relative flex h-13 w-full items-center justify-center gap-4 p-2">
+        <p className="text-secondary text-lg font-bold">Add Calendar Entry</p>
+      </div>
+
       <form
         onSubmit={form.handleSubmit(onSubmit)}
         className="flex w-full flex-col items-center p-4"
