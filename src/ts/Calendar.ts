@@ -22,3 +22,8 @@ export type Calendar = {
   pendingRequests: string[];
 };
 
+export type CalendarViewData = {
+  date: Date;
+  entries: CalendarEntry[];
+};
+

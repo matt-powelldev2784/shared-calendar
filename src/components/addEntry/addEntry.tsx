@@ -33,25 +33,16 @@ import { Calendar } from '../ui/calendar';
 import { format } from 'date-fns';
 import CalendarIcon from '../../assets/icons/cal_icon.svg';
 import addCalendarEntry, { type AddCalendarEntry } from '@/db/addCalendarEntry';
+import { useNavigate } from '@tanstack/react-router';
 
 const convertFormValuesToEntry = (values: z.infer<typeof formSchema>) => {
-  const startDateMinutes = parseInt(
-    values.startDateTenMinIntervals.toString() +
-      values.startDateOneMinIntervals.toString(),
-  );
-
-  const endDateMinutes = Number(
-    values.endDateTenMinIntervals.toString() +
-      values.endDateOneMinIntervals.toString(),
-  );
-
   const startDate = new Date(values.date);
-  startDate.setHours(values.startDateHour, startDateMinutes);
+  startDate.setHours(values.startTimeHour, Number(values.startTimeMins));
 
   const endDate = new Date(values.date);
-  endDate.setHours(values.endDateHour, endDateMinutes);
+  endDate.setHours(values.endTimeHour, Number(values.endTimeMins));
 
-  const updatedEntry: AddCalendarEntry = {
+  const entry: AddCalendarEntry = {
     title: values.title,
     description: values.description,
     startDate,
@@ -59,19 +50,25 @@ const convertFormValuesToEntry = (values: z.infer<typeof formSchema>) => {
     calendarId: values.calendarId,
   };
 
-  return updatedEntry;
+  return entry;
 };
 
 const formSchema = z.object({
-  calendarId: z.string().nonempty(),
-  title: z.string().nonempty(),
+  calendarId: z.string().nonempty({ message: 'Calendar is required' }),
+  title: z.string().nonempty({ message: 'Title is required' }),
   description: z.string().optional(),
-  startDateHour: z.number().min(0).max(23),
-  startDateTenMinIntervals: z.number().min(0).max(5),
-  startDateOneMinIntervals: z.number().min(0).max(9),
-  endDateHour: z.number().min(0).max(23),
-  endDateTenMinIntervals: z.number().min(0).max(5),
-  endDateOneMinIntervals: z.number().min(0).max(9),
+  startTimeHour: z.number().min(0).max(23, {
+    message: 'Number between 0 and 23',
+  }),
+  startTimeMins: z.string().regex(/^\d{2}$/, {
+    message: 'Must be 2-digit number',
+  }),
+  endTimeHour: z.number().min(0).max(23, {
+    message: 'Number between 0 and 23',
+  }),
+  endTimeMins: z.string().regex(/^\d{2}$/, {
+    message: 'Must be a 2-digit number',
+  }),
   date: z
     .date()
     .nullable()
@@ -80,12 +77,12 @@ const formSchema = z.object({
     }),
   startDate: z.undefined(),
   endDate: z.undefined(),
-  // ownerIds: z.array(z.string()).nonempty(),
-  // subscribers: z.array(z.string()),
-  // pendingRequests: z.array(z.string()),
 });
 
 const AddEntry = () => {
+  const navigate = useNavigate();
+
+  // get calendar list for drop down menu
   const {
     data: calendars,
     error,
@@ -95,12 +92,26 @@ const AddEntry = () => {
     queryFn: async () => await getSubscribedCalendars(),
   });
 
+  // submit calendar entry and navigate to calendar
   const mutation = useMutation({
     mutationFn: async (values: z.infer<typeof formSchema>) => {
       const entry = convertFormValuesToEntry(values);
-      return await addCalendarEntry(entry);
+      const calendarEntry = await addCalendarEntry(entry);
+
+      const calendarId = values.calendarId;
+      const startDate = format(entry.startDate, 'yyyy-MM-dd');
+
+      if (calendarEntry)
+        navigate({
+          to: `/get-calendar?calendarId=${calendarId}&startDate=${startDate}&daysToView=7`,
+        });
+      return calendarEntry;
     },
   });
+
+  const onSubmit = async (values: z.infer<typeof formSchema>) => {
+    mutation.mutate(values);
+  };
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -108,18 +119,13 @@ const AddEntry = () => {
       calendarId: '',
       title: '',
       description: '',
-      startDateHour: 9,
-      startDateTenMinIntervals: 0,
-      startDateOneMinIntervals: 0,
-      endDateHour: 10,
-      endDateTenMinIntervals: 0,
-      endDateOneMinIntervals: 0,
+      startTimeHour: 9,
+      startTimeMins: '00',
+      endTimeHour: 10,
+      endTimeMins: '00',
       date: undefined,
       startDate: undefined,
       endDate: undefined,
-      // ownerIds: [],
-      // subscribers: [],
-      // pendingRequests: [],
     },
   });
 
@@ -128,11 +134,6 @@ const AddEntry = () => {
   }
 
   if (error) return <Error error={error as CustomError} />;
-  if (mutation.isError) return <Error error={mutation.error as CustomError} />;
-
-  const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    mutation.mutate(values);
-  };
 
   return (
     <Form {...form}>
@@ -239,15 +240,15 @@ const AddEntry = () => {
           )}
         />
 
-        <div className="sm:gap:0 mt-3 flex w-full max-w-[700px] flex-col items-center justify-between gap-4 sm:flex-row">
-          <div className="max-w-screen sm:max-w-none">
-            <FormLabel className="mb-2 pl-4 sm:pl-0">Start Time</FormLabel>
-            <div className="flex w-full max-w-screen flex-row px-4 sm:px-0">
+        <div className="relative mt-3 flex w-full max-w-[700px] flex-col items-center justify-between gap-4 md:flex-row md:gap-10">
+          <div className="flex w-full flex-grow flex-col">
+            <FormLabel className="mb-2">Start Time</FormLabel>
+            <div className="flex flex-row">
               <FormField
                 control={form.control}
-                name="startDateHour"
+                name="startTimeHour"
                 render={({ field }) => (
-                  <FormItem className="m-0 w-48 max-w-[700px] sm:w-20">
+                  <FormItem className="m-0 max-w-[700px] min-w-26 flex-grow">
                     <FormLabel className="sr-only">Start Hour</FormLabel>
                     <FormControl>
                       <Input
@@ -268,52 +269,24 @@ const AddEntry = () => {
                   </FormItem>
                 )}
               />
+
               <p className="mx-2 translate-y-0.5 text-xl font-bold">:</p>
 
               <FormField
                 control={form.control}
-                name="startDateTenMinIntervals"
+                name="startTimeMins"
                 render={({ field }) => (
-                  <FormItem className="m-0 w-48 max-w-[700px] sm:w-20">
+                  <FormItem className="m-0 max-w-[700px] flex-grow">
                     <FormLabel className="sr-only">
-                      Start Minute in 10 minute intervals
+                      Start time in minutes
                     </FormLabel>
                     <FormControl>
                       <Input
-                        placeholder="Start Minute 1"
+                        placeholder="Minutes 2 Digits"
                         className="text-center"
-                        type="number"
-                        min="0"
-                        max="5"
+                        type="text"
                         {...field}
-                        onChange={(e) => field.onChange(e.target.valueAsNumber)}
-                        style={{
-                          WebkitAppearance: 'none',
-                          MozAppearance: 'textfield',
-                        }}
-                      />
-                    </FormControl>
-                    <FormMessage className="sr-only" />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="startDateOneMinIntervals"
-                render={({ field }) => (
-                  <FormItem className="m-0 w-48 max-w-[700px] sm:w-20">
-                    <FormLabel className="sr-only">
-                      Start Minute in 10 minute intervals
-                    </FormLabel>
-                    <FormControl>
-                      <Input
-                        placeholder="Start Minute 2"
-                        className="text-center"
-                        type="number"
-                        min="0"
-                        max="5"
-                        {...field}
-                        onChange={(e) => field.onChange(e.target.valueAsNumber)}
+                        onChange={(e) => field.onChange(e.target.value)}
                         style={{
                           WebkitAppearance: 'none',
                           MozAppearance: 'textfield',
@@ -327,18 +300,18 @@ const AddEntry = () => {
             </div>
           </div>
 
-          <div className="max-w-screen">
-            <FormLabel className="mb-2 pl-4 sm:pl-0">End Time</FormLabel>
-            <div className="flex w-full max-w-screen flex-row px-4 sm:px-0">
+          <div className="flex w-full flex-grow flex-col">
+            <FormLabel className="mb-2">End Time</FormLabel>
+            <div className="flex flex-row">
               <FormField
                 control={form.control}
-                name="endDateHour"
+                name="endTimeHour"
                 render={({ field }) => (
-                  <FormItem className="m-0 w-48 max-w-[700px] sm:w-20">
+                  <FormItem className="m-0 max-w-[700px] min-w-26 flex-grow">
                     <FormLabel className="sr-only">Start Hour</FormLabel>
                     <FormControl>
                       <Input
-                        placeholder="Start Hour"
+                        placeholder="End Hour"
                         className="text-center"
                         type="number"
                         min="0"
@@ -359,48 +332,19 @@ const AddEntry = () => {
 
               <FormField
                 control={form.control}
-                name="endDateTenMinIntervals"
+                name="endTimeMins"
                 render={({ field }) => (
-                  <FormItem className="m-0 w-48 max-w-[700px] sm:w-20">
+                  <FormItem className="m-0 max-w-[700px] flex-grow">
                     <FormLabel className="sr-only">
-                      Start Minute in 10 minute intervals
+                      End time in minutes
                     </FormLabel>
                     <FormControl>
                       <Input
-                        placeholder="Start Minute 1"
+                        placeholder="Minutes 2 Digits"
                         className="text-center"
-                        type="number"
-                        min="0"
-                        max="5"
+                        type="text"
                         {...field}
-                        onChange={(e) => field.onChange(e.target.valueAsNumber)}
-                        style={{
-                          WebkitAppearance: 'none',
-                          MozAppearance: 'textfield',
-                        }}
-                      />
-                    </FormControl>
-                    <FormMessage className="sr-only" />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="endDateOneMinIntervals"
-                render={({ field }) => (
-                  <FormItem className="m-0 w-48 max-w-[700px] sm:w-20">
-                    <FormLabel className="sr-only">
-                      Start Minute in 10 minute intervals
-                    </FormLabel>
-                    <FormControl>
-                      <Input
-                        placeholder="Start Minute 2"
-                        className="text-center"
-                        type="number"
-                        min="0"
-                        max="5"
-                        {...field}
-                        onChange={(e) => field.onChange(e.target.valueAsNumber)}
+                        onChange={(e) => field.onChange(e.target.value)}
                         style={{
                           WebkitAppearance: 'none',
                           MozAppearance: 'textfield',
@@ -413,11 +357,20 @@ const AddEntry = () => {
               />
             </div>
           </div>
+
+          {(form.formState.errors.startTimeHour ||
+            form.formState.errors.startTimeMins ||
+            form.formState.errors.endTimeHour ||
+            form.formState.errors.endTimeMins) && (
+            <p className="absolute w-full max-w-[700px] translate-y-33 rounded-md px-2 text-center text-sm text-red-500 md:translate-y-10">
+              Hours must be between 0 and 23 and minutes must be 2 digits.
+            </p>
+          )}
         </div>
 
         <Button
           type="submit"
-          className="m-4 mt-8 w-full max-w-[700px]"
+          className="m-4 mt-10 w-full max-w-[700px]"
           size="lg"
         >
           {mutation.isPending ? <Loading variant="sm" /> : 'Submit'}
