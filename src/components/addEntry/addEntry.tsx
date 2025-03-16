@@ -380,6 +380,7 @@ const AddEntry = () => {
                 </div>
               </div>
 
+              {/* Display error for any of the 4 time inputs */}
               {(form.formState.errors.startTimeHour ||
                 form.formState.errors.startTimeMins ||
                 form.formState.errors.endTimeHour ||
