@@ -36,21 +36,21 @@ import addCalendarEntry, { type AddCalendarEntry } from '@/db/addCalendarEntry';
 import { useNavigate } from '@tanstack/react-router';
 
 const convertFormValuesToEntry = (values: z.infer<typeof formSchema>) => {
-  const startDateMinutes = parseInt(
-    values.startDateTenMinIntervals.toString() +
-      values.startDateOneMinIntervals.toString(),
+  const startTimeMinutes = parseInt(
+    values.startTimeTenMinIntervals.toString() +
+      values.startTimeOneMinIntervals.toString(),
   );
 
-  const endDateMinutes = Number(
-    values.endDateTenMinIntervals.toString() +
-      values.endDateOneMinIntervals.toString(),
+  const endTimeMinutes = Number(
+    values.endTimeTenMinIntervals.toString() +
+      values.endTimeOneMinIntervals.toString(),
   );
 
   const startDate = new Date(values.date);
-  startDate.setHours(values.startDateHour, startDateMinutes);
+  startDate.setHours(values.startTimeHour, startTimeMinutes);
 
   const endDate = new Date(values.date);
-  endDate.setHours(values.endDateHour, endDateMinutes);
+  endDate.setHours(values.endTimeHour, endTimeMinutes);
 
   const entry: AddCalendarEntry = {
     title: values.title,
@@ -67,12 +67,12 @@ const formSchema = z.object({
   calendarId: z.string().nonempty(),
   title: z.string().nonempty(),
   description: z.string().optional(),
-  startDateHour: z.number().min(0).max(23),
-  startDateTenMinIntervals: z.number().min(0).max(5),
-  startDateOneMinIntervals: z.number().min(0).max(9),
-  endDateHour: z.number().min(0).max(23),
-  endDateTenMinIntervals: z.number().min(0).max(5),
-  endDateOneMinIntervals: z.number().min(0).max(9),
+  startTimeHour: z.number().min(0).max(23),
+  startTimeTenMinIntervals: z.number().min(0).max(5),
+  startTimeOneMinIntervals: z.number().min(0).max(9),
+  endTimeHour: z.number().min(0).max(23),
+  endTimeTenMinIntervals: z.number().min(0).max(5),
+  endTimeOneMinIntervals: z.number().min(0).max(9),
   date: z
     .date()
     .nullable()
@@ -81,9 +81,6 @@ const formSchema = z.object({
     }),
   startDate: z.undefined(),
   endDate: z.undefined(),
-  // ownerIds: z.array(z.string()).nonempty(),
-  // subscribers: z.array(z.string()),
-  // pendingRequests: z.array(z.string()),
 });
 
 const AddEntry = () => {
@@ -126,18 +123,15 @@ const AddEntry = () => {
       calendarId: '',
       title: '',
       description: '',
-      startDateHour: 9,
-      startDateTenMinIntervals: 0,
-      startDateOneMinIntervals: 0,
-      endDateHour: 10,
-      endDateTenMinIntervals: 0,
-      endDateOneMinIntervals: 0,
+      startTimeHour: 9,
+      startTimeTenMinIntervals: 0,
+      startTimeOneMinIntervals: 0,
+      endTimeHour: 10,
+      endTimeTenMinIntervals: 0,
+      endTimeOneMinIntervals: 0,
       date: undefined,
       startDate: undefined,
       endDate: undefined,
-      // ownerIds: [],
-      // subscribers: [],
-      // pendingRequests: [],
     },
   });
 
@@ -259,7 +253,7 @@ const AddEntry = () => {
             <div className="flex w-full max-w-screen flex-row px-4 sm:px-0">
               <FormField
                 control={form.control}
-                name="startDateHour"
+                name="startTimeHour"
                 render={({ field }) => (
                   <FormItem className="m-0 w-48 max-w-[700px] sm:w-20">
                     <FormLabel className="sr-only">Start Hour</FormLabel>
@@ -286,7 +280,7 @@ const AddEntry = () => {
 
               <FormField
                 control={form.control}
-                name="startDateTenMinIntervals"
+                name="startTimeTenMinIntervals"
                 render={({ field }) => (
                   <FormItem className="m-0 w-48 max-w-[700px] sm:w-20">
                     <FormLabel className="sr-only">
@@ -313,7 +307,7 @@ const AddEntry = () => {
               />
               <FormField
                 control={form.control}
-                name="startDateOneMinIntervals"
+                name="startTimeOneMinIntervals"
                 render={({ field }) => (
                   <FormItem className="m-0 w-48 max-w-[700px] sm:w-20">
                     <FormLabel className="sr-only">
@@ -346,7 +340,7 @@ const AddEntry = () => {
             <div className="flex w-full max-w-screen flex-row px-4 sm:px-0">
               <FormField
                 control={form.control}
-                name="endDateHour"
+                name="endTimeHour"
                 render={({ field }) => (
                   <FormItem className="m-0 w-48 max-w-[700px] sm:w-20">
                     <FormLabel className="sr-only">Start Hour</FormLabel>
@@ -373,7 +367,7 @@ const AddEntry = () => {
 
               <FormField
                 control={form.control}
-                name="endDateTenMinIntervals"
+                name="endTimeTenMinIntervals"
                 render={({ field }) => (
                   <FormItem className="m-0 w-48 max-w-[700px] sm:w-20">
                     <FormLabel className="sr-only">
@@ -400,7 +394,7 @@ const AddEntry = () => {
               />
               <FormField
                 control={form.control}
-                name="endDateOneMinIntervals"
+                name="endTimeOneMinIntervals"
                 render={({ field }) => (
                   <FormItem className="m-0 w-48 max-w-[700px] sm:w-20">
                     <FormLabel className="sr-only">
