@@ -6,6 +6,7 @@ import Error from '@/components/ui/error';
 import sortCalendarEntriesByDate from '@/lib/sortCalendarEntriesByDate';
 import { CalendarView } from '@/components/calenderView/calendarView';
 import Loading from '@/components/ui/loading';
+import type { CustomError } from '@/ts/errorClass';
 
 const calendarSearchSchema = z.object({
   calendarId: z.string(),
@@ -45,16 +46,8 @@ export const Route = createFileRoute('/get-calendar')({
     return sortedCalendarEntries;
   },
 
-  errorComponent: () => {
-    return (
-      <Error
-        error={{
-          name: 'Search Params Error',
-          status: 404,
-          message: 'Error fetching calendar data from search params',
-        }}
-      />
-    );
+  errorComponent: ({ error }) => {
+    return <Error error={error as CustomError} />;
   },
 });
 
