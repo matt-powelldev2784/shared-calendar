@@ -2,9 +2,8 @@ import type { FileRoutesByTo } from '@/routeTree.gen';
 import { Link, useLocation } from '@tanstack/react-router';
 import type { JSX } from 'react';
 
-interface NavIconProps {
+interface NavIconLinkProps {
   linkTo: keyof FileRoutesByTo;
-  icon?: JSX.Element;
   visibleRoutes?: (keyof FileRoutesByTo)[];
   onClick?: () => void;
   children?: JSX.Element;
@@ -13,16 +12,15 @@ interface NavIconProps {
   className?: string;
 }
 
-const NavIcon = ({
+export const NavIconLink = ({
   linkTo,
-  icon,
   visibleRoutes,
   onClick,
   children,
   ariaLabel,
   alwaysVisible,
   className,
-}: NavIconProps) => {
+}: NavIconLinkProps) => {
   const { pathname } = useLocation();
 
   if (alwaysVisible)
@@ -30,11 +28,9 @@ const NavIcon = ({
       <Link
         onClick={onClick}
         to={linkTo}
-        className={`z-1400 flex items-center justify-center ${className}`}
+        className={`z-1400 ${className}`}
         aria-label={ariaLabel}
       >
-        {icon && icon}
-
         {children}
       </Link>
     );
@@ -44,15 +40,52 @@ const NavIcon = ({
       <Link
         onClick={onClick}
         to={linkTo}
-        className={`z-1400 flex items-center justify-center ${className}`}
+        className={`z-1400 ${className}`}
         aria-label={ariaLabel}
       >
-        {(visibleRoutes?.includes(pathname as keyof FileRoutesByTo) && icon) ||
-          null}
-
         {children}
       </Link>
     );
 };
 
-export default NavIcon;
+interface NavIconProps {
+  onClick?: (event: any) => void;
+  visibleRoutes?: (keyof FileRoutesByTo)[];
+  children?: JSX.Element;
+  ariaLabel?: string;
+  alwaysVisible?: boolean;
+  className?: string;
+}
+
+export const NavIconButton = ({
+  onClick,
+  visibleRoutes,
+  children,
+  ariaLabel,
+  className,
+  alwaysVisible,
+}: NavIconProps) => {
+  const { pathname } = useLocation();
+
+  if (alwaysVisible)
+    return (
+      <button
+        onClick={onClick}
+        className={`z-1400 ${className}`}
+        aria-label={ariaLabel}
+      >
+        {children}
+      </button>
+    );
+
+  if (visibleRoutes?.includes(pathname as keyof FileRoutesByTo))
+    return (
+      <button
+        onClick={onClick}
+        className={`z-1400 ${className}`}
+        aria-label={ariaLabel}
+      >
+        {children}
+      </button>
+    );
+};

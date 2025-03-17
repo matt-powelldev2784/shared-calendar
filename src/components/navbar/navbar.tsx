@@ -1,42 +1,41 @@
 import sharcLogoWhite from "../../assets/logo/sharc_logo_white.svg";
-import crossIconWhite from "../../assets/icons/cross_white.svg";
-import nineDotsIcon from "../../assets/icons/nine_dots.svg";
-import { Calendar as CalendarIcon, CirclePlus } from 'lucide-react';
+import {
+  CalendarFold,
+  Calendar as CalendarIcon,
+  Settings as SettingsIcon,
+} from 'lucide-react';
 import { LogOut as LogOutIcon } from 'lucide-react';
 import { Users as UsersIcon } from 'lucide-react';
 import { CalendarPlus as CalendarPlusIcon } from 'lucide-react';
-import { lazy, useState } from 'react';
+import { lazy, useEffect, useState } from 'react';
 import { Link } from '@tanstack/react-router';
-import NavIcon from '../ui/navIcon';
+import { NavIconButton, NavIconLink } from '../ui/navIcon';
 import NavItem from './navItem';
+import { useQuery } from '@tanstack/react-query';
+import getSubscribedCalendars from '@/db/getSubscribedCalendars';
+import { getCalendarUrl } from '@/lib/getCalendarUrl';
 
 // firebase auth uses over 300kb of data
 // lazy loading the UserAvatar component will reduce the initial bundle size
 const UserAvatar = lazy(() => import('./userAvatar'));
 
-const navItems = [
+const userMenuItems = [
   {
     id: 1,
-    text: 'Calendar',
-    route: '/calendar',
-    icon: <CalendarIcon className="mr-2 h-6 w-6" />,
+    text: 'Settings',
+    route: '/',
+    icon: <SettingsIcon className="mr-2 h-6 w-6" />,
   },
   {
     id: 2,
     text: 'Link Calendars',
     description:
-      "Link your calendar with other users' accounts to view all linked calendars in a single, merged view. This allows you to easily manage and coordinate schedules across multiple users.",
+      'Link your calendar with other users accounts to view all linked calendars in a single, merged view. This allows you to easily manage and coordinate schedules across multiple users.',
     route: '/',
     icon: <UsersIcon className="mr-2 h-6 w-6" />,
   },
   {
     id: 3,
-    text: 'Add Calendar Entry',
-    route: '/addentry',
-    icon: <CalendarPlusIcon className="mr-2 h-6 w-6" />,
-  },
-  {
-    id: 4,
     text: 'Sign Out',
     route: '/signout',
     icon: <LogOutIcon className="mr-2 h-6 w-6" />,
@@ -44,100 +43,129 @@ const navItems = [
 ];
 
 export const Navbar = () => {
-  const [menuIsOpen, setMenuIsOpen] = useState(false);
+  const [calendarMenuIsOpen, setCalendarMenuIsOpen] = useState(false);
+  const [userMenuIsOpen, setUserMenuIsOpen] = useState(false);
+
+  // get subscribed calendars data
+  const { data } = useQuery({
+    queryKey: ['subscribedCalendar'],
+    queryFn: async () => await getSubscribedCalendars(),
+  });
+
+  // map date for calendar menu
+  const calendars = data
+    ? data.map((calendar) => {
+        const calendarItem = {
+          id: calendar.id,
+          text: calendar.name,
+          route: getCalendarUrl({ calendarId: calendar.id }),
+          icon: <CalendarIcon className="mr-2 h-6 w-6" />,
+          onClick: () => setCalendarMenuIsOpen((prev) => !prev),
+        };
+        return calendarItem;
+      })
+    : [];
+
+  useEffect(() => {
+    const handleCloseMenus = () => {
+      if (userMenuIsOpen) setUserMenuIsOpen(false);
+      if (calendarMenuIsOpen) setCalendarMenuIsOpen(false);
+    };
+
+    window.addEventListener('click', handleCloseMenus);
+    window.addEventListener('keydown', handleCloseMenus);
+    window.addEventListener('scroll', handleCloseMenus);
+    window.addEventListener('resize', handleCloseMenus);
+    window.addEventListener('touch', handleCloseMenus);
+
+    return () => {
+      window.addEventListener('click', handleCloseMenus);
+      window.addEventListener('keydown', handleCloseMenus);
+      window.addEventListener('scroll', handleCloseMenus);
+      window.addEventListener('resize', handleCloseMenus);
+      window.addEventListener('touch', handleCloseMenus);
+    };
+  }, [calendarMenuIsOpen, userMenuIsOpen]);
+
+  const handleCalendarMenuClick = (event: MouseEvent) => {
+    event.stopPropagation();
+    setUserMenuIsOpen(false);
+    setCalendarMenuIsOpen((prev) => !prev);
+  };
+
+  const handleUserMenuClick = (event: MouseEvent) => {
+    event.stopPropagation();
+    setCalendarMenuIsOpen(false);
+    setUserMenuIsOpen((prev) => !prev);
+  };
 
   return (
-    <nav className="bg-primary z-1100 flex h-14 w-full items-center justify-between px-2 text-xl font-bold text-white md:h-12 md:px-4">
-      <div className="ml-2 flex items-center sm:ml-1">
-        {/* Avatar */}
-        <UserAvatar />
+    <nav className="bg-primary z-1100 flex h-14 w-full items-center justify-between text-xl font-bold text-white md:h-12">
+      <Link to="/" aria-label="Home">
+        <img src={sharcLogoWhite} alt="sharc logo" className="ml-5 h-8" />
+      </Link>
 
-        {/* Sharc Logo */}
-        <Link to="/" aria-label="Home">
-          <img src={sharcLogoWhite} alt="sharc logo" className="h-8" />
-        </Link>
-      </div>
-
-      {/* Main Navigation Icons */}
-      <div className="mr-2 flex items-center gap-6 sm:mr-0 sm:gap-4">
-        <>
-          <NavIcon
-            linkTo="/default-calendar"
-            icon={<CalendarIcon color="#FFFF" size="26" />}
-            visibleRoutes={['/add-entry', '/signout']}
-            ariaLabel="Go to calendar page"
-            className={`${menuIsOpen ? 'hidden md:block' : 'block'}`}
-          />
-
-          <NavIcon
-            linkTo="/add-entry"
-            icon={<CirclePlus color="#FFFF" size="28" />}
-            visibleRoutes={['/default-calendar', '/get-calendar', '/signout']}
-            ariaLabel="Go to add entry page"
-            className={`${menuIsOpen ? 'hidden md:block' : 'block'}`}
-          />
-        </>
-
-        <NavIcon
-          linkTo="/default-calendar"
-          onClick={() => setMenuIsOpen(!menuIsOpen)}
-          alwaysVisible={true}
-          ariaLabel={menuIsOpen ? 'Close menu' : 'Open menu'}
-          className="mr-2"
+      {/**************** Main Navigation Icons *****************/}
+      <div className="mr-5 flex items-center gap-5">
+        <NavIconLink
+          linkTo="/add-entry"
+          visibleRoutes={['/get-calendar', '/signout']}
+          ariaLabel="Go to add entry page"
         >
-          {menuIsOpen ? (
-            <img
-              src={crossIconWhite}
-              className="h-6 w-6 p-1"
-              alt="Close menu"
-            />
-          ) : (
-            <img src={nineDotsIcon} className="h-6 w-6" alt="Open menu" />
-          )}
-        </NavIcon>
+          <CalendarPlusIcon className="h-6 w-6" />
+        </NavIconLink>
+
+        <NavIconButton
+          onClick={handleCalendarMenuClick}
+          ariaLabel={
+            calendarMenuIsOpen ? 'Close calendar menu' : 'Open calendar menu'
+          }
+          visibleRoutes={['/get-calendar', '/add-entry', '/signout']}
+        >
+          <CalendarFold className="h-6 w-6" />
+        </NavIconButton>
+
+        <NavIconButton
+          onClick={handleUserMenuClick}
+          alwaysVisible={true}
+          ariaLabel={userMenuIsOpen ? 'Close user menu' : 'Open user menu'}
+        >
+          <UserAvatar />
+        </NavIconButton>
       </div>
 
-      {/* Desktop Navigation Menu */}
+      {/**************** Calendar Navigation Menu *****************/}
       <ul
         className={
-          menuIsOpen
-            ? 'bg-primary fixed top-12 right-0 z-1200 hidden max-h-[500px] w-[250px] overflow-hidden duration-500 ease-in-out md:block'
-            : 'fixed top-12 right-0 z-9999 hidden max-h-0 w-[250px] overflow-hidden duration-500 ease-in-out md:block'
+          calendarMenuIsOpen
+            ? 'bg-primary fixed top-12 right-0 z-1200 max-h-[500px] w-[250px] overflow-hidden duration-500 ease-in-out md:block'
+            : 'fixed top-12 right-0 z-9999 max-h-0 w-[250px] overflow-hidden duration-500 ease-in-out md:block'
         }
       >
-        {/* Desktop Navigation Items */}
-        {menuIsOpen &&
-          navItems.map((item) => (
-            <NavItem
-              key={item.id}
-              {...item}
-              onClick={() => setMenuIsOpen(!menuIsOpen)}
-            />
-          ))}
+        {calendarMenuIsOpen &&
+          calendars &&
+          calendars.map((calendar) => {
+            return (
+              <NavItem
+                key={calendar.id}
+                {...calendar}
+                onClick={handleCalendarMenuClick}
+              />
+            );
+          })}
       </ul>
 
-      {/* Mobile Navigation Menu */}
+      {/**************** User Navigation Menu *****************/}
       <ul
         className={
-          menuIsOpen
-            ? 'bg-primary fixed top-0 right-0 z-1200 h-full w-full duration-500 ease-in-out md:hidden'
-            : '`z-1200 fixed top-0 bottom-0 left-[-100%] w-[10%] duration-500 ease-in-out md:hidden'
+          userMenuIsOpen
+            ? 'bg-primary fixed top-12 right-0 z-1200 max-h-[500px] w-[250px] overflow-hidden duration-500 ease-in-out md:block'
+            : 'fixed top-12 right-0 z-9999 max-h-0 w-[250px] overflow-hidden duration-500 ease-in-out md:block'
         }
       >
-        <img
-          src={sharcLogoWhite}
-          alt="sharc logo"
-          className="m-2 h-8 lg:hidden"
-        />
-
-        {/* Mobile Navigation Items */}
-        {menuIsOpen &&
-          navItems.map((item) => (
-            <NavItem
-              key={item.id}
-              {...item}
-              onClick={() => setMenuIsOpen(!menuIsOpen)}
-            />
+        {userMenuIsOpen &&
+          userMenuItems.map((item) => (
+            <NavItem key={item.id} {...item} onClick={handleUserMenuClick} />
           ))}
       </ul>
     </nav>
