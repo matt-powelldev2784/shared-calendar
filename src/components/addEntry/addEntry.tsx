@@ -17,11 +17,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import getSubscribedCalendars from '@/db/getSubscribedCalendars';
 import Loading from '../ui/loading';
-import Error from '../ui/error';
-import type { CustomError } from '@/ts/errorClass';
-import { useMutation, useQuery } from '@tanstack/react-query';
+import { useMutation } from '@tanstack/react-query';
 import { Input } from '../ui/input';
 import { Textarea } from '../ui/textarea';
 import {
@@ -42,6 +39,7 @@ import {
   CardTitle,
 } from '../ui/card';
 import { CirclePlus } from 'lucide-react';
+import type { Calendar as CalenderT } from '@/ts/Calendar';
 
 const convertFormValuesToEntry = (values: z.infer<typeof formSchema>) => {
   const startDate = new Date(values.date);
@@ -87,18 +85,12 @@ const formSchema = z.object({
   endDate: z.undefined(),
 });
 
-const AddEntry = () => {
-  const navigate = useNavigate();
+type AddEntryProps = {
+  calendars: CalenderT[];
+};
 
-  // get calendar list for drop down menu
-  const {
-    data: calendars,
-    error,
-    isLoading,
-  } = useQuery({
-    queryKey: ['getSubscribedCalendars'],
-    queryFn: async () => await getSubscribedCalendars(),
-  });
+const AddEntry = ({ calendars }: AddEntryProps) => {
+  const navigate = useNavigate();
 
   // submit calendar entry and navigate to calendar
   const mutation = useMutation({
@@ -136,12 +128,6 @@ const AddEntry = () => {
       endDate: undefined,
     },
   });
-
-  if (!calendars || isLoading) {
-    return <Loading classNames="mt-4 w-full mx-auto" />;
-  }
-
-  if (error) return <Error error={error as CustomError} />;
 
   return (
     <Card className="mt-4 w-full max-w-[700px] border-0 p-0 shadow-none md:border md:p-4 md:shadow-sm">
