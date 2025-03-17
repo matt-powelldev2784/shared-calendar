@@ -2,6 +2,7 @@ import AddEntry from '@/components/addEntry/addEntry';
 import Error from '@/components/ui/error';
 import Loading from '@/components/ui/loading';
 import getSubscribedCalendars from '@/db/getSubscribedCalendars';
+import type { CustomError } from '@/ts/errorClass';
 import { createFileRoute, useLoaderData } from '@tanstack/react-router';
 
 export const Route = createFileRoute('/add-entry')({
@@ -13,16 +14,8 @@ export const Route = createFileRoute('/add-entry')({
     return calendars;
   },
 
-  errorComponent: () => {
-    return (
-      <Error
-        error={{
-          name: 'Get calendar list error',
-          status: 404,
-          message: 'Error fetching calendar list',
-        }}
-      />
-    );
+  errorComponent: ({ error }) => {
+    return <Error error={error as CustomError} />;
   },
 });
 
