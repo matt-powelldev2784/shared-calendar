@@ -55,9 +55,9 @@ function GetCalendarPage() {
   const calendar = useLoaderData({ from: '/get-calendar' });
 
   return (
-    <div>
+    <section className="flex h-full w-full items-center">
       <CalendarView calendarData={calendar} />
-    </div>
+    </section>
   );
 }
 
