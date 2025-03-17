@@ -14,8 +14,7 @@ function SignOutPage() {
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (!user) {
-        // if the user is not signed in, redirect to the home page
-        navigate({ to: "/" });
+        navigate({ to: '/' });
       }
     });
 

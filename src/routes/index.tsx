@@ -14,7 +14,6 @@ function App() {
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
-        // if the user is signed in, redirect to the calendar
         navigate({ to: `/default-calendar` });
       }
     });
