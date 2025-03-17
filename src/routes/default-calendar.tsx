@@ -8,6 +8,7 @@ import Error from '@/components/ui/error';
 import Loading from '@/components/ui/loading';
 import getSubscribedCalendars from '@/db/getSubscribedCalendars';
 import type { CustomError } from '@/ts/errorClass';
+import { useEffect } from 'react';
 
 export const Route = createFileRoute('/default-calendar')({
   component: DefaultCalendarPage,
@@ -29,11 +30,13 @@ function DefaultCalendarPage() {
   const calendarId = useLoaderData({ from: '/default-calendar' });
   const navigate = useNavigate();
 
-  if (calendarId) {
+  useEffect(() => {
+    if (!calendarId) return;
+
     navigate({
       to: `/get-calendar?calendarId=${calendarId}&startDate=${format(new Date(), 'yyyy-MM-dd')}&daysToView=7`,
     });
-  }
+  }, [calendarId, navigate]);
 }
 
 
