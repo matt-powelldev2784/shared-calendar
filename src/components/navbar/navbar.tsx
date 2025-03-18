@@ -48,7 +48,7 @@ export const Navbar = () => {
 
   // get subscribed calendars data
   const { data } = useQuery({
-    queryKey: ['subscribedCalendar'],
+    queryKey: ['subscribedCalendars'],
     queryFn: async () => await getSubscribedCalendars(),
   });
 
