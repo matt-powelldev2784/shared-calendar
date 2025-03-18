@@ -32,7 +32,7 @@ export const Route = createFileRoute('/get-calendar')({
     const end = addDays(new Date(startDate), daysToView);
     const calendarIdArray = calendarId.split(',');
 
-    const calendar = await getCalendarEntries({
+    const calendarEntries = await getCalendarEntries({
       calendarIds: calendarIdArray,
       startDate: start,
       endDate: end,
@@ -40,7 +40,7 @@ export const Route = createFileRoute('/get-calendar')({
 
     const sortedCalendarEntries = sortCalendarEntriesByDate({
       daysToReturn: daysToView,
-      calendarData: calendar,
+      calendarData: calendarEntries,
       firstDateToDisplay: start,
     });
 
@@ -53,12 +53,13 @@ export const Route = createFileRoute('/get-calendar')({
 });
 
 function GetCalendarPage() {
-  const calendar = useLoaderData({ from: '/get-calendar' });
+  const sortedCalendarEntries = useLoaderData({
+    from: '/get-calendar',
+  });
 
   return (
     <section className="flex h-full w-full items-center">
-      <CalendarView calendarData={calendar} />
+      <CalendarView calendarEntries={sortedCalendarEntries} />
     </section>
   );
 }
-

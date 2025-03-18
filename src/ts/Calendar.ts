@@ -23,7 +23,7 @@ export type Calendar = {
   color?: string;
 };
 
-export type CalendarViewData = {
+export type CalendarEntriesData = {
   date: Date;
   entries: CalendarEntry[];
 };
