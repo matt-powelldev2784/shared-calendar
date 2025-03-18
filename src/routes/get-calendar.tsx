@@ -30,9 +30,10 @@ export const Route = createFileRoute('/get-calendar')({
   loader: async ({ deps: { calendarId, startDate, daysToView } }) => {
     const start = startDate ? new Date(startDate) : new Date();
     const end = addDays(new Date(startDate), daysToView);
+    const calendarIdArray = calendarId.split(',');
 
     const calendar = await getCalendarEntries({
-      calendarIds: [calendarId],
+      calendarIds: calendarIdArray,
       startDate: start,
       endDate: end,
     });

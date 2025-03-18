@@ -4,24 +4,30 @@ import { db } from './firebaseConfig';
 import checkAuth from './checkAuth';
 import { type Calendar } from '@/ts/Calendar';
 
-const getCalendar = async (calendarId: string) => {
+const getCalendars = async (calendarIds: string[]) => {
   try {
     await checkAuth();
 
-    const calenderDocRef = doc(db, 'calendars', calendarId);
-    const calenderDoc = await getDoc(calenderDocRef);
+    const calendarPromises = calendarIds.map(async (calendarId) => {
+      const calendarDocRef = doc(db, 'calendars', calendarId);
+      const calendarDoc = await getDoc(calendarDocRef);
 
-    if (!calenderDoc.exists()) {
-      throw new CustomError(404, 'Calendar document does not exist');
-    }
+      if (!calendarDoc.exists()) {
+        throw new CustomError(
+          404,
+          `Calendar document with ID ${calendarId} does not exist`,
+        );
+      }
 
-    const calendar = calenderDoc.data() as Calendar;
+      return calendarDoc.data() as Calendar;
+    });
 
-    return calendar;
+    const calendars = await Promise.all(calendarPromises);
+    return calendars;
   } catch (error) {
-    console.error('Error getting subscribed calendars: ', error);
+    console.error('Error getting calendars: ', error);
     throw error;
   }
 };
 
-export default getCalendar;
+export default getCalendars;
