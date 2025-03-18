@@ -1,4 +1,4 @@
-import sharcLogoWhite from "../../assets/logo/sharc_logo_white.svg";
+import sharcLogoWhite from '../../assets/logo/sharc_logo_white.svg';
 import {
   CalendarFold,
   Calendar as CalendarIcon,
@@ -54,16 +54,13 @@ export const Navbar = () => {
 
   // map calendars for calendar menu
   const calendars = data
-    ? data.map((calendar) => {
-        const calendarItem = {
-          id: calendar.id,
-          text: calendar.name,
-          route: getCalendarUrl({ calendarId: calendar.id }),
-          icon: <CalendarIcon className="mr-2 h-6 w-6" />,
-          onClick: () => setCalendarMenuIsOpen((prev) => !prev),
-        };
-        return calendarItem;
-      })
+    ? data.map((calendar) => ({
+        id: calendar.id,
+        text: calendar.name,
+        route: getCalendarUrl({ calendarId: calendar.id }),
+        icon: <CalendarIcon className="mr-2 h-6 w-6" />,
+        onClick: () => setCalendarMenuIsOpen((prev) => !prev),
+      }))
     : [];
 
   // handle the closing of menus when clicking outside of current the menu
@@ -80,11 +77,11 @@ export const Navbar = () => {
     window.addEventListener('touch', handleCloseMenus);
 
     return () => {
-      window.addEventListener('click', handleCloseMenus);
-      window.addEventListener('keydown', handleCloseMenus);
-      window.addEventListener('scroll', handleCloseMenus);
-      window.addEventListener('resize', handleCloseMenus);
-      window.addEventListener('touch', handleCloseMenus);
+      window.removeEventListener('click', handleCloseMenus);
+      window.removeEventListener('keydown', handleCloseMenus);
+      window.removeEventListener('scroll', handleCloseMenus);
+      window.removeEventListener('resize', handleCloseMenus);
+      window.removeEventListener('touch', handleCloseMenus);
     };
   }, [calendarMenuIsOpen, userMenuIsOpen]);
 
@@ -144,8 +141,8 @@ export const Navbar = () => {
       <ul
         className={
           calendarMenuIsOpen
-            ? 'bg-primary fixed top-12 right-0 z-1200 max-h-[500px] w-[250px] overflow-hidden duration-500 ease-in-out md:block'
-            : 'fixed top-12 right-0 z-9999 max-h-0 w-[250px] overflow-hidden duration-500 ease-in-out md:block'
+            ? 'bg-primary fixed top-12 right-0 z-1200 max-h-[400px] w-[250px] overflow-y-auto duration-500 ease-in-out md:block'
+            : 'fixed top-12 right-0 z-9999 max-h-0 w-[250px] overflow-y-auto duration-500 ease-in-out md:block'
         }
       >
         {calendarMenuIsOpen &&
@@ -165,8 +162,8 @@ export const Navbar = () => {
       <ul
         className={
           userMenuIsOpen
-            ? 'bg-primary fixed top-12 right-0 z-1200 max-h-[500px] w-[250px] overflow-hidden duration-500 ease-in-out md:block'
-            : 'fixed top-12 right-0 z-9999 max-h-0 w-[250px] overflow-hidden duration-500 ease-in-out md:block'
+            ? 'bg-primary fixed top-12 right-0 z-1200 max-h-[400px] w-[250px] overflow-y-auto duration-500 ease-in-out md:block'
+            : 'fixed top-12 right-0 z-9999 max-h-0 w-[250px] overflow-y-auto duration-500 ease-in-out md:block'
         }
       >
         {userMenuIsOpen &&
