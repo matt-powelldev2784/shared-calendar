@@ -12,6 +12,7 @@ import { useState } from 'react';
 import type { CalendarEntry, CalendarViewData } from '@/ts/Calendar';
 import { CalendarCard } from '../ui/calendarCard';
 import { useSearch, useNavigate } from '@tanstack/react-router';
+import { getCalendarUrl } from '@/lib/getCalendarUrl';
 
 type CalendarViewProps = {
   calendarData: CalendarViewData[];
@@ -25,8 +26,12 @@ export const CalendarView = ({ calendarData }: CalendarViewProps) => {
 
   const handleDateSelect = (selectedDate: Date) => {
     setIsSelectDateOpen(false);
+    const calendarUrl = getCalendarUrl({
+      calendarId,
+      startDate: format(selectedDate, 'yyyy-MM-dd'),
+    });
     navigate({
-      to: `/get-calendar?calendarId=${calendarId}&startDate=${format(selectedDate, 'yyyy-MM-dd')}&daysToView=7`,
+      to: calendarUrl,
     });
   };
 

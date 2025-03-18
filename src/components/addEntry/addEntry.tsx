@@ -40,6 +40,7 @@ import {
 } from '../ui/card';
 import { CalendarPlusIcon } from 'lucide-react';
 import type { Calendar as CalenderT } from '@/ts/Calendar';
+import { getCalendarUrl } from '@/lib/getCalendarUrl';
 
 const convertFormValuesToEntry = (values: z.infer<typeof formSchema>) => {
   const startDate = new Date(values.date);
@@ -101,11 +102,16 @@ const AddEntry = ({ calendars }: AddEntryProps) => {
       const calendarId = values.calendarId;
       const startDate = format(entry.startDate, 'yyyy-MM-dd');
 
-      if (calendarEntry)
-        navigate({
-          to: `/get-calendar?calendarId=${calendarId}&startDate=${startDate}&daysToView=7`,
+      if (calendarEntry) {
+        const calendarUrl = getCalendarUrl({
+          calendarId,
+          startDate,
         });
-      return calendarEntry;
+        navigate({
+          to: calendarUrl,
+        });
+        return calendarEntry;
+      }
     },
   });
 
