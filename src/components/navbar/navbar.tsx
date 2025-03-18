@@ -52,7 +52,7 @@ export const Navbar = () => {
     queryFn: async () => await getSubscribedCalendars(),
   });
 
-  // map date for calendar menu
+  // map calendars for calendar menu
   const calendars = data
     ? data.map((calendar) => {
         const calendarItem = {
@@ -66,6 +66,7 @@ export const Navbar = () => {
       })
     : [];
 
+  // handle the closing of menus when clicking outside of current the menu
   useEffect(() => {
     const handleCloseMenus = () => {
       if (userMenuIsOpen) setUserMenuIsOpen(false);

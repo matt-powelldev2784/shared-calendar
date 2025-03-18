@@ -28,5 +28,3 @@ function AddEntryPage() {
     </section>
   );
 };
-
-export default AddEntryPage;
