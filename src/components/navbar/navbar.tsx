@@ -2,7 +2,7 @@ import sharcLogoWhite from "../../assets/logo/sharc_logo_white.svg";
 import {
   CalendarFold,
   Calendar as CalendarIcon,
-  Settings as SettingsIcon,
+  CalendarPlus2 as CalenderPlus2Icon,
 } from 'lucide-react';
 import { LogOut as LogOutIcon } from 'lucide-react';
 import { Users as UsersIcon } from 'lucide-react';
@@ -22,9 +22,9 @@ const UserAvatar = lazy(() => import('./userAvatar'));
 const userMenuItems = [
   {
     id: 1,
-    text: 'Settings',
-    route: '/',
-    icon: <SettingsIcon className="mr-2 h-6 w-6" />,
+    text: 'Add Calendar',
+    route: '/add-calendar',
+    icon: <CalenderPlus2Icon className="mr-2 h-6 w-6" />,
   },
   {
     id: 2,
@@ -110,7 +110,7 @@ export const Navbar = () => {
       <div className="mr-5 flex items-center gap-5">
         <NavIconLink
           linkTo="/add-entry"
-          visibleRoutes={['/get-calendar', '/signout']}
+          visibleRoutes={['/get-calendar', '/signout', '/add-calendar']}
           ariaLabel="Go to add entry page"
         >
           <CalendarPlusIcon className="h-6 w-6" />
@@ -121,7 +121,12 @@ export const Navbar = () => {
           ariaLabel={
             calendarMenuIsOpen ? 'Close calendar menu' : 'Open calendar menu'
           }
-          visibleRoutes={['/get-calendar', '/add-entry', '/signout']}
+          visibleRoutes={[
+            '/get-calendar',
+            '/add-entry',
+            '/signout',
+            '/add-calendar',
+          ]}
         >
           <CalendarFold className="h-6 w-6" />
         </NavIconButton>
