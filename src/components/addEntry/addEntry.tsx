@@ -38,7 +38,7 @@ import {
   CardHeader,
   CardTitle,
 } from '../ui/card';
-import { CirclePlus } from 'lucide-react';
+import { CalendarPlusIcon } from 'lucide-react';
 import type { Calendar as CalenderT } from '@/ts/Calendar';
 
 const convertFormValuesToEntry = (values: z.infer<typeof formSchema>) => {
@@ -132,7 +132,7 @@ const AddEntry = ({ calendars }: AddEntryProps) => {
   return (
     <Card className="mt-4 w-full max-w-[700px] border-0 p-0 shadow-none md:border md:p-4 md:shadow-sm">
       <CardHeader className="flex flex-col items-center">
-        <CirclePlus className="mr-2 inline-block h-12 w-12" color="#F67C01" />
+        <CalendarPlusIcon className="text-primary mr-2 inline-block h-12 w-12" />
         <CardTitle className="text-center">Add Calendar Entry</CardTitle>
         <CardDescription className="text-center">
           Fill in the form below and click submit to add a calendar entry.
