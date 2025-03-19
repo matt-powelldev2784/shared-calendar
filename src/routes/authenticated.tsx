@@ -8,6 +8,7 @@ import { useEffect } from 'react';
 import Error from '@/components/ui/error';
 import type { CustomError } from '@/ts/errorClass';
 import { addDefaultCalendar } from '@/db/addDefaultCalendar';
+import { useQueryClient } from '@tanstack/react-query';
 
 export const Route = createFileRoute('/authenticated')({
   component: AuthenticatedPage,
@@ -25,8 +26,10 @@ export const Route = createFileRoute('/authenticated')({
 function AuthenticatedPage() {
   const navigate = useNavigate();
   const user = useLoaderData({ from: '/authenticated' });
+  const queryClient = useQueryClient();
 
   useEffect(() => {
+    queryClient.invalidateQueries({ queryKey: ['subscribedCalendars'] });
     if (user) navigate({ to: `/default-calendar` });
   }, [user]);
 
