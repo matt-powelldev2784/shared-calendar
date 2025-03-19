@@ -3,7 +3,6 @@ import {
   useLoaderData,
   useNavigate,
 } from '@tanstack/react-router';
-import { format } from 'date-fns';
 import Error from '@/components/ui/error';
 import Loading from '@/components/ui/loading';
 import getSubscribedCalendars from '@/db/getSubscribedCalendars';
