@@ -13,7 +13,7 @@ export const Route = createFileRoute('/authenticated')({
   component: AuthenticatedPage,
 
   loader: async () => {
-    const user = addDefaultCalendar();
+    const user = await addDefaultCalendar();
     return user;
   },
 
