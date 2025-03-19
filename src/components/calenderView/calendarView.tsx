@@ -19,7 +19,7 @@ type CalendarViewProps = {
 };
 
 export const CalendarView = ({ calendarEntries }: CalendarViewProps) => {
-  const { calendarId, startDate } = useSearch({ from: '/get-calendar' });
+  const { calendarIds, startDate } = useSearch({ from: '/get-calendar' });
   const date = new Date(startDate);
   const navigate = useNavigate();
   const [isSelectDateOpen, setIsSelectDateOpen] = useState(false);
@@ -27,7 +27,7 @@ export const CalendarView = ({ calendarEntries }: CalendarViewProps) => {
   const handleDateSelect = (selectedDate: Date) => {
     setIsSelectDateOpen(false);
     const calendarUrl = getCalendarUrl({
-      calendarId,
+      calendarIds: calendarIds,
       startDate: format(selectedDate, 'yyyy-MM-dd'),
     });
     navigate({

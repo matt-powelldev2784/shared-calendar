@@ -50,7 +50,7 @@ const AddCalendar = () => {
 
       if (calendarId) {
         queryClient.invalidateQueries({ queryKey: ['subscribedCalendars'] });
-        const calendarUrl = getCalendarUrl({ calendarId });
+        const calendarUrl = getCalendarUrl({ calendarIds: calendarId });
         navigate({
           to: calendarUrl,
         });

@@ -64,7 +64,7 @@ export const Navbar = () => {
     ? data.map((calendar) => ({
         id: calendar.id,
         text: calendar.name,
-        route: getCalendarUrl({ calendarId: calendar.id }),
+        route: getCalendarUrl({ calendarIds: calendar.id }),
         icon: <CalendarIcon className="mr-2 h-6 w-6" />,
         onClick: () => setCalendarMenuIsOpen((prev) => !prev),
       }))

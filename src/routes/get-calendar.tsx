@@ -9,7 +9,7 @@ import Loading from '@/components/ui/loading';
 import type { CustomError } from '@/ts/errorClass';
 
 const calendarSearchSchema = z.object({
-  calendarId: z.string(),
+  calendarIds: z.string(),
   startDate: z.string(),
   daysToView: z.number(),
 });
@@ -22,15 +22,15 @@ export const Route = createFileRoute('/get-calendar')({
   validateSearch: calendarSearchSchema,
 
   loaderDeps: ({ search }) => ({
-    calendarId: search.calendarId,
+    calendarIds: search.calendarIds,
     startDate: search.startDate,
     daysToView: search.daysToView,
   }),
 
-  loader: async ({ deps: { calendarId, startDate, daysToView } }) => {
+  loader: async ({ deps: { calendarIds, startDate, daysToView } }) => {
     const start = startDate ? new Date(startDate) : new Date();
     const end = addDays(new Date(startDate), daysToView);
-    const calendarIdArray = calendarId.split(',');
+    const calendarIdArray = calendarIds.split(',');
 
     const calendarEntries = await getCalendarEntries({
       calendarIds: calendarIdArray,

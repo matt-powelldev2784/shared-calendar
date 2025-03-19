@@ -104,7 +104,7 @@ const AddEntry = ({ calendars }: AddEntryProps) => {
 
       if (calendarEntry) {
         const calendarUrl = getCalendarUrl({
-          calendarId,
+          calendarIds: calendarId,
           startDate,
         });
         navigate({
