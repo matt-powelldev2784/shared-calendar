@@ -112,11 +112,7 @@ export const Navbar = () => {
 
       {/**************** Main Navigation Icons *****************/}
       <div className="mr-5 flex items-center gap-5">
-        <NavIconLink
-          linkTo="/add-entry"
-          visibleRoutes={['/get-calendar', '/signout', '/add-calendar']}
-          ariaLabel="Go to add entry page"
-        >
+        <NavIconLink linkTo="/add-entry" ariaLabel="Go to add entry page">
           <CalendarPlusIcon className="h-6 w-6" />
         </NavIconLink>
 
@@ -125,19 +121,12 @@ export const Navbar = () => {
           ariaLabel={
             calendarMenuIsOpen ? 'Close calendar menu' : 'Open calendar menu'
           }
-          visibleRoutes={[
-            '/get-calendar',
-            '/add-entry',
-            '/signout',
-            '/add-calendar',
-          ]}
         >
           <CalendarFold className="h-6 w-6" />
         </NavIconButton>
 
         <NavIconButton
           onClick={handleUserMenuClick}
-          alwaysVisible={true}
           ariaLabel={userMenuIsOpen ? 'Close user menu' : 'Open user menu'}
         >
           <UserAvatar />
