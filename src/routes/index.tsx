@@ -15,11 +15,7 @@ export const Route = createFileRoute('/')({
     const currentUser = checkAuth();
     return currentUser;
   },
-  errorComponent: () => (
-    <section className="flex h-full w-full items-center">
-      <SignIn />
-    </section>
-  ),
+  errorComponent: App,
 });
 
 function App() {
@@ -34,7 +30,7 @@ function App() {
     });
 
     return () => unsubscribe();
-  }, [navigate, currentUser]);
+  }, [currentUser]);
 
   return (
     <section className="flex h-full w-full items-center">

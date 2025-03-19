@@ -99,8 +99,6 @@ const SignInWithGoogle = async (navigate: any) => {
         subscribedCalendars: arrayUnion(calendarDocRef.id),
       });
     }
-
-    navigate({ to: `/default-calendar` });
   } catch (error: any) {
     console.error('Error during sign-in:', error);
     const errorCode = error.code;
