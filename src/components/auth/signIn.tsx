@@ -18,8 +18,11 @@ import {
 } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import googleGIcon from '@/assets/icons/google_g_logo.svg';
+import { useNavigate } from '@tanstack/react-router';
 
 export const SignIn = () => {
+  const navigate = useNavigate();
+
   return (
     <Card className="mx-auto mt-4 w-[95%] max-w-[400px]">
       <CardHeader>
@@ -31,7 +34,7 @@ export const SignIn = () => {
 
       <CardContent className="h-12">
         <Button
-          onClick={SignInWithGoogle}
+          onClick={() => SignInWithGoogle(navigate)}
           className="w-full"
           variant="googleButton"
           size="xl"
@@ -47,7 +50,7 @@ export const SignIn = () => {
   );
 };
 
-const SignInWithGoogle = async () => {
+const SignInWithGoogle = async (navigate: any) => {
   try {
     const provider = new GoogleAuthProvider();
     const result = await signInWithPopup(auth, provider);
@@ -97,7 +100,7 @@ const SignInWithGoogle = async () => {
       });
     }
 
-    window.location.href = '/default-calendar';
+    navigate({ to: `/default-calendar` });
   } catch (error: any) {
     console.error('Error during sign-in:', error);
     const errorCode = error.code;
