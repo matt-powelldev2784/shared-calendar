@@ -1,5 +1,6 @@
 import sharcLogoWhite from '../../assets/logo/sharc_logo_white.svg';
 import {
+  Bell,
   CalendarFold,
   Calendar as CalendarIcon,
   CalendarPlus2 as CalenderPlus2Icon,
@@ -22,20 +23,26 @@ const UserAvatar = lazy(() => import('./userAvatar'));
 const userMenuItems = [
   {
     id: 1,
-    text: 'Add Calendar',
-    route: '/add-calendar',
-    icon: <CalenderPlus2Icon className="mr-2 h-6 w-6" />,
+    text: 'Notifications',
+    route: '/',
+    icon: <Bell className="mr-2 h-6 w-6" />,
   },
   {
     id: 2,
-    text: 'Link Calendars',
+    text: 'Share Calendar',
     description:
-      'Link your calendar with other users accounts to view all linked calendars in a single, merged view. This allows you to easily manage and coordinate schedules across multiple users.',
+      'Share a calendar with other users accounts to view shared calendar entries in a single view.',
     route: '/',
     icon: <UsersIcon className="mr-2 h-6 w-6" />,
   },
   {
     id: 3,
+    text: 'Add Calendar',
+    route: '/add-calendar',
+    icon: <CalenderPlus2Icon className="mr-2 h-6 w-6" />,
+  },
+  {
+    id: 4,
     text: 'Sign Out',
     route: '/signout',
     icon: <LogOutIcon className="mr-2 h-6 w-6" />,
