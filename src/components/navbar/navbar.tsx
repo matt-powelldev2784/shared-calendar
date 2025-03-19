@@ -9,7 +9,7 @@ import { LogOut as LogOutIcon } from 'lucide-react';
 import { Users as UsersIcon } from 'lucide-react';
 import { CalendarPlus as CalendarPlusIcon } from 'lucide-react';
 import { lazy, useEffect, useState } from 'react';
-import { Link } from '@tanstack/react-router';
+import { Link, useSearch } from '@tanstack/react-router';
 import { NavIconButton, NavIconLink } from './navIcon';
 import NavItem from './navItem';
 import { useQuery } from '@tanstack/react-query';
@@ -31,7 +31,7 @@ const userMenuItems = [
     id: 2,
     text: 'Share Calendar',
     description:
-      'Share a calendar with other users accounts to view shared calendar entries in a single view.',
+      'Share a calendar with other users to view shared calendar entries in a single view.',
     route: '/',
     icon: <UsersIcon className="mr-2 h-6 w-6" />,
   },
