@@ -3,7 +3,7 @@ import {
   useLoaderData,
   useNavigate,
 } from '@tanstack/react-router';
-import { use, useEffect } from 'react';
+import { useEffect } from 'react';
 import { onAuthStateChanged } from 'firebase/auth';
 import { auth } from '@/db/firebaseConfig';
 import { SignIn } from '@/components/auth/signIn';
