@@ -2,37 +2,42 @@ import { Button } from '@/components/ui/button';
 import { format } from 'date-fns';
 import CalendarIcon from '../../assets/icons/cal_icon.svg';
 import DownIcon from '../../assets/icons/down_icon.svg';
-import { Calendar } from '@/components/ui/customCalendar';
+import { Calendar as CustomCalendar } from '@/components/ui/customCalendar';
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from '@/components/ui/popover';
 import { useState } from 'react';
-import type { CalendarEntry, CalendarViewData } from '@/ts/Calendar';
+import type { CalendarEntry, CalendarEntriesData } from '@/ts/Calendar';
 import { CalendarCard } from '../ui/calendarCard';
 import { useSearch, useNavigate } from '@tanstack/react-router';
+import { getCalendarUrl } from '@/lib/getCalendarUrl';
 
 type CalendarViewProps = {
-  calendarData: CalendarViewData[];
+  calendarEntries: CalendarEntriesData[];
 };
 
-export const CalendarView = ({ calendarData }: CalendarViewProps) => {
-  const { calendarId, startDate } = useSearch({ from: '/get-calendar' });
+export const CalendarView = ({ calendarEntries }: CalendarViewProps) => {
+  const { calendarIds, startDate } = useSearch({ from: '/get-calendar' });
   const date = new Date(startDate);
   const navigate = useNavigate();
   const [isSelectDateOpen, setIsSelectDateOpen] = useState(false);
 
   const handleDateSelect = (selectedDate: Date) => {
     setIsSelectDateOpen(false);
+    const calendarUrl = getCalendarUrl({
+      calendarIds: calendarIds,
+      startDate: format(selectedDate, 'yyyy-MM-dd'),
+    });
     navigate({
-      to: `/get-calendar?calendarId=${calendarId}&startDate=${format(selectedDate, 'yyyy-MM-dd')}&daysToView=7`,
+      to: calendarUrl,
     });
   };
 
   return (
     <div className="flex w-full flex-col items-center justify-center">
-      <div className="bg-primary/25 z-100s relative flex w-full items-center justify-center gap-4 p-2">
+      <div className="bg-primary/25 z-100s relative flex h-13 w-full items-center justify-center gap-4 p-2">
         <Popover open={isSelectDateOpen} onOpenChange={setIsSelectDateOpen}>
           <PopoverTrigger asChild>
             <Button variant="datePicker" className="w-96">
@@ -47,7 +52,7 @@ export const CalendarView = ({ calendarData }: CalendarViewProps) => {
           </PopoverTrigger>
 
           <PopoverContent className="w-auto">
-            <Calendar
+            <CustomCalendar
               mode="single"
               selected={date}
               onDateSelect={handleDateSelect}
@@ -58,7 +63,7 @@ export const CalendarView = ({ calendarData }: CalendarViewProps) => {
       </div>
 
       <section className="auto-row-[minmax(100px,1fr)] m-auto mx-4 mt-2 grid w-full grid-flow-row gap-2 px-4 lg:auto-cols-[minmax(100px,1fr)] lg:grid-flow-col">
-        {calendarData.map((calendarEntry, index) => {
+        {calendarEntries.map((calendarEntry, index) => {
           const { entries, date } = calendarEntry;
           return (
             <div

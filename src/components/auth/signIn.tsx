@@ -1,5 +1,5 @@
-import { signInWithPopup } from "firebase/auth";
-import { GoogleAuthProvider } from "firebase/auth";
+import { signInWithPopup } from 'firebase/auth';
+import { GoogleAuthProvider } from 'firebase/auth';
 import { auth, db } from '@/db/firebaseConfig';
 import {
   arrayUnion,
@@ -15,9 +15,9 @@ import {
   CardTitle,
   CardContent,
   CardDescription,
-} from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import googleGIcon from "@/assets/icons/google_g_logo.svg";
+} from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import googleGIcon from '@/assets/icons/google_g_logo.svg';
 
 export const SignIn = () => {
   return (
@@ -53,7 +53,7 @@ const SignInWithGoogle = async () => {
     const result = await signInWithPopup(auth, provider);
     const credential = GoogleAuthProvider.credentialFromResult(result);
     if (!credential) {
-      console.error("Error in user Credential");
+      console.error('Error in user Credential');
       return;
     }
     const token = credential.accessToken;
@@ -61,7 +61,7 @@ const SignInWithGoogle = async () => {
     console.log(user, token);
 
     // Check if the user is signing in for the first time
-    const userDocRef = doc(db, "users", user.uid);
+    const userDocRef = doc(db, 'users', user.uid);
     const userDoc = await getDoc(userDocRef);
 
     if (!userDoc.exists()) {
@@ -96,15 +96,17 @@ const SignInWithGoogle = async () => {
         subscribedCalendars: arrayUnion(calendarDocRef.id),
       });
     }
+
+    window.location.href = '/default-calendar';
   } catch (error: any) {
-    console.error("Error during sign-in:", error);
+    console.error('Error during sign-in:', error);
     const errorCode = error.code;
     const errorMessage = error.message;
     const email = error.customData?.email;
     const credential = GoogleAuthProvider.credentialFromError(error);
-    console.log("errorCode", errorCode);
-    console.log("errorMessage", errorMessage);
-    console.log("email", email);
-    console.log("credential", credential);
+    console.log('errorCode', errorCode);
+    console.log('errorMessage', errorMessage);
+    console.log('email', email);
+    console.log('credential', credential);
   }
 };

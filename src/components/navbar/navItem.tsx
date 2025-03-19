@@ -2,12 +2,12 @@ import { Link } from '@tanstack/react-router';
 import type { JSX } from 'react';
 
 type NavItemProps = {
-  id: number;
+  id: number | string;
   text: string;
-  route: string;
+  route?: string;
   icon: JSX.Element;
   description?: string;
-  onClick: () => void;
+  onClick: (event: any) => void;
 };
 
 const NavItem = ({

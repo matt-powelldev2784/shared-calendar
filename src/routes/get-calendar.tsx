@@ -6,9 +6,10 @@ import Error from '@/components/ui/error';
 import sortCalendarEntriesByDate from '@/lib/sortCalendarEntriesByDate';
 import { CalendarView } from '@/components/calenderView/calendarView';
 import Loading from '@/components/ui/loading';
+import type { CustomError } from '@/ts/errorClass';
 
 const calendarSearchSchema = z.object({
-  calendarId: z.string(),
+  calendarIds: z.string(),
   startDate: z.string(),
   daysToView: z.number(),
 });
@@ -21,51 +22,44 @@ export const Route = createFileRoute('/get-calendar')({
   validateSearch: calendarSearchSchema,
 
   loaderDeps: ({ search }) => ({
-    calendarId: search.calendarId,
+    calendarIds: search.calendarIds,
     startDate: search.startDate,
     daysToView: search.daysToView,
   }),
 
-  loader: async ({ deps: { calendarId, startDate, daysToView } }) => {
+  loader: async ({ deps: { calendarIds, startDate, daysToView } }) => {
     const start = startDate ? new Date(startDate) : new Date();
     const end = addDays(new Date(startDate), daysToView);
+    const calendarIdArray = calendarIds.split(',');
 
-    const calendar = await getCalendarEntries({
-      calendarIds: [calendarId],
+    const calendarEntries = await getCalendarEntries({
+      calendarIds: calendarIdArray,
       startDate: start,
       endDate: end,
     });
 
     const sortedCalendarEntries = sortCalendarEntriesByDate({
       daysToReturn: daysToView,
-      calendarData: calendar,
+      calendarData: calendarEntries,
       firstDateToDisplay: start,
     });
 
     return sortedCalendarEntries;
   },
 
-  errorComponent: () => {
-    return (
-      <Error
-        error={{
-          name: 'Search Params Error',
-          status: 404,
-          message: 'Error fetching calendar data from search params',
-        }}
-      />
-    );
+  errorComponent: ({ error }) => {
+    return <Error error={error as CustomError} />;
   },
 });
 
 function GetCalendarPage() {
-  const calendar = useLoaderData({ from: '/get-calendar' });
+  const sortedCalendarEntries = useLoaderData({
+    from: '/get-calendar',
+  });
 
   return (
-    <div>
-      <CalendarView calendarData={calendar} />
-    </div>
+    <section className="flex h-full w-full items-center">
+      <CalendarView calendarEntries={sortedCalendarEntries} />
+    </section>
   );
 }
-
-export default GetCalendarPage;

@@ -17,12 +17,13 @@ export type Calendar = {
   calendarId: string;
   name: string;
   description?: string;
-  ownerIds: string[];
-  subscribers: string[];
-  pendingRequests: string[];
+  ownerIds?: string[];
+  subscribers?: string[];
+  pendingRequests?: string[];
+  color?: string;
 };
 
-export type CalendarViewData = {
+export type CalendarEntriesData = {
   date: Date;
   entries: CalendarEntry[];
 };
