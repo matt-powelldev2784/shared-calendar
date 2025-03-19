@@ -95,6 +95,8 @@ const SignInWithGoogle = async () => {
       await updateDoc(userDocRef, {
         subscribedCalendars: arrayUnion(calendarDocRef.id),
       });
+
+      window.location.href = '/default-calendar';
     }
   } catch (error: any) {
     console.error("Error during sign-in:", error);
