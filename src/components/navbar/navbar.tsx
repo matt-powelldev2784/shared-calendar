@@ -9,7 +9,7 @@ import { LogOut as LogOutIcon } from 'lucide-react';
 import { Users as UsersIcon } from 'lucide-react';
 import { CalendarPlus as CalendarPlusIcon } from 'lucide-react';
 import { lazy, useEffect, useState } from 'react';
-import { Link, useSearch } from '@tanstack/react-router';
+import { Link } from '@tanstack/react-router';
 import { NavIconButton, NavIconLink } from './navIcon';
 import NavItem from './navItem';
 import { useQuery } from '@tanstack/react-query';
