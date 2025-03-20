@@ -8,17 +8,17 @@ import {
   CardContent,
   CardDescription,
 } from "@/components/ui/card";
-
-export const signOut = async () => {
-  try {
-    await signoutFirebase(auth);
-    console.log("User signed out successfully");
-  } catch (e) {
-    console.error("Error signing out: ", e);
-  }
-};
+import { useNavigate } from '@tanstack/react-router';
 
 export const SignOut = () => {
+  const navigate = useNavigate();
+
+  const signOut = async () => {
+    await signoutFirebase(auth);
+    navigate({ to: '/' });
+    window.location.reload();
+  };
+
   return (
     <Card className="mx-auto mt-4 w-[95%] max-w-[400px]">
       <CardHeader>

@@ -7,14 +7,16 @@ import { SignIn } from '@/components/auth/signIn';
 import { useEffect } from 'react';
 import Error from '@/components/ui/error';
 import type { CustomError } from '@/ts/errorClass';
-import { addDefaultCalendar } from '@/db/addDefaultCalendar';
-import { useQueryClient } from '@tanstack/react-query';
+import { createInitialUserDocuments } from '@/db/createInitialUserDocuments';
 
 export const Route = createFileRoute('/authenticated')({
   component: AuthenticatedPage,
 
   loader: async () => {
-    const user = await addDefaultCalendar();
+    // Create the initial user documents if required
+    // otherwise get the user
+    const user = await createInitialUserDocuments();
+
     return user;
   },
 
@@ -26,10 +28,8 @@ export const Route = createFileRoute('/authenticated')({
 function AuthenticatedPage() {
   const navigate = useNavigate();
   const user = useLoaderData({ from: '/authenticated' });
-  const queryClient = useQueryClient();
 
   useEffect(() => {
-    queryClient.invalidateQueries({ queryKey: ['subscribedCalendars'] });
     if (user) navigate({ to: `/default-calendar` });
   }, [user]);
 

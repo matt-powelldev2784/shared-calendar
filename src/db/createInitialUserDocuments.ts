@@ -10,7 +10,11 @@ import { db } from './firebaseConfig';
 import checkAuth from './checkAuth';
 import type { User } from 'firebase/auth';
 
-export const addDefaultCalendar = async () => {
+// if the user is signing in for the first time
+// this function will create a user document, public user document and 
+// default calendar document
+// if the documents already exist, it will return the user document
+export const createInitialUserDocuments = async () => {
   try {
     const user = await checkAuth();
 
@@ -19,7 +23,6 @@ export const addDefaultCalendar = async () => {
     const userDoc = await getDoc(userDocRef);
 
     if (!userDoc.exists()) {
-      // Create a new user document
       await setDoc(userDocRef, {
         displayName: user.displayName,
         email: user.email,

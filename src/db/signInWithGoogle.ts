@@ -13,7 +13,8 @@ export const SignInWithGoogle = async () => {
     }
     const token = credential.accessToken;
     const user = result.user;
-    console.log(user, token);
+    
+    return { user, token };
   } catch (error: any) {
     console.error('Error during sign-in:', error);
     const errorCode = error.code;

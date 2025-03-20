@@ -10,6 +10,7 @@ import type { CustomError } from '@/ts/errorClass';
 import { useEffect } from 'react';
 import { getCalendarUrl } from '@/lib/getCalendarUrl';
 
+
 export const Route = createFileRoute('/default-calendar')({
   component: DefaultCalendarPage,
   pendingComponent: () => <Loading classNames="w-full mx-auto mt-4" />,
@@ -38,6 +39,10 @@ function DefaultCalendarPage() {
       to: calendarUrl,
     });
   }, [calendarId, navigate]);
+
+  return (
+    <section className="flex h-full w-full items-center">
+      <Loading classNames="w-full mx-auto mt-4" />
+    </section>
+  );
 }
-
-
