@@ -39,10 +39,4 @@ function DefaultCalendarPage() {
       to: calendarUrl,
     });
   }, [calendarId, navigate]);
-
-  return (
-    <section className="flex h-full w-full items-center">
-      <Loading classNames="w-full mx-auto mt-4" />
-    </section>
-  );
 }
