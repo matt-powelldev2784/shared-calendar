@@ -111,7 +111,9 @@ export const Navbar = () => {
       </Link>
 
       {/**************** Main Navigation Icons *****************/}
-      <div className="mr-5 flex items-center gap-5">
+      <div
+        className={`mr-5 flex items-center gap-5 ${data ? 'md:flex' : 'md:hidden'}`}
+      >
         <NavIconLink linkTo="/add-entry" ariaLabel="Go to add entry page">
           <CalendarPlusIcon className="h-6 w-6" />
         </NavIconLink>
