@@ -51,7 +51,6 @@ const getCalendarEntries = async ({
 
     // return an empty array if no entries are found
     if (entriesQuerySnapshot.empty) {
-      console.log('No matching documents.');
       return [];
     }
 
