@@ -58,7 +58,7 @@ function GetCalendarPage() {
   });
 
   return (
-    <section className="flex h-full w-full items-center">
+    <section className="flex h-full w-full flex-col items-center">
       <CalendarView calendarEntries={sortedCalendarEntries} />
     </section>
   );

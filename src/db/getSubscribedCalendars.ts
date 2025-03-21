@@ -39,6 +39,8 @@ const getSubscribedCalendars = async () => {
       ...doc.data(),
     })) as Calendar[];
 
+    calendars.sort((a, b) => a.name.localeCompare(b.name));
+
     return calendars;
   } catch (error) {
     console.error('Error getting subscribed calendars: ', error);

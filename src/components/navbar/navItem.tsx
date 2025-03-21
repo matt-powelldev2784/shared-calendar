@@ -1,13 +1,13 @@
 import { Link } from '@tanstack/react-router';
 import type { JSX } from 'react';
 
-type NavItemProps = {
+export type NavItemProps = {
   id: number | string;
   text: string;
   route?: string;
   icon: JSX.Element;
   description?: string;
-  onClick: (event: any) => void;
+  onClick?: (event: any) => void;
 };
 
 const NavItem = ({
@@ -28,9 +28,19 @@ const NavItem = ({
         onClick={onClick}
         className="flex h-full w-full flex-col p-4 text-base hover:bg-orange-400"
       >
-        <div className="flex items-center">
-          {icon}
-          {text}
+        <div className="flex items-center gap-4">
+          <span className="h-6 w-6">{icon}</span>
+          <p
+            style={{
+              overflow: 'hidden',
+              display: '-webkit-box',
+              WebkitBoxOrient: 'vertical',
+              WebkitLineClamp: 2,
+            }}
+            className="mr-1"
+          >
+            {text}
+          </p>
         </div>
 
         {description && (
