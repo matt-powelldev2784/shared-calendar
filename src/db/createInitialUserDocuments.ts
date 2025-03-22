@@ -27,6 +27,7 @@ export const createInitialUserDocuments = async () => {
         displayName: user.displayName,
         email: user.email,
         subscribedCalendars: [],
+        userId: user.uid,
       });
 
       // create a public user document
