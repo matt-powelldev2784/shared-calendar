@@ -22,6 +22,9 @@ export const Navbar = () => {
       setCalendarName(subscribedCalendars[0].name);
       return subscribedCalendars;
     },
+    // refetch every 1 seconds if there is no subscribed calendars
+    // this is used to get the data when a first time user signs in
+    refetchInterval: (data) => (!data ? false : 1000),
   });
 
   // generate subscribed calendar menu items
