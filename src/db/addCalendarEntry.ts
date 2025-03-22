@@ -13,7 +13,7 @@ export type AddCalendarEntry = {
   calendarId: string;
   ownerIds?: string[];
   subscribers?: string[];
-  pendingRequests?: string[];
+  requests?: string[];
 };
 
 const addCalendarEntry = async (entry: AddCalendarEntry) => {
@@ -47,7 +47,7 @@ const addCalendarEntry = async (entry: AddCalendarEntry) => {
       ? entry.ownerIds.concat(currentUser.uid)
       : [currentUser.uid];
     const subscribers = calenderSubscribers;
-    const pendingRequests = entry.pendingRequests || [];
+    const requests = entry.requests || [];
 
     // validate arrays for uniqueness
     if (hasDuplicates(ownerIds)) {
@@ -56,8 +56,8 @@ const addCalendarEntry = async (entry: AddCalendarEntry) => {
     if (hasDuplicates(subscribers)) {
       throw new CustomError(403, 'Subscriber IDs must be unique');
     }
-    if (hasDuplicates(pendingRequests)) {
-      throw new CustomError(403, 'Pending Requests must be unique');
+    if (hasDuplicates(requests)) {
+      throw new CustomError(403, 'Requests userIds must be unique');
     }
 
     // add calendar entry
@@ -68,9 +68,20 @@ const addCalendarEntry = async (entry: AddCalendarEntry) => {
       endDate: Timestamp.fromDate(entry.endDate),
       ownerIds,
       subscribers,
-      pendingRequests,
     };
     const entryDocRef = await addDoc(entriesRef, newEntry);
+
+    // share entry with other users if pending requests are present
+    if (requests.length > 0) {
+      const requestDocRef = collection(db, 'requests');
+      const request = {
+        entryId: entryDocRef.id,
+        ownerId: currentUser.uid,
+        requestedUserIds: requests,
+      };
+      await addDoc(requestDocRef, request);
+    }
+
     return entryDocRef.id;
   } catch (error) {
     console.error('Error adding calendar entry: ', error);
