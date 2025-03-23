@@ -1,5 +1,4 @@
 import {
-  Bell,
   CalendarPlus2,
   CalendarPlusIcon,
   LogOutIcon,
@@ -7,12 +6,6 @@ import {
 } from 'lucide-react';
 
 export const userMenuItems = [
-  {
-    id: 1,
-    text: 'Notifications',
-    route: '/',
-    icon: <Bell className="mr-2 h-6 w-6" />,
-  },
   {
     id: 2,
     text: 'Add Entry',

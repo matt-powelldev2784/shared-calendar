@@ -61,6 +61,7 @@ export const Navbar = () => {
         description: `${request.requesterEmail} wants you to add a calendar entry`,
         icon: <Bell className="h-6 w-6" />,
         route: getCalendarUrl({ calendarIds: request.entryId }),
+        notificationCount: numberOfRequests,
       }))
     : [];
 
@@ -82,8 +83,8 @@ export const Navbar = () => {
             <DropDownMenu
               icon={<CalendarFold className="h-6 w-6" />}
               label={{
-                openText: 'Open Calendar Menu',
-                closeText: 'Close Calendar Menu',
+                openText: 'Open calendar menu',
+                closeText: 'Close calendar menu',
               }}
               navigationItems={subscribedCalendarMenuItems}
             />
@@ -91,8 +92,8 @@ export const Navbar = () => {
             <DropDownMenu
               icon={<Bell />}
               label={{
-                openText: 'Open User Menu',
-                closeText: 'Close User Menu',
+                openText: 'Open notifications menu',
+                closeText: 'Close notifications menu',
               }}
               navigationItems={requestMenuItems}
               notificationCount={numberOfRequests}
@@ -101,11 +102,10 @@ export const Navbar = () => {
             <DropDownMenu
               icon={<UserAvatar />}
               label={{
-                openText: 'Open User Menu',
-                closeText: 'Close User Menu',
+                openText: 'Open user menu',
+                closeText: 'Close user menu',
               }}
               navigationItems={userMenuItems}
-              notificationCount={numberOfRequests}
             />
           </div>
         </>
@@ -161,7 +161,7 @@ const DropDownMenu = ({
   icon,
   label,
   navigationItems,
-  notificationCount,
+  notificationCount = 0,
 }: DropDownMenuProps) => {
   const [menuIsOpen, setMenuIsOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
@@ -207,9 +207,12 @@ const DropDownMenu = ({
     };
   }, [menuIsOpen]);
 
+  console.log('notificationCount', notificationCount);
+
   return (
     <div ref={menuRef} className="flex items-center gap-5">
       <NavIconButton
+        className={`${notificationCount > 0 ? 'h-8 w-8 rounded-full bg-red-500' : 'bg-none'}`}
         onClick={handleMenuClick}
         ariaLabel={menuIsOpen ? closeText : openText}
       >
@@ -228,7 +231,6 @@ const DropDownMenu = ({
               key={item.id}
               {...item}
               onClick={() => setMenuIsOpen(false)}
-              notificationCount={notificationCount}
             />
           ))}
       </ul>

@@ -8,7 +8,6 @@ export type NavItemProps = {
   icon: JSX.Element;
   description?: string;
   onClick?: (event: any) => void;
-  notificationCount?: number;
 };
 
 const NavItem = ({
@@ -18,7 +17,6 @@ const NavItem = ({
   icon,
   description,
   onClick,
-  notificationCount = 0,
 }: NavItemProps) => {
   return (
     <li
@@ -43,12 +41,6 @@ const NavItem = ({
           >
             {text}
           </p>
-
-          {notificationCount > 0 && text === 'Notifications' && (
-            <p className="bg-destructive flex h-7 w-7 items-center justify-center rounded-full text-base text-white">
-              {notificationCount}
-            </p>
-          )}
         </div>
 
         {description && (
