@@ -85,6 +85,7 @@ const addCalendarEntry = async (entry: AddCalendarEntry) => {
           entryId: entryDocRef.id,
           ownerId: currentUser.uid,
           requestedUserIds: arrayUnion(...requests),
+          requesterEmail: currentUser.email,
         };
         const newRequestDocRef = doc(requestDocRef);
         transaction.set(newRequestDocRef, request);

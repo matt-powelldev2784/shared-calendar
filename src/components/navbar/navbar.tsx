@@ -3,8 +3,8 @@ import SharcLogo from '@/assets/logo/sharc_logo_white.svg';
 import SharcIcon from '@/assets/logo/sharc_icon_white.svg';
 import { useEffect, useRef, useState, type JSX } from 'react';
 import NavItem, { type NavItemProps } from './navItem';
-import { NavIconButton, NavIconLink } from './navIcon';
-import { CalendarFold, CalendarPlusIcon } from 'lucide-react';
+import { NavIconButton } from './navIcon';
+import { Bell, CalendarFold } from 'lucide-react';
 import UserAvatar from './userAvatar';
 import { getCalendarUrl } from '@/lib/getCalendarUrl';
 import { userMenuItems } from './userMenuItems';
@@ -31,7 +31,7 @@ export const Navbar = () => {
   });
 
   // get requests data and store number of requests in global state
-  useQuery({
+  const { data: requests } = useQuery({
     queryKey: ['requests'],
     queryFn: async () => {
       const requests = await getRequests();
@@ -41,6 +41,8 @@ export const Navbar = () => {
     refetchInterval: 60 * 2 * 1000, // 2 mins
   });
 
+  console.log('requests', requests);
+
   // generate subscribed calendar menu items
   const subscribedCalendarMenuItems = subscribedCalendars
     ? subscribedCalendars.map((calendar) => ({
@@ -48,6 +50,16 @@ export const Navbar = () => {
         text: calendar.name,
         icon: <CalendarFold className="h-6 w-6" />,
         route: getCalendarUrl({ calendarIds: calendar.id }),
+      }))
+    : [];
+
+  // generate request menu items
+  const requestMenuItems = requests
+    ? requests.map((request) => ({
+        id: request.id,
+        text: 'Request from *' + request.entryId,
+        icon: <Bell className="h-6 w-6" />,
+        route: getCalendarUrl({ calendarIds: request.entryId }),
       }))
     : [];
 
@@ -66,10 +78,6 @@ export const Navbar = () => {
           </div>
 
           <div className="mr-5 flex items-center gap-5">
-            <NavIconLink linkTo="/add-entry" ariaLabel="Go to add entry page">
-              <CalendarPlusIcon className="h-6 w-6" />
-            </NavIconLink>
-
             <DropDownMenu
               icon={<CalendarFold className="h-6 w-6" />}
               label={{
@@ -77,6 +85,16 @@ export const Navbar = () => {
                 closeText: 'Close Calendar Menu',
               }}
               navigationItems={subscribedCalendarMenuItems}
+            />
+
+            <DropDownMenu
+              icon={<Bell />}
+              label={{
+                openText: 'Open User Menu',
+                closeText: 'Close User Menu',
+              }}
+              navigationItems={requestMenuItems}
+              notificationCount={numberOfRequests}
             />
 
             <DropDownMenu

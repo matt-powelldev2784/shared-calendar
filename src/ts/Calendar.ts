@@ -33,5 +33,6 @@ export type Request = {
   ownerId: string;
   entryId: string;
   requestedUserIds: string[];
+  requesterEmail: string;
 };
 
