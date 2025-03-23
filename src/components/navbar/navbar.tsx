@@ -57,7 +57,8 @@ export const Navbar = () => {
   const requestMenuItems = requests
     ? requests.map((request) => ({
         id: request.id,
-        text: 'Request from *' + request.entryId,
+        text: 'Calendar entry request',
+        description: `${request.requesterEmail} wants you to add a calendar entry`,
         icon: <Bell className="h-6 w-6" />,
         route: getCalendarUrl({ calendarIds: request.entryId }),
       }))
