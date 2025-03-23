@@ -28,3 +28,10 @@ export type CalendarEntriesData = {
   entries: CalendarEntry[];
 };
 
+export type Request = {
+  id: string;
+  ownerId: string;
+  entryId: string;
+  requestedUserIds: string[];
+};
+

@@ -10,9 +10,12 @@ import { getCalendarUrl } from '@/lib/getCalendarUrl';
 import { userMenuItems } from './userMenuItems';
 import { useQuery } from '@tanstack/react-query';
 import getSubscribedCalendars from '@/db/getSubscribedCalendars';
+import getRequests from '@/db/getRequests';
+import { getNumberOfRequests, setNumberOfRequests } from '@/store/store';
 
 export const Navbar = () => {
   const [calendarName, setCalendarName] = useState('');
+  const numberOfRequests = getNumberOfRequests();
 
   // get subscribed calendars data
   const { data: subscribedCalendars } = useQuery({
@@ -25,6 +28,17 @@ export const Navbar = () => {
     // refetch every 1 seconds if there is no subscribed calendars
     // this is used to get the data when a first time user signs in
     refetchInterval: (data) => (!data ? false : 1000),
+  });
+
+  // get requests data and store number of requests in global state
+  useQuery({
+    queryKey: ['requests'],
+    queryFn: async () => {
+      const requests = await getRequests();
+      setNumberOfRequests(requests.length);
+      return requests;
+    },
+    refetchInterval: 60 * 2 * 1000, // 2 mins
   });
 
   // generate subscribed calendar menu items
@@ -40,7 +54,7 @@ export const Navbar = () => {
   return (
     <nav className="bg-primary z-1100 flex h-14 w-full items-center justify-between text-xl font-bold text-white md:h-12">
       {!subscribedCalendars && (
-        <div className="flex flex-grow items-center">
+        <div className="flex flex-grow items-center justify-between">
           <Logo />
         </div>
       )}
@@ -50,6 +64,7 @@ export const Navbar = () => {
           <div className="flex flex-grow items-center">
             <LogoWithCalendarName calendarName={calendarName} />
           </div>
+
           <div className="mr-5 flex items-center gap-5">
             <NavIconLink linkTo="/add-entry" ariaLabel="Go to add entry page">
               <CalendarPlusIcon className="h-6 w-6" />
@@ -71,6 +86,7 @@ export const Navbar = () => {
                 closeText: 'Close User Menu',
               }}
               navigationItems={userMenuItems}
+              notificationCount={numberOfRequests}
             />
           </div>
         </>
@@ -117,11 +133,17 @@ type DropDownMenuProps = {
     closeText: string;
   };
   navigationItems: NavItemProps[];
+  notificationCount?: number;
 };
 
 type PressOutsideEvent = MouseEvent | TouchEvent;
 
-const DropDownMenu = ({ icon, label, navigationItems }: DropDownMenuProps) => {
+const DropDownMenu = ({
+  icon,
+  label,
+  navigationItems,
+  notificationCount,
+}: DropDownMenuProps) => {
   const [menuIsOpen, setMenuIsOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
   const { openText, closeText } = label;
@@ -187,6 +209,7 @@ const DropDownMenu = ({ icon, label, navigationItems }: DropDownMenuProps) => {
               key={item.id}
               {...item}
               onClick={() => setMenuIsOpen(false)}
+              notificationCount={notificationCount}
             />
           ))}
       </ul>

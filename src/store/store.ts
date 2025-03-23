@@ -1,21 +1,20 @@
 import { useStore } from '@tanstack/react-store';
 import { Store } from '@tanstack/store';
-import type { Calendar } from '@/ts/Calendar';
 
 type Calendars = {
-  calendars: Calendar[];
+  numberOfRequests: number;
 };
 
 export const store = new Store<Calendars>({
-  calendars: [],
+  numberOfRequests: 0,
 });
 
-export const addCalendarsToStore = (calenders: Calendar[]) => {
+export const setNumberOfRequests = (numberOfRequests: number) => {
   store.setState((state) => {
-    return { calenders, ...state };
+    return { ...state, numberOfRequests };
   });
 };
 
-export const getCalendarsFromStore = () => {
-  return useStore(store, (state) => state.calendars);
+export const getNumberOfRequests = () => {
+  return useStore(store, (state) => state.numberOfRequests);
 };
