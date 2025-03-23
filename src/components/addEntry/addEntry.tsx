@@ -45,6 +45,7 @@ import getUserIdByEmail from '@/db/getUserIdByEmail';
 import { useState } from 'react';
 import { hasDuplicates } from '@/lib/hasDuplicates';
 import { CustomError } from '@/ts/errorClass';
+import Error from '../ui/error';
 
 const convertFormValuesToEntry = (values: z.infer<typeof formSchema>) => {
   const startDate = new Date(values.date);
@@ -99,12 +100,14 @@ type AddEntryProps = {
 
 const AddEntry = ({ calendars }: AddEntryProps) => {
   const [usersToRequest, setUsersToRequest] = useState<string[]>([]);
+  const [submitError, setSubmitError] = useState<CustomError | null>(null);
   const navigate = useNavigate();
 
   // submit calendar entry and navigate to calendar
   const mutation = useMutation({
     mutationFn: async (values: z.infer<typeof formSchema>) => {
       const entry = convertFormValuesToEntry(values);
+      console.log('entry', entry);
       const calendarEntry = await addCalendarEntry(entry);
 
       const calendarId = values.calendarId;
@@ -120,6 +123,9 @@ const AddEntry = ({ calendars }: AddEntryProps) => {
         });
         return calendarEntry;
       }
+    },
+    onError: (error) => {
+      setSubmitError(error as CustomError);
     },
   });
 
@@ -185,6 +191,8 @@ const AddEntry = ({ calendars }: AddEntryProps) => {
 
   return (
     <Card className="my-8 mb-32 w-full max-w-[700px] border-0 p-0 shadow-none md:border md:p-4 md:shadow-sm">
+      {submitError && <Error error={submitError} />}
+
       <CardHeader className="flex flex-col items-center">
         <CalendarPlusIcon className="text-primary mr-2 inline-block h-12 w-12" />
         <CardTitle className="text-center">Add Calendar Entry</CardTitle>
@@ -192,7 +200,6 @@ const AddEntry = ({ calendars }: AddEntryProps) => {
           Fill in the form below and click submit to add a calendar entry.
         </CardDescription>
       </CardHeader>
-
       <CardContent className="p-0">
         <Form {...form}>
           <form
