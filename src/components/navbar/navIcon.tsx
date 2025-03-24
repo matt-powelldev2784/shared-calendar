@@ -42,8 +42,6 @@ export const NavIconButton = ({
   ariaLabel,
   className,
 }: NavIconProps) => {
-
-  console.log('className', className);
   return (
     <button
       onClick={onClick}

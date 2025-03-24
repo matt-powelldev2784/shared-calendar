@@ -41,8 +41,6 @@ export const Navbar = () => {
     refetchInterval: 60 * 2 * 1000, // 2 mins
   });
 
-  console.log('requests', requests);
-
   // generate subscribed calendar menu items
   const subscribedCalendarMenuItems = subscribedCalendars
     ? subscribedCalendars.map((calendar) => ({
@@ -206,8 +204,6 @@ const DropDownMenu = ({
       document.removeEventListener('keydown', handleKeyDown);
     };
   }, [menuIsOpen]);
-
-  console.log('notificationCount', notificationCount);
 
   return (
     <div ref={menuRef} className="flex items-center gap-5">
