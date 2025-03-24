@@ -60,7 +60,7 @@ const convertFormValuesToEntry = (values: z.infer<typeof formSchema>) => {
     startDate,
     endDate,
     calendarId: values.calendarId,
-    requests: values.requests,
+    pendingRequests: values.pendingRequests,
   };
 
   return entry;
@@ -89,7 +89,7 @@ const formSchema = z.object({
       message: 'Date is required',
     }),
   addUser: z.string().email().or(z.literal('')).optional(),
-  requests: z.array(z.string()).optional(),
+  pendingRequests: z.array(z.string()).optional(),
   startDate: z.undefined(),
   endDate: z.undefined(),
 });
@@ -147,7 +147,7 @@ const AddEntry = ({ calendars }: AddEntryProps) => {
       startDate: undefined,
       endDate: undefined,
       addUser: '',
-      requests: [],
+      pendingRequests: [],
     },
   });
 
@@ -159,7 +159,7 @@ const AddEntry = ({ calendars }: AddEntryProps) => {
         const userId = await getUserIdByEmail(email);
 
         const userIdString = userId.toString();
-        const currentRequests = form.getValues('requests') || [];
+        const currentRequests = form.getValues('pendingRequests') || [];
         const updatedRequests = [...currentRequests, userIdString];
 
         const userIdsHasDuplicates = hasDuplicates(updatedRequests);
@@ -172,7 +172,7 @@ const AddEntry = ({ calendars }: AddEntryProps) => {
         }
 
         if (userIdString) {
-          form.setValue('requests', [...currentRequests, userId]);
+          form.setValue('pendingRequests', [...currentRequests, userId]);
           form.setValue('addUser', '');
         }
 
