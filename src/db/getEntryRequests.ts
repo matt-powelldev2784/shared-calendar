@@ -3,7 +3,7 @@ import { db } from '@/db/firebaseConfig';
 import checkAuth from './checkAuth';
 import { type Request } from '@/ts/Calendar';
 
-const getRequests = async () => {
+const getEntryRequests = async () => {
   try {
     const user = await checkAuth();
 
@@ -33,4 +33,4 @@ const getRequests = async () => {
   }
 };
 
-export default getRequests;
+export default getEntryRequests;

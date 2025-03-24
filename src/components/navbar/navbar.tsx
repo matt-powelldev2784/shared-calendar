@@ -10,7 +10,7 @@ import { getCalendarUrl } from '@/lib/getCalendarUrl';
 import { userMenuItems } from './userMenuItems';
 import { useQuery } from '@tanstack/react-query';
 import getSubscribedCalendars from '@/db/getSubscribedCalendars';
-import getRequests from '@/db/getRequests';
+import getEntryRequests from '@/db/getEntryRequests';
 import { getNumberOfRequests, setNumberOfRequests } from '@/store/store';
 
 export const Navbar = () => {
@@ -34,12 +34,14 @@ export const Navbar = () => {
   const { data: requests } = useQuery({
     queryKey: ['requests'],
     queryFn: async () => {
-      const requests = await getRequests();
+      const requests = await getEntryRequests();
       setNumberOfRequests(requests.length);
       return requests;
     },
     refetchInterval: 60 * 2 * 1000, // 2 mins
   });
+
+  console.log('requests', requests);
 
   // generate subscribed calendar menu items
   const subscribedCalendarMenuItems = subscribedCalendars
