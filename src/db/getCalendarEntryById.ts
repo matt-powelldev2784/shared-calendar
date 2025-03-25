@@ -7,12 +7,20 @@ const getCalendarEntryById = async (entryId: string) => {
   try {
     const entryDocRef = doc(db, 'entries', entryId);
     const entryDoc = await getDoc(entryDocRef);
+    const entryData = entryDoc.data();
+
+    if (!entryData) {
+      throw new CustomError(404, 'Calendar entry not found');
+    }
+
+    entryData.startDate = entryData.startDate.toDate();
+    entryData.endDate = entryData.endDate.toDate();
 
     if (!entryDoc.exists()) {
       throw new CustomError(404, 'Calendar entry not found');
     }
 
-    return entryDoc.data() as CalendarEntry;
+    return entryData as CalendarEntry;
   } catch (error) {
     console.error('Error getting calendar entry: ', error);
     throw error;

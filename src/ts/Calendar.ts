@@ -1,5 +1,6 @@
 export type CalendarEntry = {
   id: string;
+  entryId: string;
   title: string;
   description?: string;
   startDate: Date;
@@ -20,6 +21,7 @@ export type Calendar = {
   ownerIds?: string[];
   subscribers?: string[];
   pendingRequests?: string[];
+  defaultCalendarId: string;
   color?: string;
 };
 
@@ -36,3 +38,10 @@ export type Request = {
   requesterEmail: string;
 };
 
+export type UserDocument = {
+  defaultCalendarId: string;
+  displayName: string;
+  email: string;
+  subscribedCalendars: string[];
+  userId: string;
+};

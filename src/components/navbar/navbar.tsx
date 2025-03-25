@@ -41,8 +41,6 @@ export const Navbar = () => {
     refetchInterval: 60 * 2 * 1000, // 2 mins
   });
 
-  console.log('requests', requests);
-
   // generate subscribed calendar menu items
   const subscribedCalendarMenuItems = subscribedCalendars
     ? subscribedCalendars.map((calendar) => ({
@@ -60,7 +58,7 @@ export const Navbar = () => {
         text: 'Calendar entry request',
         description: `${request.requesterEmail} wants you to add a calendar entry`,
         icon: <Bell className="h-6 w-6" />,
-        route: getCalendarUrl({ calendarIds: request.entryId }),
+        route: `/subscribe-to-entry?entryId=${request.entryId}`,
         notificationCount: numberOfRequests,
       }))
     : [];
@@ -210,7 +208,7 @@ const DropDownMenu = ({
   return (
     <div ref={menuRef} className="flex items-center gap-5">
       <NavIconButton
-        className={`${notificationCount > 0 ? 'h-8 w-8 rounded-full bg-red-500' : 'bg-none'}`}
+        className={`${notificationCount > 0 ? 'h-8 w-8 rounded-full bg-yellow-400' : 'bg-none'}`}
         onClick={handleMenuClick}
         ariaLabel={menuIsOpen ? closeText : openText}
       >

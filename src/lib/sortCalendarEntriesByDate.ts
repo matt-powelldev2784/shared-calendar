@@ -51,8 +51,6 @@ const sortCalendarEntriesByDate = ({
           new Date(a.startDate).getTime() - new Date(b.startDate).getTime(),
       );
 
-    console.log('entries', entries);
-
     return entries.length > 0
       ? { date: dateTitles[index], entries: [...entries] }
       : { date: dateTitles[index], entries: [] };

@@ -59,6 +59,7 @@ const getCalendarEntries = async ({
       return {
         id: doc.id,
         title: data.title,
+        entryId: data.entryId,
         description: data.description,
         startDate: data.startDate.toDate(),
         endDate: data.endDate.toDate(),
@@ -66,8 +67,8 @@ const getCalendarEntries = async ({
         ownerIds: data.ownerIds,
         subscribers: data.subscribers,
         pendingRequests: data.pendingRequests,
-      } as CalendarEntry;
-    });
+      };
+    }) as CalendarEntry[];
 
     return calendarEntries;
   } catch (error) {
