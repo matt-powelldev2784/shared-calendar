@@ -6,12 +6,16 @@ import { CalendarCard } from '@/components/ui/calendarCard';
 type ReviewPendingEntryProps = {
   calendarEntries: CalendarEntriesData[];
   pendingEntry: string;
+  requestId: string;
 };
 
 const ReviewPendingEntry = ({
   calendarEntries,
   pendingEntry,
+  requestId,
 }: ReviewPendingEntryProps) => {
+  console.log('requestId', requestId);
+
   return (
     <div className="mt-2 flex h-full w-full flex-col items-center p-2">
       {calendarEntries.map((calendarEntry, index) => {

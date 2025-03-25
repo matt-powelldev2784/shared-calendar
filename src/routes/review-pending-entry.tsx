@@ -16,6 +16,7 @@ import ReviewPendingEntry from '@/components/reviewPendingEntry';
 
 const calendarSearchSchema = z.object({
   entryId: z.string(),
+  requestId: z.string(),
 });
 
 // example route : domain/review-pending-entry?entryId=I7IqzEMLKWh4Jdxuddzp
@@ -27,6 +28,7 @@ export const Route = createFileRoute('/review-pending-entry')({
 
   loaderDeps: ({ search }) => ({
     entryId: search.entryId,
+    requestId: search.requestId,
   }),
 
   loader: async ({ deps: { entryId } }) => {
@@ -55,16 +57,19 @@ export const Route = createFileRoute('/review-pending-entry')({
 });
 
 function ReviewPendingEntryPage() {
-  const { entryId } = useSearch({ from: '/review-pending-entry' });
+  const { entryId, requestId } = useSearch({ from: '/review-pending-entry' });
   const sortedCalendarEntries = useLoaderData({
     from: '/review-pending-entry',
   });
+
+  console.log('entryId, requestId ', entryId, requestId);
 
   return (
     <section className="flex h-full w-full flex-col items-center">
       <ReviewPendingEntry
         calendarEntries={sortedCalendarEntries}
         pendingEntry={entryId}
+        requestId={requestId}
       />
     </section>
   );

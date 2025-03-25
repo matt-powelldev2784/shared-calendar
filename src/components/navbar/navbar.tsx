@@ -58,7 +58,7 @@ export const Navbar = () => {
         text: 'Calendar entry request',
         description: `${request.requesterEmail} wants you to add a calendar entry`,
         icon: <Bell className="h-6 w-6" />,
-        route: `/subscribe-to-entry?entryId=${request.entryId}`,
+        route: `/review-pending-entry?entryId=${request.entryId}&requestId=${request.id}`,
         notificationCount: numberOfRequests,
       }))
     : [];
