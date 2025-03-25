@@ -12,7 +12,7 @@ import Loading from '@/components/ui/loading';
 import type { CustomError } from '@/ts/errorClass';
 import getCalendarEntryById from '@/db/getCalendarEntryById';
 import getUserDocument from '@/db/getUserDocument';
-import ReviewPendingEntry from '@/components/reviewPendingEntry';
+import ReviewPendingEntry from '@/components/reviewPendingEntry/reviewPendingEntry';
 
 const calendarSearchSchema = z.object({
   entryId: z.string(),

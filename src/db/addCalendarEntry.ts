@@ -80,12 +80,14 @@ const addCalendarEntry = async (entry: AddCalendarEntry) => {
       // add request to requests collection
       if (pendingRequests.length > 0) {
         const requestsRef = collection(db, 'requests');
+
         const newRequest = {
           userId: currentUser.uid,
           entryId: entryDocRef.id,
           requesterEmail: currentUser.email,
           requestedUserIds: pendingRequests,
         };
+        
         const requestDocRef = doc(requestsRef);
         transaction.set(requestDocRef, {
           ...newRequest,
