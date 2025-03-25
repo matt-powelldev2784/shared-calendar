@@ -35,9 +35,12 @@ export const Route = createFileRoute('/review-pending-entry')({
     const pendingEntry = await getCalendarEntryById(entryId);
     const userDocument = await getUserDocument();
 
+    const startDateAtMidnight = new Date(pendingEntry.startDate);
+    startDateAtMidnight.setHours(0, 0, 0, 0);
+
     const calendarEntries = await getCalendarEntries({
       calendarIds: [userDocument.defaultCalendarId],
-      startDate: pendingEntry.startDate,
+      startDate: startDateAtMidnight,
       endDate: addDays(pendingEntry.endDate, 1),
     });
     const mergedEntries = [...calendarEntries, pendingEntry];
@@ -61,8 +64,6 @@ function ReviewPendingEntryPage() {
   const sortedCalendarEntries = useLoaderData({
     from: '/review-pending-entry',
   });
-
-  console.log('entryId, requestId ', entryId, requestId);
 
   return (
     <section className="flex h-full w-full flex-col items-center">
