@@ -14,8 +14,6 @@ const ReviewPendingEntry = ({
   pendingEntry,
   requestId,
 }: ReviewPendingEntryProps) => {
-  console.log('requestId', requestId);
-
   return (
     <div className="mt-2 flex h-full w-full flex-col items-center p-2">
       {calendarEntries.map((calendarEntry, index) => {
@@ -45,7 +43,11 @@ const ReviewPendingEntry = ({
 
             {entries.map((entry: CalendarEntry) => {
               return entry.entryId === pendingEntry ? (
-                <PendingEntryCard entry={entry} key={entry.entryId} />
+                <PendingEntryCard
+                  entry={entry}
+                  requestId={requestId}
+                  key={entry.entryId}
+                />
               ) : (
                 <CalendarCard
                   key={entry.entryId}

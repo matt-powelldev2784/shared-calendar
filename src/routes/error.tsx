@@ -4,8 +4,8 @@ import { createFileRoute, useLoaderData } from '@tanstack/react-router';
 import { z } from 'zod';
 
 const errorSearchSchema = z.object({
-  status: z.union([z.string(), z.number()]),
-  message: z.string(),
+  status: z.union([z.string(), z.number()]).optional(),
+  message: z.string().optional(),
   name: z.string().optional(),
 });
 
