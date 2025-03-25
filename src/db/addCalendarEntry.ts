@@ -73,7 +73,6 @@ const addCalendarEntry = async (entry: AddCalendarEntry) => {
         endDate: Timestamp.fromDate(entry.endDate),
         ownerIds,
         subscribers,
-        pendingRequests,
       };
       const entryDocRef = doc(entriesRef);
       transaction.set(entryDocRef, { ...newEntry, entryId: entryDocRef.id });
