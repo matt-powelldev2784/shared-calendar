@@ -8,6 +8,7 @@ const variantClasses = {
   purple: 'bg-lightPurple text-darkPurple',
   blue: 'bg-lightBlue text-darkBlue',
   yellow: 'bg-lightYellow text-darkYellow',
+  white: '',
 };
 
 const dateIconClasses = {
@@ -18,6 +19,7 @@ const dateIconClasses = {
   purple: 'bg-darkPurple',
   blue: 'bg-darkBlue',
   yellow: 'bg-darkYellow',
+  white: 'bg-secondary',
 };
 
 interface CalendarCardProps {
