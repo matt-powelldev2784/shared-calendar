@@ -4,7 +4,7 @@ import SharcIcon from '@/assets/logo/sharc_icon_white.svg';
 import { useEffect, useRef, useState, type JSX } from 'react';
 import NavItem, { type NavItemProps } from './navItem';
 import { NavIconButton } from './navIcon';
-import { Bell, CalendarFold } from 'lucide-react';
+import { Bell, CalendarFold, CalendarPlus } from 'lucide-react';
 import UserAvatar from './userAvatar';
 import { getCalendarUrl } from '@/lib/getCalendarUrl';
 import { userMenuItems } from './userMenuItems';
@@ -85,16 +85,16 @@ export const Navbar = () => {
             />
 
             <DropDownMenu
+              icon={<CalendarPlus />}
+              menuName="Add Items"
+              navigationItems={userMenuItems}
+            />
+
+            <DropDownMenu
               icon={<Bell />}
               menuName="Notification"
               navigationItems={requestMenuItems}
               notificationCount={numberOfRequests}
-            />
-
-            <DropDownMenu
-              icon={<UserAvatar />}
-              menuName="User"
-              navigationItems={userMenuItems}
             />
           </div>
         </>
@@ -117,8 +117,8 @@ type LogoWithCalendarNameProps = {
 
 const LogoWithCalendarName = ({ calendarName }: LogoWithCalendarNameProps) => {
   return (
-    <Link to="/" aria-label="Home" className="flex h-full items-center">
-      <img src={SharcIcon} alt="sharc logo" className="ml-5 h-8" />
+    <Link to="/" aria-label="Home" className="ml-5 flex h-full items-center">
+      <UserAvatar />
       <p
         style={{
           overflow: 'hidden',
