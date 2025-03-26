@@ -80,29 +80,20 @@ export const Navbar = () => {
           <div className="mr-5 flex items-center gap-5">
             <DropDownMenu
               icon={<CalendarFold className="h-6 w-6" />}
-              label={{
-                openText: 'Open calendar menu',
-                closeText: 'Close calendar menu',
-              }}
+              menuName={'Calendar'}
               navigationItems={subscribedCalendarMenuItems}
             />
 
             <DropDownMenu
               icon={<Bell />}
-              label={{
-                openText: 'Open notifications menu',
-                closeText: 'Close notifications menu',
-              }}
+              menuName="Notification"
               navigationItems={requestMenuItems}
               notificationCount={numberOfRequests}
             />
 
             <DropDownMenu
               icon={<UserAvatar />}
-              label={{
-                openText: 'Open user menu',
-                closeText: 'Close user menu',
-              }}
+              menuName="User"
               navigationItems={userMenuItems}
             />
           </div>
@@ -145,10 +136,7 @@ const LogoWithCalendarName = ({ calendarName }: LogoWithCalendarNameProps) => {
 
 type DropDownMenuProps = {
   icon: JSX.Element;
-  label: {
-    openText: string;
-    closeText: string;
-  };
+  menuName: string;
   navigationItems: NavItemProps[];
   notificationCount?: number;
 };
@@ -157,13 +145,12 @@ type PressOutsideEvent = MouseEvent | TouchEvent;
 
 const DropDownMenu = ({
   icon,
-  label,
+  menuName,
   navigationItems,
   notificationCount = 0,
 }: DropDownMenuProps) => {
   const [menuIsOpen, setMenuIsOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
-  const { openText, closeText } = label;
 
   const handleMenuClick = () => {
     setMenuIsOpen((prev) => !prev);
@@ -210,7 +197,9 @@ const DropDownMenu = ({
       <NavIconButton
         className={`${notificationCount > 0 ? 'h-8 w-8 rounded-full bg-yellow-400' : 'bg-none'}`}
         onClick={handleMenuClick}
-        ariaLabel={menuIsOpen ? closeText : openText}
+        ariaLabel={
+          menuIsOpen ? `Close ${menuName} menu` : `Open ${menuName} menu`
+        }
       >
         {icon}
       </NavIconButton>
@@ -229,6 +218,16 @@ const DropDownMenu = ({
               onClick={() => setMenuIsOpen(false)}
             />
           ))}
+
+        {menuIsOpen && navigationItems.length === 0 && (
+          <NavItem
+            key={menuName}
+            id={menuName}
+            text={`No ${menuName}s`}
+            icon={icon}
+            onClick={() => setMenuIsOpen(false)}
+          />
+        )}
       </ul>
     </div>
   );
