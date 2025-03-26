@@ -7,7 +7,7 @@ import {
 } from 'firebase/firestore';
 import { db } from '@/db/firebaseConfig';
 import { CustomError } from '@/ts/errorClass';
-import checkAuth from './checkAuth';
+import checkAuth from '../auth/checkAuth';
 import { hasDuplicates } from '@/lib/hasDuplicates';
 import { isValidStartEndDates } from '@/lib/validateStartEndDates';
 
@@ -87,7 +87,7 @@ const addCalendarEntry = async (entry: AddCalendarEntry) => {
           requesterEmail: currentUser.email,
           requestedUserIds: pendingRequests,
         };
-        
+
         const requestDocRef = doc(requestsRef);
         transaction.set(requestDocRef, {
           ...newRequest,

@@ -1,7 +1,7 @@
 import { Button } from '@/components/ui/button';
 import { CalendarCard } from '@/components/ui/calendarCard';
-import acceptPendingEntry from '@/db/acceptPendingEntry';
-import rejectPendingEntry from '@/db/rejectPendingEntry';
+import acceptPendingEntry from '@/db/request/acceptPendingEntry';
+import rejectPendingEntry from '@/db/request/rejectPendingEntry';
 import { getCalendarUrl } from '@/lib/getCalendarUrl';
 import type { CalendarEntry } from '@/ts/Calendar';
 import type { CustomError } from '@/ts/errorClass';

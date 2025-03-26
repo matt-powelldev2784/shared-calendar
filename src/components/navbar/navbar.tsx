@@ -8,8 +8,8 @@ import UserAvatar from './userAvatar';
 import { getCalendarUrl } from '@/lib/getCalendarUrl';
 import { userMenuItems } from './userMenuItems';
 import { useQuery } from '@tanstack/react-query';
-import getSubscribedCalendars from '@/db/getSubscribedCalendars';
-import getEntryRequests from '@/db/getEntryRequests';
+import getSubscribedCalendars from '@/db/calendar/getSubscribedCalendars';
+import getEntryRequests from '@/db/request/getEntryRequests';
 import { getNumberOfRequests, setNumberOfRequests } from '@/store/store';
 
 export const Navbar = () => {

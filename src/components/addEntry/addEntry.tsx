@@ -29,7 +29,9 @@ import {
 import { Calendar } from '../ui/calendar';
 import { format } from 'date-fns';
 import CalendarIcon from '../../assets/icons/cal_icon.svg';
-import addCalendarEntry, { type AddCalendarEntry } from '@/db/addCalendarEntry';
+import addCalendarEntry, {
+  type AddCalendarEntry,
+} from '@/db/entry/addCalendarEntry';
 import { useNavigate } from '@tanstack/react-router';
 import {
   Card,
@@ -41,7 +43,7 @@ import {
 import { AtSign, CalendarPlusIcon } from 'lucide-react';
 import type { Calendar as CalenderT } from '@/ts/Calendar';
 import { getCalendarUrl } from '@/lib/getCalendarUrl';
-import getUserIdByEmail from '@/db/getUserIdByEmail';
+import getUserIdByEmail from '@/db/auth/getUserIdByEmail';
 import { useState } from 'react';
 import { hasDuplicates } from '@/lib/hasDuplicates';
 import { CustomError } from '@/ts/errorClass';

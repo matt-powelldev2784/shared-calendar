@@ -1,4 +1,4 @@
-import getCalendarEntries from '@/db/getCalendarEntries';
+import getCalendarEntries from '@/db/entry/getCalendarEntries';
 import {
   createFileRoute,
   useLoaderData,
@@ -10,8 +10,8 @@ import Error from '@/components/ui/error';
 import sortCalendarEntriesByDate from '@/lib/sortCalendarEntriesByDate';
 import Loading from '@/components/ui/loading';
 import type { CustomError } from '@/ts/errorClass';
-import getCalendarEntryById from '@/db/getCalendarEntryById';
-import getUserDocument from '@/db/getUserDocument';
+import getCalendarEntryById from '@/db/entry/getCalendarEntryById';
+import getUserDocument from '@/db/auth/getUserDocument';
 import ReviewPendingEntry from '@/components/reviewPendingEntry/reviewPendingEntry';
 
 const calendarSearchSchema = z.object({

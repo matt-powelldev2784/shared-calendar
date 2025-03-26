@@ -7,7 +7,7 @@ import {
 } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import googleGIcon from '@/assets/icons/google_g_logo.svg';
-import { SignInWithGoogle } from '@/db/signInWithGoogle';
+import { SignInWithGoogle } from '@/db/auth/signInWithGoogle';
 
 export const SignIn = () => {
   return (

@@ -9,7 +9,7 @@ import { db } from '@/db//firebaseConfig';
 import type { CalendarEntry } from '@/ts/Calendar';
 import { CustomError } from '@/ts/errorClass';
 import { isValidStartEndDates } from '@/lib/validateStartEndDates';
-import checkAuth from './checkAuth';
+import checkAuth from '@/db/auth/checkAuth';
 
 interface GetCalendarEntriesInput {
   calendarIds: string[];

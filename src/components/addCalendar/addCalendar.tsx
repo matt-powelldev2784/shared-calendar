@@ -22,7 +22,7 @@ import {
   CardTitle,
 } from '../ui/card';
 import { CalendarIcon } from 'lucide-react';
-import addCalendar from '@/db/addCalendar';
+import addCalendar from '@/db/calendar/addCalendar';
 import { getCalendarUrl } from '@/lib/getCalendarUrl';
 
 export type AddCalendar = {

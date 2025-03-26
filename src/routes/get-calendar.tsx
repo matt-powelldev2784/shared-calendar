@@ -1,4 +1,4 @@
-import getCalendarEntries from '@/db/getCalendarEntries';
+import getCalendarEntries from '@/db/entry/getCalendarEntries';
 import { createFileRoute, useLoaderData } from '@tanstack/react-router';
 import { z } from 'zod';
 import { addDays } from 'date-fns';

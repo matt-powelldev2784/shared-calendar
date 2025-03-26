@@ -7,8 +7,8 @@ import {
   getDoc,
 } from 'firebase/firestore';
 import { CustomError } from '@/ts/errorClass';
-import { db } from './firebaseConfig';
-import checkAuth from './checkAuth';
+import { db } from '../firebaseConfig';
+import checkAuth from '../auth/checkAuth';
 import { type Calendar } from '@/ts/Calendar';
 
 const getSubscribedCalendars = async () => {
