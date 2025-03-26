@@ -3,7 +3,7 @@ import SharcLogo from '@/assets/logo/sharc_logo_white.svg';
 import { useEffect, useRef, useState, type JSX } from 'react';
 import NavItem, { type NavItemProps } from './navItem';
 import { NavIconButton } from './navIcon';
-import { Bell, CalendarFold, CalendarPlus } from 'lucide-react';
+import { Bell, CalendarFold, CirclePlus } from 'lucide-react';
 import UserAvatar from './userAvatar';
 import { getCalendarUrl } from '@/lib/getCalendarUrl';
 import { userMenuItems } from './userMenuItems';
@@ -78,22 +78,22 @@ export const Navbar = () => {
 
           <div className="mr-5 flex items-center gap-5">
             <DropDownMenu
+              icon={<Bell className="h-6 w-6" />}
+              menuName="Notification"
+              navigationItems={requestMenuItems}
+              notificationCount={numberOfRequests}
+            />
+
+            <DropDownMenu
               icon={<CalendarFold className="h-6 w-6" />}
               menuName={'Calendar'}
               navigationItems={subscribedCalendarMenuItems}
             />
 
             <DropDownMenu
-              icon={<CalendarPlus />}
+              icon={<CirclePlus className="h-7 w-7" />}
               menuName="Add Items"
               navigationItems={userMenuItems}
-            />
-
-            <DropDownMenu
-              icon={<Bell />}
-              menuName="Notification"
-              navigationItems={requestMenuItems}
-              notificationCount={numberOfRequests}
             />
           </div>
         </>

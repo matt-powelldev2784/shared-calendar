@@ -42,7 +42,7 @@ export const createInitialUserDocuments = async () => {
       const calendarDocRef = doc(collection(db, 'calendars'));
       await setDoc(calendarDocRef, {
         calendarId: calendarDocRef.id,
-        name: `${user.displayName} Main`,
+        name: `${user.displayName} Calendar`,
         description: 'This is your default calendar.',
         ownerIds: [user.uid],
         subscribers: [user.uid],
