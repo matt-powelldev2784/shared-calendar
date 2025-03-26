@@ -1,4 +1,4 @@
-import getCalendarEntries from '@/db/entry/getCalendarEntries';
+import getCalendarEntries from '@/db/entry/getCalendarEntriesByDate';
 import {
   createFileRoute,
   useLoaderData,

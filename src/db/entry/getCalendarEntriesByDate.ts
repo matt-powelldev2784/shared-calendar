@@ -17,7 +17,7 @@ interface GetCalendarEntriesInput {
   endDate: Date;
 }
 
-const getCalendarEntries = async ({
+const getCalendarEntriesByDate = async ({
   calendarIds,
   startDate,
   endDate,
@@ -77,4 +77,4 @@ const getCalendarEntries = async ({
   }
 };
 
-export default getCalendarEntries;
+export default getCalendarEntriesByDate;
