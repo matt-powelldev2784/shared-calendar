@@ -1,6 +1,5 @@
 import { Link } from '@tanstack/react-router';
 import SharcLogo from '@/assets/logo/sharc_logo_white.svg';
-import SharcIcon from '@/assets/logo/sharc_icon_white.svg';
 import { useEffect, useRef, useState, type JSX } from 'react';
 import NavItem, { type NavItemProps } from './navItem';
 import { NavIconButton } from './navIcon';
