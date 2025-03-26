@@ -1,4 +1,10 @@
-import { collection, addDoc, Timestamp, doc, getDoc } from 'firebase/firestore';
+import {
+  collection,
+  doc,
+  getDoc,
+  runTransaction,
+  Timestamp,
+} from 'firebase/firestore';
 import { db } from '@/db/firebaseConfig';
 import { CustomError } from '@/ts/errorClass';
 import checkAuth from './checkAuth';
@@ -25,28 +31,26 @@ const addCalendarEntry = async (entry: AddCalendarEntry) => {
       throw new CustomError(403, 'Title and calendar Id is required');
     }
 
-    // // validate start and end dates
+    // validate start and end dates
     if (!isValidStartEndDates(entry.startDate, entry.endDate)) {
       throw new CustomError(403, 'Invalid start and end dates');
     }
 
     // get entry subscribers from calendar subscribers
-    const calendarDoc = doc(db, 'calendars', entry.calendarId);
-    if (!calendarDoc) {
+    const calendarDocRef = doc(db, 'calendars', entry.calendarId);
+    const calendarDoc = await getDoc(calendarDocRef);
+    if (!calendarDoc.exists()) {
       throw new CustomError(404, 'Error adding entry, calendar does not exist');
     }
 
-    const calendarDocData = (await getDoc(calendarDoc)).data();
-    if (!calendarDocData) {
-      throw new CustomError(404, 'Error adding entry, calendar does not exist');
-    }
-    const calenderSubscribers = calendarDocData.subscribers || [];
+    const calendarDocData = calendarDoc.data();
+    const calendarSubscribers = calendarDocData?.subscribers || [];
 
     // define entry data
     const ownerIds = entry.ownerIds
       ? entry.ownerIds.concat(currentUser.uid)
       : [currentUser.uid];
-    const subscribers = calenderSubscribers;
+    const subscribers = calendarSubscribers;
     const pendingRequests = entry.pendingRequests || [];
 
     // validate arrays for uniqueness
@@ -57,20 +61,46 @@ const addCalendarEntry = async (entry: AddCalendarEntry) => {
       throw new CustomError(403, 'Subscriber IDs must be unique');
     }
     if (hasDuplicates(pendingRequests)) {
-      throw new CustomError(403, 'Pending Requests must be unique');
+      throw new CustomError(403, 'Pending requests userIds must be unique');
     }
 
-    // add calendar entry
-    const entriesRef = collection(db, 'entries');
-    const newEntry = {
-      ...entry,
-      startDate: Timestamp.fromDate(entry.startDate),
-      endDate: Timestamp.fromDate(entry.endDate),
-      ownerIds,
-      subscribers,
-      pendingRequests,
-    };
-    const entryDocRef = await addDoc(entriesRef, newEntry);
+    const entryDocRef = await runTransaction(db, async (transaction) => {
+      // add calendar entry
+      const entriesRef = collection(db, 'entries');
+      const newEntry = {
+        ...entry,
+        startDate: Timestamp.fromDate(entry.startDate),
+        endDate: Timestamp.fromDate(entry.endDate),
+        ownerIds,
+        subscribers,
+      };
+      const entryDocRef = doc(entriesRef);
+      transaction.set(entryDocRef, { ...newEntry, entryId: entryDocRef.id });
+
+      // add request to requests collection
+      if (pendingRequests.length > 0) {
+        const requestsRef = collection(db, 'requests');
+
+        const newRequest = {
+          userId: currentUser.uid,
+          entryId: entryDocRef.id,
+          requesterEmail: currentUser.email,
+          requestedUserIds: pendingRequests,
+        };
+        
+        const requestDocRef = doc(requestsRef);
+        transaction.set(requestDocRef, {
+          ...newRequest,
+          requestId: requestDocRef.id,
+        });
+      }
+
+      return entryDocRef;
+    });
+
+    if (!entryDocRef) {
+      throw new CustomError(403, 'Error adding entry, transaction failed');
+    }
     return entryDocRef.id;
   } catch (error) {
     console.error('Error adding calendar entry: ', error);

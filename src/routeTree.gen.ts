@@ -12,7 +12,9 @@
 
 import { Route as rootRoute } from './routes/__root'
 import { Route as SignoutImport } from './routes/signout'
+import { Route as ReviewPendingEntryImport } from './routes/review-pending-entry'
 import { Route as GetCalendarImport } from './routes/get-calendar'
+import { Route as ErrorImport } from './routes/error'
 import { Route as DefaultCalendarImport } from './routes/default-calendar'
 import { Route as AuthenticatedImport } from './routes/authenticated'
 import { Route as AddEntryImport } from './routes/add-entry'
@@ -27,9 +29,21 @@ const SignoutRoute = SignoutImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
+const ReviewPendingEntryRoute = ReviewPendingEntryImport.update({
+  id: '/review-pending-entry',
+  path: '/review-pending-entry',
+  getParentRoute: () => rootRoute,
+} as any)
+
 const GetCalendarRoute = GetCalendarImport.update({
   id: '/get-calendar',
   path: '/get-calendar',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const ErrorRoute = ErrorImport.update({
+  id: '/error',
+  path: '/error',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -102,11 +116,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DefaultCalendarImport
       parentRoute: typeof rootRoute
     }
+    '/error': {
+      id: '/error'
+      path: '/error'
+      fullPath: '/error'
+      preLoaderRoute: typeof ErrorImport
+      parentRoute: typeof rootRoute
+    }
     '/get-calendar': {
       id: '/get-calendar'
       path: '/get-calendar'
       fullPath: '/get-calendar'
       preLoaderRoute: typeof GetCalendarImport
+      parentRoute: typeof rootRoute
+    }
+    '/review-pending-entry': {
+      id: '/review-pending-entry'
+      path: '/review-pending-entry'
+      fullPath: '/review-pending-entry'
+      preLoaderRoute: typeof ReviewPendingEntryImport
       parentRoute: typeof rootRoute
     }
     '/signout': {
@@ -127,7 +155,9 @@ export interface FileRoutesByFullPath {
   '/add-entry': typeof AddEntryRoute
   '/authenticated': typeof AuthenticatedRoute
   '/default-calendar': typeof DefaultCalendarRoute
+  '/error': typeof ErrorRoute
   '/get-calendar': typeof GetCalendarRoute
+  '/review-pending-entry': typeof ReviewPendingEntryRoute
   '/signout': typeof SignoutRoute
 }
 
@@ -137,7 +167,9 @@ export interface FileRoutesByTo {
   '/add-entry': typeof AddEntryRoute
   '/authenticated': typeof AuthenticatedRoute
   '/default-calendar': typeof DefaultCalendarRoute
+  '/error': typeof ErrorRoute
   '/get-calendar': typeof GetCalendarRoute
+  '/review-pending-entry': typeof ReviewPendingEntryRoute
   '/signout': typeof SignoutRoute
 }
 
@@ -148,7 +180,9 @@ export interface FileRoutesById {
   '/add-entry': typeof AddEntryRoute
   '/authenticated': typeof AuthenticatedRoute
   '/default-calendar': typeof DefaultCalendarRoute
+  '/error': typeof ErrorRoute
   '/get-calendar': typeof GetCalendarRoute
+  '/review-pending-entry': typeof ReviewPendingEntryRoute
   '/signout': typeof SignoutRoute
 }
 
@@ -160,7 +194,9 @@ export interface FileRouteTypes {
     | '/add-entry'
     | '/authenticated'
     | '/default-calendar'
+    | '/error'
     | '/get-calendar'
+    | '/review-pending-entry'
     | '/signout'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -169,7 +205,9 @@ export interface FileRouteTypes {
     | '/add-entry'
     | '/authenticated'
     | '/default-calendar'
+    | '/error'
     | '/get-calendar'
+    | '/review-pending-entry'
     | '/signout'
   id:
     | '__root__'
@@ -178,7 +216,9 @@ export interface FileRouteTypes {
     | '/add-entry'
     | '/authenticated'
     | '/default-calendar'
+    | '/error'
     | '/get-calendar'
+    | '/review-pending-entry'
     | '/signout'
   fileRoutesById: FileRoutesById
 }
@@ -189,7 +229,9 @@ export interface RootRouteChildren {
   AddEntryRoute: typeof AddEntryRoute
   AuthenticatedRoute: typeof AuthenticatedRoute
   DefaultCalendarRoute: typeof DefaultCalendarRoute
+  ErrorRoute: typeof ErrorRoute
   GetCalendarRoute: typeof GetCalendarRoute
+  ReviewPendingEntryRoute: typeof ReviewPendingEntryRoute
   SignoutRoute: typeof SignoutRoute
 }
 
@@ -199,7 +241,9 @@ const rootRouteChildren: RootRouteChildren = {
   AddEntryRoute: AddEntryRoute,
   AuthenticatedRoute: AuthenticatedRoute,
   DefaultCalendarRoute: DefaultCalendarRoute,
+  ErrorRoute: ErrorRoute,
   GetCalendarRoute: GetCalendarRoute,
+  ReviewPendingEntryRoute: ReviewPendingEntryRoute,
   SignoutRoute: SignoutRoute,
 }
 
@@ -218,7 +262,9 @@ export const routeTree = rootRoute
         "/add-entry",
         "/authenticated",
         "/default-calendar",
+        "/error",
         "/get-calendar",
+        "/review-pending-entry",
         "/signout"
       ]
     },
@@ -237,8 +283,14 @@ export const routeTree = rootRoute
     "/default-calendar": {
       "filePath": "default-calendar.tsx"
     },
+    "/error": {
+      "filePath": "error.tsx"
+    },
     "/get-calendar": {
       "filePath": "get-calendar.tsx"
+    },
+    "/review-pending-entry": {
+      "filePath": "review-pending-entry.tsx"
     },
     "/signout": {
       "filePath": "signout.tsx"

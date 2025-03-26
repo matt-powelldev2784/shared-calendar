@@ -33,8 +33,8 @@ const UserAvatar = () => {
   }
 
   return (
-    <Avatar className="flex h-8 w-8 items-center justify-center">
-      <AvatarFallback className="h-8 w-8 text-xs">
+    <Avatar className="relative flex h-8 w-8 items-center justify-center">
+      <AvatarFallback className="bg-secondary h-8 w-8 flex-col gap-0.5 text-xs">
         {userInitials}
       </AvatarFallback>
     </Avatar>

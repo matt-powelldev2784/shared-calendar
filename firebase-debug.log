@@ -1,0 +1,43 @@
+[debug] [2025-03-23T07:55:10.934Z] ----------------------------------------------------------------------
+[debug] [2025-03-23T07:55:10.935Z] Command:       /Users/mattpowell/.volta/tools/image/node/18.16.0/bin/node /Users/mattpowell/.volta/tools/image/packages/firebase-tools/bin/firebase init emulators
+[debug] [2025-03-23T07:55:10.935Z] CLI Version:   13.0.0
+[debug] [2025-03-23T07:55:10.936Z] Platform:      darwin
+[debug] [2025-03-23T07:55:10.936Z] Node Version:  v18.16.0
+[debug] [2025-03-23T07:55:10.937Z] Time:          Sun Mar 23 2025 07:55:10 GMT+0000 (Greenwich Mean Time)
+[debug] [2025-03-23T07:55:10.937Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2025-03-23T07:55:10.940Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2025-03-23T07:55:10.940Z] > authorizing via signed-in user (matt.powell2784@gmail.com)
+[info] 
+     ######## #### ########  ######## ########     ###     ######  ########
+     ##        ##  ##     ## ##       ##     ##  ##   ##  ##       ##
+     ######    ##  ########  ######   ########  #########  ######  ######
+     ##        ##  ##    ##  ##       ##     ## ##     ##       ## ##
+     ##       #### ##     ## ######## ########  ##     ##  ######  ########
+
+You're about to initialize a Firebase project in this directory:
+
+  /Users/mattpowell/Dropbox/Javascript/11_Dan_Page/shared-calendar/shared-calendar
+
+[info] 
+=== Project Setup
+[info] 
+[info] First, let's associate this project directory with a Firebase project.
+[info] You can create multiple project aliases by running firebase use --add, 
+[info] but for now we'll just set up a default project.
+[info] 
+[debug] [2025-03-23T07:55:19.466Z] > refreshing access token with scopes: []
+[debug] [2025-03-23T07:55:19.467Z] >>> [apiv2][query] POST https://www.googleapis.com/oauth2/v3/token [none]
+[debug] [2025-03-23T07:55:19.467Z] >>> [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2025-03-23T07:55:19.572Z] <<< [apiv2][status] POST https://www.googleapis.com/oauth2/v3/token 400
+[debug] [2025-03-23T07:55:19.572Z] <<< [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2025-03-23T07:55:19.573Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects pageSize=100
+[debug] [2025-03-23T07:55:19.623Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects 401
+[debug] [2025-03-23T07:55:19.623Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects [omitted]
+[debug] [2025-03-23T07:55:19.623Z] HTTP Error: 401, Request had invalid authentication credentials. Expected OAuth 2 access token, login cookie or other valid authentication credential. See https://developers.google.com/identity/sign-in/web/devconsole-project.
+[debug] [2025-03-23T07:55:19.659Z] FirebaseError: HTTP Error: 401, Request had invalid authentication credentials. Expected OAuth 2 access token, login cookie or other valid authentication credential. See https://developers.google.com/identity/sign-in/web/devconsole-project.
+    at responseToError (/Users/mattpowell/.volta/tools/image/packages/firebase-tools/lib/node_modules/firebase-tools/lib/responseToError.js:49:12)
+    at RetryOperation._fn (/Users/mattpowell/.volta/tools/image/packages/firebase-tools/lib/node_modules/firebase-tools/lib/apiv2.js:292:77)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+[error] 
+[error] Error: Failed to list Firebase projects. See firebase-debug.log for more info.

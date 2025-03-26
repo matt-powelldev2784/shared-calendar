@@ -38,9 +38,13 @@ import {
   CardHeader,
   CardTitle,
 } from '../ui/card';
-import { CalendarPlusIcon } from 'lucide-react';
+import { AtSign, CalendarPlusIcon } from 'lucide-react';
 import type { Calendar as CalenderT } from '@/ts/Calendar';
 import { getCalendarUrl } from '@/lib/getCalendarUrl';
+import getUserIdByEmail from '@/db/getUserIdByEmail';
+import { useState } from 'react';
+import { hasDuplicates } from '@/lib/hasDuplicates';
+import { CustomError } from '@/ts/errorClass';
 
 const convertFormValuesToEntry = (values: z.infer<typeof formSchema>) => {
   const startDate = new Date(values.date);
@@ -55,6 +59,7 @@ const convertFormValuesToEntry = (values: z.infer<typeof formSchema>) => {
     startDate,
     endDate,
     calendarId: values.calendarId,
+    pendingRequests: values.pendingRequests,
   };
 
   return entry;
@@ -82,6 +87,8 @@ const formSchema = z.object({
     .refine((date) => date !== null, {
       message: 'Date is required',
     }),
+  addUser: z.string().email().or(z.literal('')).optional(),
+  pendingRequests: z.array(z.string()).optional(),
   startDate: z.undefined(),
   endDate: z.undefined(),
 });
@@ -91,6 +98,7 @@ type AddEntryProps = {
 };
 
 const AddEntry = ({ calendars }: AddEntryProps) => {
+  const [usersToRequest, setUsersToRequest] = useState<string[]>([]);
   const navigate = useNavigate();
 
   // submit calendar entry and navigate to calendar
@@ -113,6 +121,13 @@ const AddEntry = ({ calendars }: AddEntryProps) => {
         return calendarEntry;
       }
     },
+    onError: (error: CustomError) => {
+      const message = 'Error adding calendar entry';
+
+      navigate({
+        to: `/error?status=${error.status}&message=${message}`,
+      });
+    },
   });
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
@@ -132,11 +147,51 @@ const AddEntry = ({ calendars }: AddEntryProps) => {
       date: undefined,
       startDate: undefined,
       endDate: undefined,
+      addUser: '',
+      pendingRequests: [],
     },
   });
 
+  const handleAddUser = async () => {
+    const email = form.getValues('addUser');
+
+    if (email) {
+      try {
+        const userId = await getUserIdByEmail(email);
+
+        const userIdString = userId.toString();
+        const currentRequests = form.getValues('pendingRequests') || [];
+        const updatedRequests = [...currentRequests, userIdString];
+
+        const userIdsHasDuplicates = hasDuplicates(updatedRequests);
+        if (userIdsHasDuplicates) {
+          form.setError('addUser', {
+            type: 'manual',
+            message: 'User already added',
+          });
+          return;
+        }
+
+        if (userIdString) {
+          form.setValue('pendingRequests', [...currentRequests, userId]);
+          form.setValue('addUser', '');
+        }
+
+        setUsersToRequest((prev) => [...prev, email]);
+      } catch (error) {
+        console.error('Error getting user id: ', error);
+        if (error instanceof CustomError) {
+          form.setError('addUser', {
+            type: 'manual',
+            message: error.message,
+          });
+        }
+      }
+    }
+  };
+
   return (
-    <Card className="mt-4 w-full max-w-[700px] border-0 p-0 shadow-none md:border md:p-4 md:shadow-sm">
+    <Card className="my-8 mb-32 w-full max-w-[700px] border-0 p-0 shadow-none md:border md:p-4 md:shadow-sm">
       <CardHeader className="flex flex-col items-center">
         <CalendarPlusIcon className="text-primary mr-2 inline-block h-12 w-12" />
         <CardTitle className="text-center">Add Calendar Entry</CardTitle>
@@ -144,7 +199,6 @@ const AddEntry = ({ calendars }: AddEntryProps) => {
           Fill in the form below and click submit to add a calendar entry.
         </CardDescription>
       </CardHeader>
-
       <CardContent className="p-0">
         <Form {...form}>
           <form
@@ -201,7 +255,7 @@ const AddEntry = ({ calendars }: AddEntryProps) => {
               name="description"
               render={({ field }) => (
                 <FormItem className="mt-5 w-full max-w-[700px]">
-                  <FormLabel>Description</FormLabel>
+                  <FormLabel>Description (optional)</FormLabel>
                   <FormControl>
                     <Textarea placeholder="Description" {...field} />
                   </FormControl>
@@ -382,6 +436,57 @@ const AddEntry = ({ calendars }: AddEntryProps) => {
                 </p>
               )}
             </div>
+
+            <div className="border-secondary25 mt-4 flex w-full max-w-[700px] flex-col items-center justify-between gap-2 rounded-lg pb-4 md:mt-6 md:gap-4 md:border-1 md:px-6 md:py-3">
+              <div className="border-secondary/50 mt-5 w-full border-2 md:hidden"></div>
+
+              <div className="mt-4 flex w-full max-w-[700px] flex-col items-center justify-between md:flex-row md:gap-4">
+                <FormField
+                  control={form.control}
+                  name="addUser"
+                  render={({ field }) => (
+                    <FormItem className="mt-0 w-full max-w-[700px]">
+                      <FormLabel>Share Request With (optional)</FormLabel>
+                      <FormControl>
+                        <Input
+                          placeholder="Enter email address of user"
+                          {...field}
+                          onFocus={() => form.clearErrors('addUser')}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <Button
+                  className="bg-secondary hover:bg-secondary md:md-2 mt-3 w-full max-w-[700px] md:mt-3 md:h-9 md:w-12"
+                  size="lg"
+                  onClick={handleAddUser}
+                  type="button"
+                >
+                  Add User
+                </Button>
+              </div>
+
+              {usersToRequest.length > 0 && (
+                <div className="mt-4 flex w-full max-w-[700px] flex-col">
+                  <ul className="flex flex-wrap items-center justify-center gap-2">
+                    {usersToRequest.map((user) => (
+                      <li
+                        key={user}
+                        className="border-secondary/25 text-secondary flex flex-grow items-center justify-center gap-2 rounded-md border-1 px-4 py-1 text-center"
+                      >
+                        <AtSign />
+                        {user}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+            </div>
+
+            <div className="border-secondary/50 mt-5 w-full border-2 md:hidden"></div>
 
             <Button
               type="submit"

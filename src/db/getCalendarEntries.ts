@@ -23,7 +23,7 @@ const getCalendarEntries = async ({
   endDate,
 }: GetCalendarEntriesInput) => {
   try {
-    await checkAuth();
+    const user = await checkAuth();
 
     // validate text inputs
     if (!calendarIds || !calendarIds.length) {
@@ -43,7 +43,7 @@ const getCalendarEntries = async ({
     // get all entries that match the calendarIds and fall within the start and end dates
     const entriesQuery = query(
       entriesRef,
-      where('calendarId', 'in', calendarIds),
+      where('subscribers', 'array-contains', user.uid),
       where('startDate', '>=', startTimestamp),
       where('endDate', '<=', endTimestamp),
     );
@@ -59,6 +59,7 @@ const getCalendarEntries = async ({
       return {
         id: doc.id,
         title: data.title,
+        entryId: data.entryId,
         description: data.description,
         startDate: data.startDate.toDate(),
         endDate: data.endDate.toDate(),
@@ -66,8 +67,8 @@ const getCalendarEntries = async ({
         ownerIds: data.ownerIds,
         subscribers: data.subscribers,
         pendingRequests: data.pendingRequests,
-      } as CalendarEntry;
-    });
+      };
+    }) as CalendarEntry[];
 
     return calendarEntries;
   } catch (error) {

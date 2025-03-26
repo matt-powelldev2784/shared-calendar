@@ -42,10 +42,14 @@ const sortCalendarEntriesByDate = ({
 
   // return an array of objects with the date and the calendar entries for that date
   // dates without entries will will return an array with a date but no entries
+  // the entries will then be sorted by start time
   const calendarEntries = dateTitles.map((date, index) => {
-    const entries = calendarData.filter((entry) => {
-      return format(date, 'd') === format(entry.startDate, 'd');
-    });
+    const entries = calendarData
+      .filter((entry) => format(date, 'd') === format(entry.startDate, 'd'))
+      .sort(
+        (a, b) =>
+          new Date(a.startDate).getTime() - new Date(b.startDate).getTime(),
+      );
 
     return entries.length > 0
       ? { date: dateTitles[index], entries: [...entries] }

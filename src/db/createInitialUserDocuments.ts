@@ -52,6 +52,7 @@ export const createInitialUserDocuments = async () => {
       // add the default calendar to the user's subscribedCalendars array
       await updateDoc(userDocRef, {
         subscribedCalendars: arrayUnion(calendarDocRef.id),
+        defaultCalendarId: calendarDocRef.id,
       });
     }
 

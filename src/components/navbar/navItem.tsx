@@ -37,7 +37,7 @@ const NavItem = ({
               WebkitBoxOrient: 'vertical',
               WebkitLineClamp: 2,
             }}
-            className="mr-1"
+            className="mr-1 text-sm font-bold"
           >
             {text}
           </p>

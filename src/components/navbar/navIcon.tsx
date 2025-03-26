@@ -45,7 +45,7 @@ export const NavIconButton = ({
   return (
     <button
       onClick={onClick}
-      className={`z-1400 ${className}`}
+      className={`z-1400 flex h-8 w-8 items-center justify-center ${className}`}
       aria-label={ariaLabel}
     >
       {children}

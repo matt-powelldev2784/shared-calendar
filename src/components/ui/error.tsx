@@ -11,6 +11,7 @@ type ErrorProps = {
 const Error = ({ error }: ErrorProps) => {
   const navigate = useNavigate();
   const errorMessage = error.message || 'An error occurred';
+  const status = error.status || 500;
 
   return (
     <Card className="m-4 mx-auto flex w-[90%] max-w-[700px] flex-col items-center justify-center p-4">
@@ -19,7 +20,7 @@ const Error = ({ error }: ErrorProps) => {
         <CardTitle className="text-center">Error</CardTitle>
 
         <CardDescription className="text-center">
-          <p>Error Status Code: {error.status}</p>
+          <p>Error Status Code: {status}</p>
           <p>Error Message: {errorMessage}</p>
         </CardDescription>
       </CardHeader>
