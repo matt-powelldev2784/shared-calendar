@@ -19,7 +19,7 @@ type GetDatesToDisplay = {
   firstDateToDisplay: Date;
 };
 
-const sortCalendarEntriesByDate = ({
+const sortCalendarEntriesByDateTime = ({
   daysToReturn,
   calendarData,
   firstDateToDisplay,
@@ -57,4 +57,4 @@ const sortCalendarEntriesByDate = ({
   return calendarEntries;
 };
 
-export default sortCalendarEntriesByDate;
+export default sortCalendarEntriesByDateTime;
