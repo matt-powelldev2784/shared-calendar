@@ -126,7 +126,7 @@ const LogoWithCalendarName = ({ calendarName }: LogoWithCalendarNameProps) => {
           WebkitBoxOrient: 'vertical',
           WebkitLineClamp: 2,
         }}
-        className="mr-3 flex h-full max-h-12 flex-wrap items-center justify-center overflow-hidden px-2 text-[15px]/4 font-normal sm:max-w-[400px] sm:text-[16px]/5"
+        className="mr-1 flex h-full max-h-12 flex-wrap items-center justify-center overflow-hidden px-2 text-[15px]/4 sm:max-w-[400px] sm:text-[16px]/5"
       >
         {calendarName}
       </p>
