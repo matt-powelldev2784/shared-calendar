@@ -36,17 +36,19 @@ const CalendarCard = ({ entry, variant }: CalendarCardProps) => {
   const { title, startDate, endDate } = entry;
 
   return (
-    <button className={`${variantClasses.default} ${variantClasses[variant]}`}>
+    <button
+      className={`${variantClasses.default} ${variantClasses[variant]} w-full`}
+    >
       <p className={`${dateIconClasses.default} ${dateIconClasses[variant]}`}>
         {format(startDate, 'HH:mm')}
       </p>
 
-      <div className="flex -translate-y-0.75 flex-col items-start justify-center gap-1.5 overflow-hidden p-2 lg:gap-2">
-        <p className="text-md flex h-5 w-full translate-y-1 items-center truncate">
+      <div className="flex w-full -translate-y-0.75 flex-col items-start justify-center gap-1.5 overflow-hidden p-2 lg:gap-2">
+        <p className="text-md h-6 w-full translate-y-1 truncate overflow-hidden text-left text-ellipsis whitespace-nowrap">
           {title}
         </p>
 
-        <p className={'flex flex-row items-center gap-1 text-[11px] lg:gap-2'}>
+        <p className="flex flex-row items-center gap-1 text-[11px] lg:gap-2">
           <ClockIcon size={13} />
           {format(startDate, 'HH:mm')}-{format(endDate, 'HH:mm')}
         </p>
