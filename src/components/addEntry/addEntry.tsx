@@ -26,7 +26,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from '@/components/ui/popover';
-import { Calendar } from '../ui/calendar';
+import { Calendar } from '../ui/customCalendar';
 import { format } from 'date-fns';
 import CalendarIcon from '../../assets/icons/cal_icon.svg';
 import addCalendarEntry, {
@@ -107,6 +107,7 @@ type UserToRequest = {
 
 const AddEntry = ({ calendars }: AddEntryProps) => {
   const [usersToRequest, setUsersToRequest] = useState<UserToRequest[]>([]);
+  const [isSelectDateOpen, setIsSelectDateOpen] = useState(false);
   const navigate = useNavigate();
 
   // submit calendar entry and navigate to calendar
@@ -140,8 +141,8 @@ const AddEntry = ({ calendars }: AddEntryProps) => {
     },
     onError: (error: CustomError) => {
       navigate({
-       to: `/error?status=${error.status}&message=${error.message}`,
-     });
+        to: `/error?status=${error.status}&message=${error.message}`,
+      });
     },
   });
 
@@ -297,7 +298,10 @@ const AddEntry = ({ calendars }: AddEntryProps) => {
               render={({ field }) => (
                 <FormItem className="w-full max-w-[700px]">
                   <FormLabel>Date</FormLabel>
-                  <Popover>
+                  <Popover
+                    open={isSelectDateOpen}
+                    onOpenChange={setIsSelectDateOpen}
+                  >
                     <PopoverTrigger asChild>
                       <FormControl>
                         <Button
@@ -322,6 +326,7 @@ const AddEntry = ({ calendars }: AddEntryProps) => {
                         selected={field.value}
                         onSelect={field.onChange}
                         disabled={(date) => date < new Date('1900-01-01')}
+                        onDateSelect={() => setIsSelectDateOpen(false)}
                         initialFocus
                       />
                     </PopoverContent>
