@@ -1,31 +1,26 @@
 import { Link } from '@tanstack/react-router';
 import SharcLogo from '@/assets/logo/sharc_logo_white.svg';
+import SharcIcon from '@/assets/logo/sharc_icon_white.svg';
 import { useEffect, useRef, useState, type JSX } from 'react';
-import NavItem, { type NavItemProps } from './navItem';
 import { NavIconButton } from './navIcon';
-import { Bell, CalendarFold, CirclePlus } from 'lucide-react';
+import { Bell, CalendarFold } from 'lucide-react';
 import UserAvatar from './userAvatar';
-import { getCalendarUrl } from '@/lib/getCalendarUrl';
-import { userMenuItems } from './userMenuItems';
+import { calendarMenuItem, userMenuItems } from './userMenuItems';
 import { useQuery } from '@tanstack/react-query';
-import getSubscribedCalendars from '@/db/calendar/getSubscribedCalendars';
 import getEntryRequests from '@/db/request/getEntryRequests';
 import { getNumberOfRequests, setNumberOfRequests } from '@/store/store';
+import checkAuth from '@/db/auth/checkAuth';
+import { NavItem, NavItemPlaceholder, type NavItemProps } from './navItem';
 
 export const Navbar = () => {
-  const [calendarName, setCalendarName] = useState('');
   const numberOfRequests = getNumberOfRequests();
 
-  // get subscribed calendars data
-  const { data: subscribedCalendars } = useQuery({
-    queryKey: ['subscribedCalendars'],
-    queryFn: async () => {
-      const subscribedCalendars = await getSubscribedCalendars();
-      setCalendarName(subscribedCalendars[0].name);
-      return subscribedCalendars;
-    },
-    // refetch every 1 seconds if there is no subscribed calendars
-    // this is used to get the data when a first time user signs in
+  const { data: authenticatedUser } = useQuery({
+    queryKey: ['authenticatedUser'],
+    queryFn: async () => await checkAuth(),
+
+    // refetch data every 1 seconds if there is no data
+    // this is needed to get the data when the user first signs in
     refetchInterval: (data) => (!data ? false : 1000),
   });
 
@@ -39,16 +34,6 @@ export const Navbar = () => {
     },
     refetchInterval: 60 * 2 * 1000, // 2 mins
   });
-
-  // generate subscribed calendar menu items
-  const subscribedCalendarMenuItems = subscribedCalendars
-    ? subscribedCalendars.map((calendar) => ({
-        id: calendar.id,
-        text: calendar.name,
-        icon: <CalendarFold className="h-6 w-6" />,
-        route: getCalendarUrl({ calendarIds: calendar.id }),
-      }))
-    : [];
 
   // generate request menu items
   const requestMenuItems = requests
@@ -64,19 +49,27 @@ export const Navbar = () => {
 
   return (
     <nav className="bg-primary z-1100 flex h-14 w-full items-center justify-between text-xl font-bold text-white md:h-12">
-      {!subscribedCalendars && (
+      {!authenticatedUser && (
         <div className="flex flex-grow items-center justify-between">
           <Logo />
         </div>
       )}
 
-      {subscribedCalendars && (
+      {authenticatedUser && (
         <>
           <div className="flex flex-grow items-center">
-            <LogoWithCalendarName calendarName={calendarName} />
+            <LogoWithCalendarName
+              calendarName={`${authenticatedUser.displayName}'s Calendar`}
+            />
           </div>
 
           <div className="mr-5 flex items-center gap-5">
+            <DropDownMenu
+              icon={<CalendarFold className="h-6 w-6" />}
+              menuName="Calendar Menu Items"
+              navigationItems={calendarMenuItem}
+            />
+
             <DropDownMenu
               icon={<Bell className="h-6 w-6" />}
               menuName="Notification"
@@ -85,14 +78,8 @@ export const Navbar = () => {
             />
 
             <DropDownMenu
-              icon={<CalendarFold className="h-6 w-6" />}
-              menuName={'Calendar'}
-              navigationItems={subscribedCalendarMenuItems}
-            />
-
-            <DropDownMenu
-              icon={<CirclePlus className="h-7 w-7" />}
-              menuName="Add Items"
+              icon={<UserAvatar />}
+              menuName="User Menu Items"
               navigationItems={userMenuItems}
             />
           </div>
@@ -117,7 +104,7 @@ type LogoWithCalendarNameProps = {
 const LogoWithCalendarName = ({ calendarName }: LogoWithCalendarNameProps) => {
   return (
     <Link to="/" aria-label="Home" className="ml-5 flex h-full items-center">
-      <UserAvatar />
+      <img src={SharcIcon} alt="sharc logo" className="h-8" />
       <p
         style={{
           overflow: 'hidden',
@@ -219,13 +206,11 @@ const DropDownMenu = ({
           ))}
 
         {menuIsOpen && navigationItems.length === 0 && (
-          <NavItem
-            key={menuName}
+          <NavItemPlaceholder
             id={menuName}
             text={`No ${menuName}s`}
             icon={icon}
             onClick={() => setMenuIsOpen(false)}
-            disabled={true}
           />
         )}
       </ul>
