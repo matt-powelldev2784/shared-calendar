@@ -1,7 +1,7 @@
 import AddEntry from '@/components/addEntry/addEntry';
 import Error from '@/components/ui/error';
 import Loading from '@/components/ui/loading';
-import getSubscribedCalendars from '@/db/getSubscribedCalendars';
+import getSubscribedCalendars from '@/db/calendar/getSubscribedCalendars';
 import type { CustomError } from '@/ts/errorClass';
 import { createFileRoute, useLoaderData } from '@tanstack/react-router';
 

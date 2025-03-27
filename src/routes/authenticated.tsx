@@ -7,7 +7,7 @@ import { SignIn } from '@/components/auth/signIn';
 import { useEffect } from 'react';
 import Error from '@/components/ui/error';
 import type { CustomError } from '@/ts/errorClass';
-import { createInitialUserDocuments } from '@/db/createInitialUserDocuments';
+import { createInitialUserDocuments } from '@/db/auth/createInitialUserDocuments';
 
 export const Route = createFileRoute('/authenticated')({
   component: AuthenticatedPage,

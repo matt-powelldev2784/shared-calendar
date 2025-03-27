@@ -1,7 +1,7 @@
 import { collection, query, where, getDocs } from 'firebase/firestore';
 import { db } from '@/db/firebaseConfig';
 import { CustomError } from '@/ts/errorClass';
-import checkAuth from './checkAuth';
+import checkAuth from '@/db/auth/checkAuth';
 
 export const getUserIdFromEmail = async (email: string) => {
   try {

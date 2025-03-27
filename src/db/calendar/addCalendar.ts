@@ -7,7 +7,7 @@ import {
 } from 'firebase/firestore';
 import { db } from '@/db/firebaseConfig';
 import { CustomError } from '@/ts/errorClass';
-import checkAuth from '@/db/checkAuth';
+import checkAuth from '@/db/auth/checkAuth';
 import { hasDuplicates } from '@/lib/hasDuplicates';
 
 export type AddCalendar = {

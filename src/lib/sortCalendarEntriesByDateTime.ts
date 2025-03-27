@@ -1,6 +1,6 @@
 // Querying entries from the database only returns a group of entries
 // To render the calendar view, the following is required:
-// - Calendar entries sorted into arrays by date
+// - Calendar entries sorted into arrays by date and time
 // - A date title for each day which is used to display a header row
 //
 // This function will return the calendar entries in a 2D array with the date title merged in.
@@ -19,28 +19,26 @@ type GetDatesToDisplay = {
   firstDateToDisplay: Date;
 };
 
-const sortCalendarEntriesByDate = ({
+const sortCalendarEntriesByDateTime = ({
   daysToReturn,
   calendarData,
   firstDateToDisplay,
 }: GetDatesToDisplay) => {
-  // initialize and fill an array of dates
-  // this cam be used to display the calendar day titles{}
-  const dateTitles: Date[] = [];
-  for (let i = 0; i < daysToReturn; i++) {
-    // push first date in to date titles array and move to next iteration
-    if (i === 0) {
-      dateTitles.push(firstDateToDisplay);
-      continue;
-    }
+  // initialize array where the length is the number of days to return
+  const initializeDaysToReturn = Array.from(
+    { length: daysToReturn },
+    () => undefined,
+  );
 
-    // push the next date in to the date titles array
-    const previousDate = dateTitles[dateTitles.length - 1];
-    const nextDate = addDays(previousDate, 1);
-    dateTitles.push(nextDate);
-  }
+  // map the dates of the days to display
+  const dateTitles: Date[] =
+    initializeDaysToReturn.reduce((accumulator, _, index) => {
+      if (index === 0) return [...accumulator, firstDateToDisplay];
+      return [...accumulator, addDays(firstDateToDisplay, index)];
+    }, [] as Date[]) || [];
 
-  // return an array of objects with the date and the calendar entries for that date
+  // merge the calendar entires with the days to display
+  // this returns an array of objects with the date and the calendar entries for that date
   // dates without entries will will return an array with a date but no entries
   // the entries will then be sorted by start time
   const calendarEntries = dateTitles.map((date, index) => {
@@ -59,4 +57,4 @@ const sortCalendarEntriesByDate = ({
   return calendarEntries;
 };
 
-export default sortCalendarEntriesByDate;
+export default sortCalendarEntriesByDateTime;

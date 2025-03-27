@@ -1,7 +1,7 @@
 import { doc, getDoc } from 'firebase/firestore';
 import { CustomError } from '@/ts/errorClass';
-import { db } from './firebaseConfig';
-import checkAuth from './checkAuth';
+import { db } from '@/db/firebaseConfig';
+import checkAuth from '@/db/auth/checkAuth';
 import { type Calendar } from '@/ts/Calendar';
 
 const getCalendars = async (calendarIds: string[]) => {

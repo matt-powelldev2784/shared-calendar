@@ -1,6 +1,6 @@
 import { doc, updateDoc, deleteDoc, getDoc } from 'firebase/firestore';
 import { db } from '@/db/firebaseConfig';
-import checkAuth from './checkAuth';
+import checkAuth from '@/db//auth/checkAuth';
 import { CustomError } from '@/ts/errorClass';
 
 type RejectPendingEntry = { requestId: string };

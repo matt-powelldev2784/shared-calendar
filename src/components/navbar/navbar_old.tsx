@@ -13,7 +13,7 @@ import { Link } from '@tanstack/react-router';
 import { NavIconButton, NavIconLink } from './navIcon';
 import NavItem from './navItem';
 import { useQuery } from '@tanstack/react-query';
-import getSubscribedCalendars from '@/db/getSubscribedCalendars';
+import getSubscribedCalendars from '@/db/calendar/getSubscribedCalendars';
 import { getCalendarUrl } from '@/lib/getCalendarUrl';
 
 // firebase auth uses over 300kb of data

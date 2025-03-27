@@ -1,9 +1,9 @@
-import getCalendarEntries from '@/db/getCalendarEntries';
+import getCalendarEntries from '@/db/entry/getCalendarEntriesByDate';
 import { createFileRoute, useLoaderData } from '@tanstack/react-router';
 import { z } from 'zod';
 import { addDays } from 'date-fns';
 import Error from '@/components/ui/error';
-import sortCalendarEntriesByDate from '@/lib/sortCalendarEntriesByDate';
+import sortCalendarEntriesByDateTime from '@/lib/sortCalendarEntriesByDateTime';
 import { CalendarView } from '@/components/calenderView/calendarView';
 import Loading from '@/components/ui/loading';
 import type { CustomError } from '@/ts/errorClass';
@@ -38,7 +38,7 @@ export const Route = createFileRoute('/get-calendar')({
       endDate: end,
     });
 
-    const sortedCalendarEntries = sortCalendarEntriesByDate({
+    const sortedCalendarEntries = sortCalendarEntriesByDateTime({
       daysToReturn: daysToView,
       calendarData: calendarEntries,
       firstDateToDisplay: start,

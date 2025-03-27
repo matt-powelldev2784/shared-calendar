@@ -1,6 +1,6 @@
 import { collection, getDocs, query, where } from 'firebase/firestore';
 import { db } from '@/db/firebaseConfig';
-import checkAuth from './checkAuth';
+import checkAuth from '@/db/auth/checkAuth';
 import { type Request } from '@/ts/Calendar';
 
 const getEntryRequests = async () => {

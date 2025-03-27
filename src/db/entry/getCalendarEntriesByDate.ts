@@ -9,7 +9,7 @@ import { db } from '@/db//firebaseConfig';
 import type { CalendarEntry } from '@/ts/Calendar';
 import { CustomError } from '@/ts/errorClass';
 import { isValidStartEndDates } from '@/lib/validateStartEndDates';
-import checkAuth from './checkAuth';
+import checkAuth from '@/db/auth/checkAuth';
 
 interface GetCalendarEntriesInput {
   calendarIds: string[];
@@ -17,7 +17,7 @@ interface GetCalendarEntriesInput {
   endDate: Date;
 }
 
-const getCalendarEntries = async ({
+const getCalendarEntriesByDate = async ({
   calendarIds,
   startDate,
   endDate,
@@ -77,4 +77,4 @@ const getCalendarEntries = async ({
   }
 };
 
-export default getCalendarEntries;
+export default getCalendarEntriesByDate;

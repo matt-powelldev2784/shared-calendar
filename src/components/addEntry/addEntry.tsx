@@ -29,7 +29,9 @@ import {
 import { Calendar } from '../ui/calendar';
 import { format } from 'date-fns';
 import CalendarIcon from '../../assets/icons/cal_icon.svg';
-import addCalendarEntry, { type AddCalendarEntry } from '@/db/addCalendarEntry';
+import addCalendarEntry, {
+  type AddCalendarEntry,
+} from '@/db/entry/addCalendarEntry';
 import { useNavigate } from '@tanstack/react-router';
 import {
   Card,
@@ -38,10 +40,10 @@ import {
   CardHeader,
   CardTitle,
 } from '../ui/card';
-import { AtSign, CalendarPlusIcon } from 'lucide-react';
+import { AtSign, CalendarPlusIcon, CircleX } from 'lucide-react';
 import type { Calendar as CalenderT } from '@/ts/Calendar';
 import { getCalendarUrl } from '@/lib/getCalendarUrl';
-import getUserIdByEmail from '@/db/getUserIdByEmail';
+import getUserIdByEmail from '@/db/auth/getUserIdByEmail';
 import { useState } from 'react';
 import { hasDuplicates } from '@/lib/hasDuplicates';
 import { CustomError } from '@/ts/errorClass';
@@ -91,20 +93,35 @@ const formSchema = z.object({
   pendingRequests: z.array(z.string()).optional(),
   startDate: z.undefined(),
   endDate: z.undefined(),
+  startAndEndTimeError: z.string().optional(),
 });
 
 type AddEntryProps = {
   calendars: CalenderT[];
 };
 
+type UserToRequest = {
+  email: string;
+  userId: string;
+};
+
 const AddEntry = ({ calendars }: AddEntryProps) => {
-  const [usersToRequest, setUsersToRequest] = useState<string[]>([]);
+  const [usersToRequest, setUsersToRequest] = useState<UserToRequest[]>([]);
   const navigate = useNavigate();
 
   // submit calendar entry and navigate to calendar
   const mutation = useMutation({
     mutationFn: async (values: z.infer<typeof formSchema>) => {
       const entry = convertFormValuesToEntry(values);
+
+      if (entry.startDate >= entry.endDate) {
+        form.setError('startAndEndTimeError', {
+          type: 'manual',
+          message: 'Start time must be before end time',
+        });
+        return;
+      }
+
       const calendarEntry = await addCalendarEntry(entry);
 
       const calendarId = values.calendarId;
@@ -122,11 +139,9 @@ const AddEntry = ({ calendars }: AddEntryProps) => {
       }
     },
     onError: (error: CustomError) => {
-      const message = 'Error adding calendar entry';
-
       navigate({
-        to: `/error?status=${error.status}&message=${message}`,
-      });
+       to: `/error?status=${error.status}&message=${error.message}`,
+     });
     },
   });
 
@@ -177,7 +192,7 @@ const AddEntry = ({ calendars }: AddEntryProps) => {
           form.setValue('addUser', '');
         }
 
-        setUsersToRequest((prev) => [...prev, email]);
+        setUsersToRequest((prev) => [...prev, { email, userId }]);
       } catch (error) {
         console.error('Error getting user id: ', error);
         if (error instanceof CustomError) {
@@ -188,6 +203,18 @@ const AddEntry = ({ calendars }: AddEntryProps) => {
         }
       }
     }
+  };
+
+  const handleRemoveUser = (user: UserToRequest) => {
+    const updatedUsers = form
+      .getValues('pendingRequests')
+      ?.filter((request) => request !== user.userId);
+
+    form.setValue('pendingRequests', updatedUsers);
+
+    setUsersToRequest((prev) =>
+      prev.filter((requestedUser) => requestedUser.email !== user.email),
+    );
   };
 
   return (
@@ -329,6 +356,9 @@ const AddEntry = ({ calendars }: AddEntryProps) => {
                               WebkitAppearance: 'none',
                               MozAppearance: 'textfield',
                             }}
+                            onFocus={() =>
+                              form.clearErrors('startAndEndTimeError')
+                            }
                           />
                         </FormControl>
                         <FormMessage className="sr-only" />
@@ -357,6 +387,9 @@ const AddEntry = ({ calendars }: AddEntryProps) => {
                               WebkitAppearance: 'none',
                               MozAppearance: 'textfield',
                             }}
+                            onFocus={() =>
+                              form.clearErrors('startAndEndTimeError')
+                            }
                           />
                         </FormControl>
                         <FormMessage className="sr-only" />
@@ -386,6 +419,9 @@ const AddEntry = ({ calendars }: AddEntryProps) => {
                             onChange={(e) =>
                               field.onChange(e.target.valueAsNumber)
                             }
+                            onFocus={() =>
+                              form.clearErrors('startAndEndTimeError')
+                            }
                             style={{
                               WebkitAppearance: 'none',
                               MozAppearance: 'textfield',
@@ -413,6 +449,9 @@ const AddEntry = ({ calendars }: AddEntryProps) => {
                             type="text"
                             {...field}
                             onChange={(e) => field.onChange(e.target.value)}
+                            onFocus={() =>
+                              form.clearErrors('startAndEndTimeError')
+                            }
                             style={{
                               WebkitAppearance: 'none',
                               MozAppearance: 'textfield',
@@ -433,6 +472,12 @@ const AddEntry = ({ calendars }: AddEntryProps) => {
                 form.formState.errors.endTimeMins) && (
                 <p className="absolute w-full max-w-[700px] translate-y-33 rounded-md px-2 text-center text-sm text-red-500 md:translate-y-10">
                   Hours must be between 0 and 23 and minutes must be 2 digits.
+                </p>
+              )}
+
+              {form.formState.errors.startAndEndTimeError && (
+                <p className="absolute w-full max-w-[700px] translate-y-33 rounded-md px-2 text-center text-sm text-red-500 md:translate-y-10">
+                  {form.formState.errors.startAndEndTimeError.message}
                 </p>
               )}
             </div>
@@ -470,15 +515,23 @@ const AddEntry = ({ calendars }: AddEntryProps) => {
               </div>
 
               {usersToRequest.length > 0 && (
-                <div className="mt-4 flex w-full max-w-[700px] flex-col">
+                <div className="relative mt-4 flex w-full flex-col">
                   <ul className="flex flex-wrap items-center justify-center gap-2">
                     {usersToRequest.map((user) => (
                       <li
-                        key={user}
-                        className="border-secondary/25 text-secondary flex flex-grow items-center justify-center gap-2 rounded-md border-1 px-4 py-1 text-center"
+                        key={user.email}
+                        className="border-secondary/25 text-secondary flex w-full flex-grow items-center justify-between gap-2 rounded-md border-1 px-4 py-1"
                       >
                         <AtSign />
-                        {user}
+                        <p className="w-full truncate text-center text-xs sm:text-sm">
+                          {user.email}
+                        </p>
+                        <button
+                          className="text-destructive px-2 font-bold"
+                          onClick={() => handleRemoveUser(user)}
+                        >
+                          <CircleX />
+                        </button>
                       </li>
                     ))}
                   </ul>
@@ -490,7 +543,7 @@ const AddEntry = ({ calendars }: AddEntryProps) => {
 
             <Button
               type="submit"
-              className="m-4 mt-10 w-full max-w-[700px]"
+              className="mt-8 w-full max-w-[700px]"
               size="lg"
             >
               {mutation.isPending ? <Loading variant="sm" /> : 'Submit'}

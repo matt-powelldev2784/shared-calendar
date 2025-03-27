@@ -1,4 +1,4 @@
-import getCalendarEntries from '@/db/getCalendarEntries';
+import getCalendarEntries from '@/db/entry/getCalendarEntriesByDate';
 import {
   createFileRoute,
   useLoaderData,
@@ -7,11 +7,11 @@ import {
 import { z } from 'zod';
 import { addDays } from 'date-fns';
 import Error from '@/components/ui/error';
-import sortCalendarEntriesByDate from '@/lib/sortCalendarEntriesByDate';
+import sortCalendarEntriesByDateTime from '@/lib/sortCalendarEntriesByDateTime';
 import Loading from '@/components/ui/loading';
 import type { CustomError } from '@/ts/errorClass';
-import getCalendarEntryById from '@/db/getCalendarEntryById';
-import getUserDocument from '@/db/getUserDocument';
+import getCalendarEntryById from '@/db/entry/getCalendarEntryById';
+import getUserDocument from '@/db/auth/getUserDocument';
 import ReviewPendingEntry from '@/components/reviewPendingEntry/reviewPendingEntry';
 
 const calendarSearchSchema = z.object({
@@ -45,7 +45,7 @@ export const Route = createFileRoute('/review-pending-entry')({
     });
     const mergedEntries = [...calendarEntries, pendingEntry];
 
-    const sortedCalendarEntries = sortCalendarEntriesByDate({
+    const sortedCalendarEntries = sortCalendarEntriesByDateTime({
       daysToReturn: 1,
       calendarData: mergedEntries,
       firstDateToDisplay: pendingEntry.startDate,

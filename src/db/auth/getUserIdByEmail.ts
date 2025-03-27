@@ -1,9 +1,12 @@
 import { collection, query, where, getDocs } from 'firebase/firestore';
 import { db } from '@/db/firebaseConfig';
 import { CustomError } from '@/ts/errorClass';
+import checkAuth from './checkAuth';
 
-const getUserIdByEmail = async (email: string): Promise<string> => {
+const getUserIdByEmail = async (email: string) => {
   try {
+    const user = await checkAuth();
+
     if (!email) {
       throw new CustomError(400, 'Email is required');
     }
@@ -20,6 +23,10 @@ const getUserIdByEmail = async (email: string): Promise<string> => {
 
     if (!userId) {
       throw new CustomError(404, 'No user found with the given email');
+    }
+
+    if (userId === user.uid) {
+      throw new CustomError(403, 'You cannot check your own email');
     }
 
     return userId as string;

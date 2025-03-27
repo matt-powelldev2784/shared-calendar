@@ -6,12 +6,12 @@ import {
   setDoc,
   updateDoc,
 } from 'firebase/firestore';
-import { db } from './firebaseConfig';
-import checkAuth from './checkAuth';
+import { db } from '@/db/firebaseConfig';
+import checkAuth from '@/db/auth/checkAuth';
 import type { User } from 'firebase/auth';
 
 // if the user is signing in for the first time
-// this function will create a user document, public user document and 
+// this function will create a user document, public user document and
 // default calendar document
 // if the documents already exist, it will return the user document
 export const createInitialUserDocuments = async () => {
@@ -42,7 +42,7 @@ export const createInitialUserDocuments = async () => {
       const calendarDocRef = doc(collection(db, 'calendars'));
       await setDoc(calendarDocRef, {
         calendarId: calendarDocRef.id,
-        name: `${user.displayName} Main`,
+        name: `${user.displayName} Calendar`,
         description: 'This is your default calendar.',
         ownerIds: [user.uid],
         subscribers: [user.uid],

@@ -1,6 +1,6 @@
 import { doc, runTransaction, arrayUnion } from 'firebase/firestore';
 import { db } from '@/db/firebaseConfig';
-import checkAuth from './checkAuth';
+import checkAuth from '../auth/checkAuth';
 import { CustomError } from '@/ts/errorClass';
 
 type AcceptPendingEntry = { entryId: string; requestId: string };

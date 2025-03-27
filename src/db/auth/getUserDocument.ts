@@ -1,7 +1,7 @@
 import { doc, getDoc } from 'firebase/firestore';
 import { db } from '@/db/firebaseConfig';
 import { CustomError } from '@/ts/errorClass';
-import checkAuth from './checkAuth';
+import checkAuth from '@/db/auth/checkAuth';
 import type { UserDocument } from '@/ts/Calendar';
 
 const getUserDocument = async () => {
