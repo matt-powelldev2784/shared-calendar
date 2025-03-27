@@ -55,7 +55,7 @@ export const Navbar = () => {
     ? requests.map((request) => ({
         id: request.id,
         text: 'Calendar entry request',
-        description: `${request.requesterEmail} wants you to add a calendar entry`,
+        description: `${request.requesterEmail} has shared a calendar entry with you.`,
         icon: <Bell className="h-6 w-6" />,
         route: `/review-pending-entry?entryId=${request.entryId}&requestId=${request.id}`,
         notificationCount: numberOfRequests,
