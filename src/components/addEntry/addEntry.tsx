@@ -93,6 +93,7 @@ const formSchema = z.object({
   pendingRequests: z.array(z.string()).optional(),
   startDate: z.undefined(),
   endDate: z.undefined(),
+  startAndEndTimeError: z.string().optional(),
 });
 
 type AddEntryProps = {
@@ -112,6 +113,15 @@ const AddEntry = ({ calendars }: AddEntryProps) => {
   const mutation = useMutation({
     mutationFn: async (values: z.infer<typeof formSchema>) => {
       const entry = convertFormValuesToEntry(values);
+
+      if (entry.startDate >= entry.endDate) {
+        form.setError('startAndEndTimeError', {
+          type: 'manual',
+          message: 'Start time must be before end time',
+        });
+        return;
+      }
+
       const calendarEntry = await addCalendarEntry(entry);
 
       const calendarId = values.calendarId;
@@ -129,11 +139,9 @@ const AddEntry = ({ calendars }: AddEntryProps) => {
       }
     },
     onError: (error: CustomError) => {
-      const message = 'Error adding calendar entry';
-
       navigate({
-        to: `/error?status=${error.status}&message=${message}`,
-      });
+       to: `/error?status=${error.status}&message=${error.message}`,
+     });
     },
   });
 
@@ -348,6 +356,9 @@ const AddEntry = ({ calendars }: AddEntryProps) => {
                               WebkitAppearance: 'none',
                               MozAppearance: 'textfield',
                             }}
+                            onFocus={() =>
+                              form.clearErrors('startAndEndTimeError')
+                            }
                           />
                         </FormControl>
                         <FormMessage className="sr-only" />
@@ -376,6 +387,9 @@ const AddEntry = ({ calendars }: AddEntryProps) => {
                               WebkitAppearance: 'none',
                               MozAppearance: 'textfield',
                             }}
+                            onFocus={() =>
+                              form.clearErrors('startAndEndTimeError')
+                            }
                           />
                         </FormControl>
                         <FormMessage className="sr-only" />
@@ -405,6 +419,9 @@ const AddEntry = ({ calendars }: AddEntryProps) => {
                             onChange={(e) =>
                               field.onChange(e.target.valueAsNumber)
                             }
+                            onFocus={() =>
+                              form.clearErrors('startAndEndTimeError')
+                            }
                             style={{
                               WebkitAppearance: 'none',
                               MozAppearance: 'textfield',
@@ -432,6 +449,9 @@ const AddEntry = ({ calendars }: AddEntryProps) => {
                             type="text"
                             {...field}
                             onChange={(e) => field.onChange(e.target.value)}
+                            onFocus={() =>
+                              form.clearErrors('startAndEndTimeError')
+                            }
                             style={{
                               WebkitAppearance: 'none',
                               MozAppearance: 'textfield',
@@ -452,6 +472,12 @@ const AddEntry = ({ calendars }: AddEntryProps) => {
                 form.formState.errors.endTimeMins) && (
                 <p className="absolute w-full max-w-[700px] translate-y-33 rounded-md px-2 text-center text-sm text-red-500 md:translate-y-10">
                   Hours must be between 0 and 23 and minutes must be 2 digits.
+                </p>
+              )}
+
+              {form.formState.errors.startAndEndTimeError && (
+                <p className="absolute w-full max-w-[700px] translate-y-33 rounded-md px-2 text-center text-sm text-red-500 md:translate-y-10">
+                  {form.formState.errors.startAndEndTimeError.message}
                 </p>
               )}
             </div>
@@ -517,7 +543,7 @@ const AddEntry = ({ calendars }: AddEntryProps) => {
 
             <Button
               type="submit"
-              className="m-4 mt-10 w-full max-w-[700px]"
+              className="mt-8 w-full max-w-[700px]"
               size="lg"
             >
               {mutation.isPending ? <Loading variant="sm" /> : 'Submit'}
