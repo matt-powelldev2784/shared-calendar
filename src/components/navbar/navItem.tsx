@@ -8,6 +8,7 @@ export type NavItemProps = {
   icon: JSX.Element;
   description?: string;
   onClick?: (event: any) => void;
+  disabled?: boolean;
 };
 
 const NavItem = ({
@@ -17,6 +18,7 @@ const NavItem = ({
   icon,
   description,
   onClick,
+  disabled = false,
 }: NavItemProps) => {
   return (
     <li
@@ -25,7 +27,10 @@ const NavItem = ({
     >
       <Link
         to={route}
-        onClick={onClick}
+        onClick={(e) => {
+          if (disabled) e.preventDefault();
+          onClick;
+        }}
         className="flex h-full w-full flex-col p-4 text-base hover:bg-orange-400"
       >
         <div className="flex items-center gap-4">

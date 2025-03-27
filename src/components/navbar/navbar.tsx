@@ -225,6 +225,7 @@ const DropDownMenu = ({
             text={`No ${menuName}s`}
             icon={icon}
             onClick={() => setMenuIsOpen(false)}
+            disabled={true}
           />
         )}
       </ul>
