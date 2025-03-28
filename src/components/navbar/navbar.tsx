@@ -167,8 +167,8 @@ const DropDownMenu = ({
       <ul
         className={
           menuIsOpen
-            ? 'bg-primary fixed top-12 right-0 z-1200 max-h-[400px] w-[250px] overflow-y-auto duration-500 ease-in-out md:block'
-            : 'fixed top-12 right-0 z-9999 max-h-0 w-[250px] overflow-y-auto duration-500 ease-in-out md:block'
+            ? 'bg-primary fixed top-14 right-0 z-1200 max-h-[400px] w-[250px] overflow-y-auto duration-500 ease-in-out md:block'
+            : 'fixed top-14 right-0 z-9999 max-h-0 w-[250px] overflow-y-auto duration-500 ease-in-out md:block'
         }
       >
         {menuIsOpen &&
