@@ -17,9 +17,9 @@ export const Navbar = () => {
   const { data: authenticatedUser } = useQuery({
     queryKey: ['authenticatedUser'],
     queryFn: async () => await checkAuth(),
-    // refetch data every 1 seconds if there is no data
+    // refetch data every 1 millisecond if there is no data
     // this is needed to get the data when the user first signs in
-    refetchInterval: (data) => (!data ? false : 1000),
+    refetchInterval: (data) => (!data ? false : 1),
   });
 
   return (
