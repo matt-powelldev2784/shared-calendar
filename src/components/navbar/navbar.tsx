@@ -7,45 +7,20 @@ import { Bell, CalendarFold } from 'lucide-react';
 import UserAvatar from './userAvatar';
 import { calendarMenuItem, userMenuItems } from './userMenuItems';
 import { useQuery } from '@tanstack/react-query';
-import getEntryRequests from '@/db/request/getEntryRequests';
-import { getNumberOfRequests, setNumberOfRequests } from '@/store/store';
 import checkAuth from '@/db/auth/checkAuth';
 import { NavItem, NavItemPlaceholder, type NavItemProps } from './navItem';
+import { useRequestMenuItems } from './useRequestMenuItems';
 
 export const Navbar = () => {
-  const numberOfRequests = getNumberOfRequests();
+  const { requestMenuItems, numberOfRequests } = useRequestMenuItems();
 
   const { data: authenticatedUser } = useQuery({
     queryKey: ['authenticatedUser'],
     queryFn: async () => await checkAuth(),
-
     // refetch data every 1 seconds if there is no data
     // this is needed to get the data when the user first signs in
     refetchInterval: (data) => (!data ? false : 1000),
   });
-
-  // get requests data and store number of requests in global state
-  const { data: requests } = useQuery({
-    queryKey: ['requests'],
-    queryFn: async () => {
-      const requests = await getEntryRequests();
-      setNumberOfRequests(requests.length);
-      return requests;
-    },
-    refetchInterval: 60 * 2 * 1000, // 2 mins
-  });
-
-  // generate request menu items
-  const requestMenuItems = requests
-    ? requests.map((request) => ({
-        id: request.id,
-        text: 'Calendar entry request',
-        description: `${request.requesterEmail} has shared a calendar entry with you.`,
-        icon: <Bell className="h-6 w-6" />,
-        route: `/review-pending-entry?entryId=${request.entryId}&requestId=${request.id}`,
-        notificationCount: numberOfRequests,
-      }))
-    : [];
 
   return (
     <nav className="bg-primary z-1100 flex h-14 w-full items-center justify-between text-xl font-bold text-white md:h-12">
