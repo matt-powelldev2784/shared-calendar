@@ -1,3 +1,5 @@
+import type { CalendarEntry } from '@/ts/Calendar';
+import { useNavigate } from '@tanstack/react-router';
 import { format } from 'date-fns';
 import { ClockIcon } from 'lucide-react';
 
@@ -23,21 +25,23 @@ const dateIconClasses = {
 };
 
 interface CalendarCardProps {
-  entry: {
-    title: string;
-    description?: string;
-    startDate: Date;
-    endDate: Date;
-  };
+  entry: CalendarEntry;
   variant: keyof typeof variantClasses;
 }
 
 const CalendarCard = ({ entry, variant }: CalendarCardProps) => {
+  const navigate = useNavigate();
   const { title, startDate, endDate } = entry;
+  const navigateToEntry = () => {
+    navigate({
+      to: `/view-entry?entryId=${entry.entryId}`,
+    });
+  };
 
   return (
     <button
       className={`${variantClasses.default} ${variantClasses[variant]} w-full`}
+      onClick={navigateToEntry}
     >
       <p className={`${dateIconClasses.default} ${dateIconClasses[variant]}`}>
         {format(startDate, 'HH:mm')}
