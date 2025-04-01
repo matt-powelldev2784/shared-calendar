@@ -1,4 +1,8 @@
-import { createFileRoute, useLoaderData } from '@tanstack/react-router';
+import {
+  createFileRoute,
+  useLoaderData,
+  useNavigate,
+} from '@tanstack/react-router';
 import Error from '@/components/ui/error';
 import Loading from '@/components/ui/loading';
 import type { CustomError } from '@/ts/errorClass';
@@ -14,6 +18,9 @@ import {
 import { AtSign, ClockIcon, Info } from 'lucide-react';
 import { format } from 'date-fns';
 import { getEmailsFromUserIds } from '@/db/auth/getEmailsFromUserIds';
+import { Button } from '@/components/ui/button';
+import deleteCalendarEntry from '@/db/entry/deleteCalendarEntry';
+import { useMutation } from '@tanstack/react-query';
 
 const entrySearchSchema = z.object({
   entryId: z.string(),
@@ -43,6 +50,21 @@ export const Route = createFileRoute('/view-entry')({
 function ViewEntryPage() {
   const { entry, entrySubscribers } = useLoaderData({
     from: '/view-entry',
+  });
+  const navigate = useNavigate();
+
+  const mutate = useMutation({
+    mutationFn: async () => {
+      await deleteCalendarEntry(entry.entryId);
+    },
+    onSuccess: () => {
+      navigate({ to: `/default-calendar` });
+    },
+    onError: (error: CustomError) => {
+      const status = error?.status || 500;
+      const message = 'Error deleting calendar entry';
+      navigate({ to: `/error?status=${status}&message=${message}` });
+    },
   });
 
   return (
@@ -100,6 +122,17 @@ function ViewEntryPage() {
               </ul>
             )}
           </div>
+
+          <Button
+            variant="destructive"
+            size="default"
+            className="mx-auto mt-4 w-full"
+            onClick={() => {
+              mutate.mutate();
+            }}
+          >
+            Delete Entry
+          </Button>
         </CardContent>
       </Card>
     </section>
