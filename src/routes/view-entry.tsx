@@ -1,14 +1,19 @@
-import {
-  createFileRoute,
-  useLoaderData,
-  useNavigate,
-} from '@tanstack/react-router';
+import { createFileRoute, useLoaderData } from '@tanstack/react-router';
 import Error from '@/components/ui/error';
 import Loading from '@/components/ui/loading';
 import type { CustomError } from '@/ts/errorClass';
-import { getCalendarUrl } from '@/lib/getCalendarUrl';
 import getCalendarEntryById from '@/db/entry/getCalendarEntryById';
 import { z } from 'zod';
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardContent,
+  CardDescription,
+} from '@/components/ui/card';
+import { AtSign, ClockIcon, Info } from 'lucide-react';
+import { format } from 'date-fns';
+import { getEmailsFromUserIds } from '@/db/auth/getEmailsFromUserIds';
 
 const entrySearchSchema = z.object({
   entryId: z.string(),
@@ -26,7 +31,8 @@ export const Route = createFileRoute('/view-entry')({
 
   loader: async ({ deps: { entryId } }) => {
     const entry = await getCalendarEntryById(entryId);
-    return entry;
+    const entrySubscribers = await getEmailsFromUserIds(entry.subscribers);
+    return { entry, entrySubscribers };
   },
 
   errorComponent: ({ error }) => {
@@ -35,40 +41,67 @@ export const Route = createFileRoute('/view-entry')({
 });
 
 function ViewEntryPage() {
-  const entry = useLoaderData({ from: '/view-entry' });
-  const navigate = useNavigate();
+  const { entry, entrySubscribers } = useLoaderData({
+    from: '/view-entry',
+  });
 
   return (
-    <section className="flex h-full w-full items-center">
-      <div className="flex w-full flex-col items-center">
-        <h1 className="text-2xl font-bold">{entry.title}</h1>
-        <p className="text-lg">{entry.description}</p>
-        <p className="text-lg">
-          {entry.startDate.toLocaleString()} - {entry.endDate.toLocaleString()}
-        </p>
-        <button
-          className="mt-4 rounded bg-blue-500 px-4 py-2 text-white"
-          onClick={() => {
-            const calendarUrl = getCalendarUrl({
-              calendarIds: entry.calendarId,
-            });
-            navigate({ to: calendarUrl });
-          }}
-        >
-          Go to Calendar
-        </button>
-        <button
-          className="mt-4 rounded bg-green-500 px-4 py-2 text-white"
-          onClick={() => {
-            const calendarUrl = getCalendarUrl({
-              calendarIds: entry.calendarId,
-            });
-            navigate({ to: calendarUrl });
-          }}
-        >
-          Edit Entry
-        </button>
-      </div>
+    <section className="flex h-full w-full flex-col items-center">
+      <Card className="mx-auto mt-4 w-[95%] max-w-[700px]">
+        <CardHeader className="flex flex-col items-center">
+          <Info className="text-primary mr-2 inline-block h-12 w-12" />
+          <CardTitle className="text-center">Calendar Entry Details</CardTitle>
+          <CardDescription className="text-center">
+            View calendar entry detail below
+          </CardDescription>
+        </CardHeader>
+
+        <CardContent>
+          <div className="border-secondary/25 mb-2 rounded-lg border-2 p-2">
+            <p className="text-lg font-bold">Title</p>
+            <p className="text-secondary">{entry.title}</p>
+          </div>
+
+          <div className="border-secondary/25 mb-2 rounded-lg border-2 p-2">
+            <p className="text-lg font-bold">Description</p>
+            <p className="text-secondary">
+              {entry.description
+                ? entry.description
+                : 'No description provided'}
+            </p>
+          </div>
+
+          <div className="border-secondary/25 mb-2 rounded-lg border-2 p-2">
+            <p className="text-lg font-bold">Time</p>
+            <p className="text-secondary flex items-center gap-2">
+              <ClockIcon size={20} />
+              {format(entry.startDate, 'HH:mm')}-
+              {format(entry.endDate, 'HH:mm')}
+            </p>
+          </div>
+
+          <div className="mb-2 p-2 py-4">
+            <p className="pb-2 text-center text-lg font-bold">Attendees</p>
+            {entrySubscribers.length > 0 && (
+              <ul className="flex flex-wrap items-center justify-center gap-2">
+                {entrySubscribers.map((email) => {
+                  return (
+                    <li
+                      key={email}
+                      className="border-secondary/25 text-secondary flex w-full flex-grow items-center justify-between gap-2 rounded-md border-1 px-4 py-1"
+                    >
+                      <AtSign />
+                      <p className="w-full truncate text-center text-xs text-black sm:text-sm">
+                        {email}
+                      </p>
+                    </li>
+                  );
+                })}
+              </ul>
+            )}
+          </div>
+        </CardContent>
+      </Card>
     </section>
   );
 }
