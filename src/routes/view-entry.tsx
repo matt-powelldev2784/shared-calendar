@@ -15,7 +15,7 @@ import {
   CardContent,
   CardDescription,
 } from '@/components/ui/card';
-import { AtSign, ClockIcon, Info } from 'lucide-react';
+import { AtSign, CalendarDays, ClockIcon, Info } from 'lucide-react';
 import { format } from 'date-fns';
 import { getEmailsFromUserIds } from '@/db/auth/getEmailsFromUserIds';
 import { Button } from '@/components/ui/button';
@@ -39,7 +39,8 @@ export const Route = createFileRoute('/view-entry')({
   loader: async ({ deps: { entryId } }) => {
     const entry = await getCalendarEntryById(entryId);
     const entrySubscribers = await getEmailsFromUserIds(entry.subscribers);
-    return { entry, entrySubscribers };
+    const ownerEmails = await getEmailsFromUserIds(entry.ownerIds);
+    return { entry, entrySubscribers, ownerEmails };
   },
 
   errorComponent: ({ error }) => {
@@ -48,9 +49,10 @@ export const Route = createFileRoute('/view-entry')({
 });
 
 function ViewEntryPage() {
-  const { entry, entrySubscribers } = useLoaderData({
+  const { entry, entrySubscribers, ownerEmails } = useLoaderData({
     from: '/view-entry',
   });
+
   const navigate = useNavigate();
 
   const mutate = useMutation({
@@ -69,7 +71,7 @@ function ViewEntryPage() {
 
   return (
     <section className="flex h-full w-full flex-col items-center">
-      <Card className="mx-auto mt-4 w-[95%] max-w-[700px]">
+      <Card className="mx-auto mt-4 mb-24 w-full max-w-[700px] border-0 shadow-none sm:w-[95%] sm:border-2">
         <CardHeader className="flex flex-col items-center">
           <Info className="text-primary mr-2 inline-block h-12 w-12" />
           <CardTitle className="text-center">Calendar Entry Details</CardTitle>
@@ -79,14 +81,38 @@ function ViewEntryPage() {
         </CardHeader>
 
         <CardContent>
-          <div className="border-secondary/25 mb-2 rounded-lg border-2 p-2">
-            <p className="text-lg font-bold">Title</p>
-            <p className="text-secondary">{entry.title}</p>
+          <div className="mb-2 py-4">
+            <p className="pb-2 text-center text-lg font-bold">
+              Entry Organisers
+            </p>
+
+            {ownerEmails.length > 0 && (
+              <ul className="flex flex-wrap items-center justify-center gap-2">
+                {ownerEmails.map((email) => {
+                  return (
+                    <li
+                      key={email}
+                      className="border-secondary/25 text-secondary flex w-full flex-grow items-center justify-between gap-2 rounded-md border-1 border-2 px-4 py-1"
+                    >
+                      <AtSign />
+                      <p className="w-full truncate text-center text-xs text-black sm:text-sm">
+                        {email}
+                      </p>
+                    </li>
+                  );
+                })}
+              </ul>
+            )}
           </div>
 
           <div className="border-secondary/25 mb-2 rounded-lg border-2 p-2">
-            <p className="text-lg font-bold">Description</p>
-            <p className="text-secondary">
+            <p className="font-bold">Title</p>
+            <p className="text-secondary text-lg">{entry.title}</p>
+          </div>
+
+          <div className="border-secondary/25 mb-2 rounded-lg border-2 p-2">
+            <p className="font-bold">Description</p>
+            <p className="text-secondary text-lg">
               {entry.description
                 ? entry.description
                 : 'No description provided'}
@@ -94,15 +120,24 @@ function ViewEntryPage() {
           </div>
 
           <div className="border-secondary/25 mb-2 rounded-lg border-2 p-2">
-            <p className="text-lg font-bold">Time</p>
-            <p className="text-secondary flex items-center gap-2">
+            <p className="font-bold">Date</p>
+            <p className="text-secondary flex items-center gap-2 text-lg">
+              <CalendarDays size={20} />
+              {format(entry.startDate, 'dd-MM-yyyy')}
+            </p>
+          </div>
+
+          <div className="border-secondary/25 mb-2 rounded-lg border-2 p-2">
+            <p className="font-bold">Time</p>
+
+            <p className="text-secondary flex items-center gap-2 text-lg">
               <ClockIcon size={20} />
               {format(entry.startDate, 'HH:mm')}-
               {format(entry.endDate, 'HH:mm')}
             </p>
           </div>
 
-          <div className="mb-2 p-2 py-4">
+          <div className="mb-2 py-4">
             <p className="pb-2 text-center text-lg font-bold">Attendees</p>
             {entrySubscribers.length > 0 && (
               <ul className="flex flex-wrap items-center justify-center gap-2">
@@ -110,7 +145,7 @@ function ViewEntryPage() {
                   return (
                     <li
                       key={email}
-                      className="border-secondary/25 text-secondary flex w-full flex-grow items-center justify-between gap-2 rounded-md border-1 px-4 py-1"
+                      className="border-secondary/25 text-secondary flex w-full flex-grow items-center justify-between gap-2 rounded-md border-1 border-2 px-4 py-1"
                     >
                       <AtSign />
                       <p className="w-full truncate text-center text-xs text-black sm:text-sm">
