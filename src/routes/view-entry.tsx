@@ -21,6 +21,8 @@ import { getEmailsFromUserIds } from '@/db/auth/getEmailsFromUserIds';
 import { Button } from '@/components/ui/button';
 import deleteCalendarEntry from '@/db/entry/deleteCalendarEntry';
 import { useMutation } from '@tanstack/react-query';
+import getUserDocument from '@/db/auth/getUserDocument';
+import unsubscribeCurrentUserFromEntry from '@/db/entry/unsubscribeCurrentUserFromEntry';
 
 const entrySearchSchema = z.object({
   entryId: z.string(),
@@ -40,7 +42,8 @@ export const Route = createFileRoute('/view-entry')({
     const entry = await getCalendarEntryById(entryId);
     const entrySubscribers = await getEmailsFromUserIds(entry.subscribers);
     const ownerEmails = await getEmailsFromUserIds(entry.ownerIds);
-    return { entry, entrySubscribers, ownerEmails };
+    const currentUser = await getUserDocument();
+    return { entry, entrySubscribers, ownerEmails, currentUser };
   },
 
   errorComponent: ({ error }) => {
@@ -49,13 +52,13 @@ export const Route = createFileRoute('/view-entry')({
 });
 
 function ViewEntryPage() {
-  const { entry, entrySubscribers, ownerEmails } = useLoaderData({
+  const { entry, entrySubscribers, ownerEmails, currentUser } = useLoaderData({
     from: '/view-entry',
   });
-
+  const currentUserIsOwner = ownerEmails.includes(currentUser.email);
   const navigate = useNavigate();
 
-  const mutate = useMutation({
+  const deleteEntry = useMutation({
     mutationFn: async () => {
       await deleteCalendarEntry(entry.entryId);
     },
@@ -65,6 +68,20 @@ function ViewEntryPage() {
     onError: (error: CustomError) => {
       const status = error?.status || 500;
       const message = 'Error deleting calendar entry';
+      navigate({ to: `/error?status=${status}&message=${message}` });
+    },
+  });
+
+  const unsubscribeCurrentUser = useMutation({
+    mutationFn: async () => {
+      await unsubscribeCurrentUserFromEntry(entry.entryId);
+    },
+    onSuccess: () => {
+      navigate({ to: `/default-calendar` });
+    },
+    onError: (error: CustomError) => {
+      const status = error?.status || 500;
+      const message = 'Error unsubscribing from calendar entry';
       navigate({ to: `/error?status=${status}&message=${message}` });
     },
   });
@@ -92,7 +109,7 @@ function ViewEntryPage() {
                   return (
                     <li
                       key={email}
-                      className="border-secondary/25 text-secondary flex w-full flex-grow items-center justify-between gap-2 rounded-md border-1 border-2 px-4 py-1"
+                      className="border-secondary/25 text-secondary flex w-full flex-grow items-center justify-between gap-2 rounded-md border-2 px-4 py-1"
                     >
                       <AtSign />
                       <p className="w-full truncate text-center text-xs text-black sm:text-sm">
@@ -145,7 +162,7 @@ function ViewEntryPage() {
                   return (
                     <li
                       key={email}
-                      className="border-secondary/25 text-secondary flex w-full flex-grow items-center justify-between gap-2 rounded-md border-1 border-2 px-4 py-1"
+                      className="border-secondary/25 text-secondary flex w-full flex-grow items-center justify-between gap-2 rounded-md border-2 px-4 py-1"
                     >
                       <AtSign />
                       <p className="w-full truncate text-center text-xs text-black sm:text-sm">
@@ -158,16 +175,31 @@ function ViewEntryPage() {
             )}
           </div>
 
-          <Button
-            variant="destructive"
-            size="default"
-            className="mx-auto mt-4 w-full"
-            onClick={() => {
-              mutate.mutate();
-            }}
-          >
-            Delete Entry
-          </Button>
+          {currentUserIsOwner && (
+            <Button
+              variant="destructive"
+              size="default"
+              className="mx-auto mt-4 w-full"
+              onClick={() => {
+                deleteEntry.mutate();
+              }}
+            >
+              Delete Entry
+            </Button>
+          )}
+
+          {!currentUserIsOwner && (
+            <Button
+              variant="destructive"
+              size="default"
+              className="mx-auto mt-4 w-full"
+              onClick={() => {
+                unsubscribeCurrentUser.mutate();
+              }}
+            >
+              Opt Out of Event
+            </Button>
+          )}
         </CardContent>
       </Card>
     </section>
