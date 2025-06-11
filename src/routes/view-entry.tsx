@@ -1,28 +1,12 @@
-import {
-  createFileRoute,
-  useLoaderData,
-  useNavigate,
-} from '@tanstack/react-router';
+import { createFileRoute, useLoaderData } from '@tanstack/react-router';
 import Error from '@/components/ui/error';
 import Loading from '@/components/ui/loading';
 import type { CustomError } from '@/ts/errorClass';
 import getCalendarEntryById from '@/db/entry/getCalendarEntryById';
 import { z } from 'zod';
-import {
-  Card,
-  CardHeader,
-  CardTitle,
-  CardContent,
-  CardDescription,
-} from '@/components/ui/card';
-import { AtSign, CalendarDays, ClockIcon, Info } from 'lucide-react';
-import { format } from 'date-fns';
 import { getEmailsFromUserIds } from '@/db/auth/getEmailsFromUserIds';
-import { Button } from '@/components/ui/button';
-import deleteCalendarEntry from '@/db/entry/deleteCalendarEntry';
-import { useMutation } from '@tanstack/react-query';
 import getUserDocument from '@/db/auth/getUserDocument';
-import unsubscribeCurrentUserFromEntry from '@/db/entry/unsubscribeCurrentUserFromEntry';
+import ViewEntry from '@/components/viewEntry/viewEntry';
 
 const entrySearchSchema = z.object({
   entryId: z.string(),
@@ -55,153 +39,13 @@ function ViewEntryPage() {
   const { entry, entrySubscribers, ownerEmails, currentUser } = useLoaderData({
     from: '/view-entry',
   });
-  const currentUserIsOwner = ownerEmails.includes(currentUser.email);
-  const navigate = useNavigate();
-
-  const deleteEntry = useMutation({
-    mutationFn: async () => {
-      await deleteCalendarEntry(entry.entryId);
-    },
-    onSuccess: () => {
-      navigate({ to: `/default-calendar` });
-    },
-    onError: (error: CustomError) => {
-      const status = error?.status || 500;
-      const message = 'Error deleting calendar entry';
-      navigate({ to: `/error?status=${status}&message=${message}` });
-    },
-  });
-
-  const unsubscribeCurrentUser = useMutation({
-    mutationFn: async () => {
-      await unsubscribeCurrentUserFromEntry(entry.entryId);
-    },
-    onSuccess: () => {
-      navigate({ to: `/default-calendar` });
-    },
-    onError: (error: CustomError) => {
-      const status = error?.status || 500;
-      const message = 'Error unsubscribing from calendar entry';
-      navigate({ to: `/error?status=${status}&message=${message}` });
-    },
-  });
 
   return (
-    <section className="flex h-full w-full flex-col items-center">
-      <Card className="mx-auto mt-4 mb-24 w-full max-w-[700px] border-0 shadow-none sm:w-[95%] sm:border-2">
-        <CardHeader className="flex flex-col items-center">
-          <Info className="text-primary mr-2 inline-block h-12 w-12" />
-          <CardTitle className="text-center">Calendar Entry Details</CardTitle>
-          <CardDescription className="text-center">
-            View calendar entry detail below
-          </CardDescription>
-        </CardHeader>
-
-        <CardContent>
-          <div className="mb-2 py-4">
-            <p className="pb-2 text-center text-lg font-bold">
-              Entry Organisers
-            </p>
-
-            {ownerEmails.length > 0 && (
-              <ul className="flex flex-wrap items-center justify-center gap-2">
-                {ownerEmails.map((email) => {
-                  return (
-                    <li
-                      key={email}
-                      className="border-secondary/25 text-secondary flex w-full flex-grow items-center justify-between gap-2 rounded-md border-2 px-4 py-1"
-                    >
-                      <AtSign />
-                      <p className="w-full truncate text-center text-xs text-black sm:text-sm">
-                        {email}
-                      </p>
-                    </li>
-                  );
-                })}
-              </ul>
-            )}
-          </div>
-
-          <div className="border-secondary/25 mb-2 rounded-lg border-2 p-2">
-            <p className="font-bold">Title</p>
-            <p className="text-secondary text-lg">{entry.title}</p>
-          </div>
-
-          <div className="border-secondary/25 mb-2 rounded-lg border-2 p-2">
-            <p className="font-bold">Description</p>
-            <p className="text-secondary text-lg">
-              {entry.description
-                ? entry.description
-                : 'No description provided'}
-            </p>
-          </div>
-
-          <div className="border-secondary/25 mb-2 rounded-lg border-2 p-2">
-            <p className="font-bold">Date</p>
-            <p className="text-secondary flex items-center gap-2 text-lg">
-              <CalendarDays size={20} />
-              {format(entry.startDate, 'dd-MM-yyyy')}
-            </p>
-          </div>
-
-          <div className="border-secondary/25 mb-2 rounded-lg border-2 p-2">
-            <p className="font-bold">Time</p>
-
-            <p className="text-secondary flex items-center gap-2 text-lg">
-              <ClockIcon size={20} />
-              {format(entry.startDate, 'HH:mm')}-
-              {format(entry.endDate, 'HH:mm')}
-            </p>
-          </div>
-
-          <div className="mb-2 py-4">
-            <p className="pb-2 text-center text-lg font-bold">Attendees</p>
-            {entrySubscribers.length > 0 && (
-              <ul className="flex flex-wrap items-center justify-center gap-2">
-                {entrySubscribers.map((email) => {
-                  return (
-                    <li
-                      key={email}
-                      className="border-secondary/25 text-secondary flex w-full flex-grow items-center justify-between gap-2 rounded-md border-2 px-4 py-1"
-                    >
-                      <AtSign />
-                      <p className="w-full truncate text-center text-xs text-black sm:text-sm">
-                        {email}
-                      </p>
-                    </li>
-                  );
-                })}
-              </ul>
-            )}
-          </div>
-
-          {currentUserIsOwner && (
-            <Button
-              variant="destructive"
-              size="default"
-              className="mx-auto mt-4 w-full"
-              onClick={() => {
-                deleteEntry.mutate();
-              }}
-            >
-              Delete Entry
-            </Button>
-          )}
-
-          {!currentUserIsOwner && (
-            <Button
-              variant="destructive"
-              size="default"
-              className="mx-auto mt-4 w-full"
-              onClick={() => {
-                unsubscribeCurrentUser.mutate();
-              }}
-            >
-              Opt Out of Event
-            </Button>
-          )}
-        </CardContent>
-      </Card>
-    </section>
+    <ViewEntry
+      entry={entry}
+      entrySubscribers={entrySubscribers}
+      ownerEmails={ownerEmails}
+      currentUser={currentUser}
+    />
   );
 }
