@@ -10,13 +10,6 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
 import Loading from '../ui/loading';
 import { useMutation } from '@tanstack/react-query';
 import { Input } from '../ui/input';
@@ -153,7 +146,7 @@ const AddEntry = ({ calendars }: AddEntryProps) => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      calendarId: '',
+      calendarId: calendars[0].id,
       title: '',
       description: '',
       startTimeHour: 9,
@@ -233,7 +226,7 @@ const AddEntry = ({ calendars }: AddEntryProps) => {
             onSubmit={form.handleSubmit(onSubmit)}
             className="flex w-full flex-col items-center p-4"
           >
-            <FormField
+            {/* <FormField
               control={form.control}
               name="calendarId"
               render={({ field, fieldState }) => (
@@ -262,7 +255,7 @@ const AddEntry = ({ calendars }: AddEntryProps) => {
                   <FormMessage />
                 </FormItem>
               )}
-            />
+            /> */}
 
             <FormField
               control={form.control}

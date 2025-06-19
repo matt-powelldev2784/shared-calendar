@@ -10,13 +10,6 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
 import Loading from '../ui/loading';
 import { useMutation } from '@tanstack/react-query';
 import { Input } from '../ui/input';
@@ -206,7 +199,7 @@ const EditEntry = ({ calendars, entry, currentUser }: EditEntryProps) => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      calendarId: entry.calendarId || '',
+      calendarId: entry.calendarId,
       entryId: entry.entryId || '',
       title: entry.title || '',
       description: entry.description || '',
@@ -287,37 +280,6 @@ const EditEntry = ({ calendars, entry, currentUser }: EditEntryProps) => {
             onSubmit={form.handleSubmit(onSubmit)}
             className="flex w-full flex-col items-center p-4"
           >
-            <FormField
-              control={form.control}
-              name="calendarId"
-              render={({ field, fieldState }) => (
-                <FormItem className="w-full max-w-[700px]">
-                  <FormLabel>Choose Calendar</FormLabel>
-                  <FormControl>
-                    <Select
-                      onValueChange={field.onChange}
-                      defaultValue={field.value}
-                    >
-                      <SelectTrigger
-                        aria-invalid={!!fieldState.error}
-                        className="w-full"
-                      >
-                        <SelectValue placeholder="Choose Calendar" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {calendars.map((calendar) => (
-                          <SelectItem key={calendar.id} value={calendar.id}>
-                            {calendar.name}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
             <FormField
               control={form.control}
               name="title"
