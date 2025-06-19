@@ -22,9 +22,6 @@ import {
 import { Calendar } from '../ui/customCalendar';
 import { format } from 'date-fns';
 import CalendarIcon from '../../assets/icons/cal_icon.svg';
-import addCalendarEntry, {
-  type AddCalendarEntry,
-} from '@/db/entry/addCalendarEntry';
 import { useNavigate } from '@tanstack/react-router';
 import {
   Card,
@@ -34,12 +31,20 @@ import {
   CardTitle,
 } from '../ui/card';
 import { AtSign, CalendarPlusIcon, CircleX } from 'lucide-react';
-import type { Calendar as CalenderT } from '@/ts/Calendar';
+import type {
+  CalendarEntry,
+  Calendar as CalenderT,
+  UserDocument,
+} from '@/ts/Calendar';
 import { getCalendarUrl } from '@/lib/getCalendarUrl';
 import getUserIdByEmail from '@/db/auth/getUserIdByEmail';
 import { useState } from 'react';
 import { hasDuplicates } from '@/lib/hasDuplicates';
 import { CustomError } from '@/ts/errorClass';
+import { getEmailsFromUserIds } from '@/db/auth/getEmailsFromUserIds';
+import updateCalendarEntry, {
+  type UpdateCalendarEntry,
+} from '@/db/entry/updateCalendarEntry';
 
 const convertFormValuesToEntry = (values: z.infer<typeof formSchema>) => {
   const startDate = new Date(values.date);
@@ -48,7 +53,8 @@ const convertFormValuesToEntry = (values: z.infer<typeof formSchema>) => {
   const endDate = new Date(values.date);
   endDate.setHours(values.endTimeHour, Number(values.endTimeMins));
 
-  const entry: AddCalendarEntry = {
+  const entry: UpdateCalendarEntry = {
+    entryId: values.entryId,
     title: values.title,
     description: values.description,
     startDate,
@@ -62,6 +68,7 @@ const convertFormValuesToEntry = (values: z.infer<typeof formSchema>) => {
 
 const formSchema = z.object({
   calendarId: z.string().nonempty({ message: 'Calendar is required' }),
+  entryId: z.string().nonempty({ message: 'Entry ID is required' }),
   title: z.string().nonempty({ message: 'Title is required' }),
   description: z.string().optional(),
   startTimeHour: z.number().min(0).max(23, {
@@ -89,8 +96,10 @@ const formSchema = z.object({
   startAndEndTimeError: z.string().optional(),
 });
 
-type AddEntryProps = {
+type EditEntryProps = {
   calendars: CalenderT[];
+  entry: CalendarEntry;
+  currentUser: UserDocument;
 };
 
 type UserToRequest = {
@@ -98,10 +107,54 @@ type UserToRequest = {
   userId: string;
 };
 
-const AddEntry = ({ calendars }: AddEntryProps) => {
+const EditEntry = ({ calendars, entry, currentUser }: EditEntryProps) => {
   const [usersToRequest, setUsersToRequest] = useState<UserToRequest[]>([]);
   const [isSelectDateOpen, setIsSelectDateOpen] = useState(false);
+  const [isSubscribedUserAdded, setIsSubscribedUserAdded] = useState(false);
   const navigate = useNavigate();
+
+  const populateSubscribedUser = async (userId: string) => {
+    try {
+      const emails = await getEmailsFromUserIds([userId]);
+      const email = emails[0];
+
+      const userIdString = userId.toString();
+      const currentRequests = form.getValues('pendingRequests') || [];
+      const updatedRequests = [...currentRequests, userIdString];
+
+      const userIdsHasDuplicates = hasDuplicates(updatedRequests);
+      if (userIdsHasDuplicates) {
+        form.setError('addUser', {
+          type: 'manual',
+          message: 'User already added',
+        });
+        return;
+      }
+
+      if (userIdString) {
+        form.setValue('pendingRequests', [...currentRequests, userId]);
+        form.setValue('addUser', '');
+      }
+
+      setUsersToRequest((prev) => [...prev, { email, userId }]);
+    } catch (error) {
+      console.error('Error getting user id: ', error);
+      if (error instanceof CustomError) {
+        form.setError('addUser', {
+          type: 'manual',
+          message: error.message,
+        });
+      }
+    }
+  };
+
+  if (!isSubscribedUserAdded) {
+    entry.subscribers?.map((subscriber) => {
+      if (subscriber === currentUser.userId) return;
+      populateSubscribedUser(subscriber);
+    });
+    setIsSubscribedUserAdded(true);
+  }
 
   // submit calendar entry and navigate to calendar
   const mutation = useMutation({
@@ -116,7 +169,7 @@ const AddEntry = ({ calendars }: AddEntryProps) => {
         return;
       }
 
-      const calendarEntry = await addCalendarEntry(entry);
+      const calendarEntry = await updateCalendarEntry(entry);
 
       const calendarId = values.calendarId;
       const startDate = format(entry.startDate, 'yyyy-MM-dd');
@@ -146,14 +199,15 @@ const AddEntry = ({ calendars }: AddEntryProps) => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      calendarId: calendars[0].id,
-      title: '',
-      description: '',
-      startTimeHour: 9,
-      startTimeMins: '00',
-      endTimeHour: 10,
-      endTimeMins: '00',
-      date: undefined,
+      calendarId: entry.calendarId,
+      entryId: entry.entryId || '',
+      title: entry.title || '',
+      description: entry.description || '',
+      startTimeHour: Number(format(entry.startDate, 'HH')),
+      startTimeMins: format(entry.startDate, 'mm'),
+      endTimeHour: Number(format(entry.endDate, 'HH')),
+      endTimeMins: format(entry.endDate, 'mm'),
+      date: entry.startDate || null,
       startDate: undefined,
       endDate: undefined,
       addUser: '',
@@ -215,9 +269,10 @@ const AddEntry = ({ calendars }: AddEntryProps) => {
     <Card className="my-8 mb-32 w-full max-w-[700px] border-0 p-0 shadow-none md:border md:p-4 md:shadow-sm">
       <CardHeader className="flex flex-col items-center">
         <CalendarPlusIcon className="text-primary mr-2 inline-block h-12 w-12" />
-        <CardTitle className="text-center">Add Calendar Entry</CardTitle>
+        <CardTitle className="text-center">Update Calendar Entry</CardTitle>
         <CardDescription className="text-center">
-          Fill in the form below and click submit to add a calendar entry.
+          Edit the form below and click the update button to make changes to the
+          calendar entry.
         </CardDescription>
       </CardHeader>
       <CardContent className="p-0">
@@ -226,37 +281,6 @@ const AddEntry = ({ calendars }: AddEntryProps) => {
             onSubmit={form.handleSubmit(onSubmit)}
             className="flex w-full flex-col items-center p-4"
           >
-            {/* <FormField
-              control={form.control}
-              name="calendarId"
-              render={({ field, fieldState }) => (
-                <FormItem className="w-full max-w-[700px]">
-                  <FormLabel>Choose Calendar</FormLabel>
-                  <FormControl>
-                    <Select
-                      onValueChange={field.onChange}
-                      defaultValue={field.value}
-                    >
-                      <SelectTrigger
-                        aria-invalid={!!fieldState.error}
-                        className="w-full"
-                      >
-                        <SelectValue placeholder="Choose Calendar" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {calendars.map((calendar) => (
-                          <SelectItem key={calendar.id} value={calendar.id}>
-                            {calendar.name}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            /> */}
-
             <FormField
               control={form.control}
               name="title"
@@ -544,7 +568,7 @@ const AddEntry = ({ calendars }: AddEntryProps) => {
               className="mt-8 w-full max-w-[700px]"
               size="lg"
             >
-              {mutation.isPending ? <Loading variant="sm" /> : 'Submit'}
+              {mutation.isPending ? <Loading variant="sm" /> : 'Update Entry'}
             </Button>
           </form>
         </Form>
@@ -553,4 +577,4 @@ const AddEntry = ({ calendars }: AddEntryProps) => {
   );
 };
 
-export default AddEntry;
+export default EditEntry;

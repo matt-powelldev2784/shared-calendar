@@ -11,10 +11,12 @@
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
+import { Route as ViewEntryImport } from './routes/view-entry'
 import { Route as SignoutImport } from './routes/signout'
 import { Route as ReviewPendingEntryImport } from './routes/review-pending-entry'
 import { Route as GetCalendarImport } from './routes/get-calendar'
 import { Route as ErrorImport } from './routes/error'
+import { Route as EditEntryImport } from './routes/edit-entry'
 import { Route as DefaultCalendarImport } from './routes/default-calendar'
 import { Route as AuthenticatedImport } from './routes/authenticated'
 import { Route as AddEntryImport } from './routes/add-entry'
@@ -22,6 +24,12 @@ import { Route as AddCalendarImport } from './routes/add-calendar'
 import { Route as IndexImport } from './routes/index'
 
 // Create/Update Routes
+
+const ViewEntryRoute = ViewEntryImport.update({
+  id: '/view-entry',
+  path: '/view-entry',
+  getParentRoute: () => rootRoute,
+} as any)
 
 const SignoutRoute = SignoutImport.update({
   id: '/signout',
@@ -44,6 +52,12 @@ const GetCalendarRoute = GetCalendarImport.update({
 const ErrorRoute = ErrorImport.update({
   id: '/error',
   path: '/error',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const EditEntryRoute = EditEntryImport.update({
+  id: '/edit-entry',
+  path: '/edit-entry',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -116,6 +130,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DefaultCalendarImport
       parentRoute: typeof rootRoute
     }
+    '/edit-entry': {
+      id: '/edit-entry'
+      path: '/edit-entry'
+      fullPath: '/edit-entry'
+      preLoaderRoute: typeof EditEntryImport
+      parentRoute: typeof rootRoute
+    }
     '/error': {
       id: '/error'
       path: '/error'
@@ -144,6 +165,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SignoutImport
       parentRoute: typeof rootRoute
     }
+    '/view-entry': {
+      id: '/view-entry'
+      path: '/view-entry'
+      fullPath: '/view-entry'
+      preLoaderRoute: typeof ViewEntryImport
+      parentRoute: typeof rootRoute
+    }
   }
 }
 
@@ -155,10 +183,12 @@ export interface FileRoutesByFullPath {
   '/add-entry': typeof AddEntryRoute
   '/authenticated': typeof AuthenticatedRoute
   '/default-calendar': typeof DefaultCalendarRoute
+  '/edit-entry': typeof EditEntryRoute
   '/error': typeof ErrorRoute
   '/get-calendar': typeof GetCalendarRoute
   '/review-pending-entry': typeof ReviewPendingEntryRoute
   '/signout': typeof SignoutRoute
+  '/view-entry': typeof ViewEntryRoute
 }
 
 export interface FileRoutesByTo {
@@ -167,10 +197,12 @@ export interface FileRoutesByTo {
   '/add-entry': typeof AddEntryRoute
   '/authenticated': typeof AuthenticatedRoute
   '/default-calendar': typeof DefaultCalendarRoute
+  '/edit-entry': typeof EditEntryRoute
   '/error': typeof ErrorRoute
   '/get-calendar': typeof GetCalendarRoute
   '/review-pending-entry': typeof ReviewPendingEntryRoute
   '/signout': typeof SignoutRoute
+  '/view-entry': typeof ViewEntryRoute
 }
 
 export interface FileRoutesById {
@@ -180,10 +212,12 @@ export interface FileRoutesById {
   '/add-entry': typeof AddEntryRoute
   '/authenticated': typeof AuthenticatedRoute
   '/default-calendar': typeof DefaultCalendarRoute
+  '/edit-entry': typeof EditEntryRoute
   '/error': typeof ErrorRoute
   '/get-calendar': typeof GetCalendarRoute
   '/review-pending-entry': typeof ReviewPendingEntryRoute
   '/signout': typeof SignoutRoute
+  '/view-entry': typeof ViewEntryRoute
 }
 
 export interface FileRouteTypes {
@@ -194,10 +228,12 @@ export interface FileRouteTypes {
     | '/add-entry'
     | '/authenticated'
     | '/default-calendar'
+    | '/edit-entry'
     | '/error'
     | '/get-calendar'
     | '/review-pending-entry'
     | '/signout'
+    | '/view-entry'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -205,10 +241,12 @@ export interface FileRouteTypes {
     | '/add-entry'
     | '/authenticated'
     | '/default-calendar'
+    | '/edit-entry'
     | '/error'
     | '/get-calendar'
     | '/review-pending-entry'
     | '/signout'
+    | '/view-entry'
   id:
     | '__root__'
     | '/'
@@ -216,10 +254,12 @@ export interface FileRouteTypes {
     | '/add-entry'
     | '/authenticated'
     | '/default-calendar'
+    | '/edit-entry'
     | '/error'
     | '/get-calendar'
     | '/review-pending-entry'
     | '/signout'
+    | '/view-entry'
   fileRoutesById: FileRoutesById
 }
 
@@ -229,10 +269,12 @@ export interface RootRouteChildren {
   AddEntryRoute: typeof AddEntryRoute
   AuthenticatedRoute: typeof AuthenticatedRoute
   DefaultCalendarRoute: typeof DefaultCalendarRoute
+  EditEntryRoute: typeof EditEntryRoute
   ErrorRoute: typeof ErrorRoute
   GetCalendarRoute: typeof GetCalendarRoute
   ReviewPendingEntryRoute: typeof ReviewPendingEntryRoute
   SignoutRoute: typeof SignoutRoute
+  ViewEntryRoute: typeof ViewEntryRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
@@ -241,10 +283,12 @@ const rootRouteChildren: RootRouteChildren = {
   AddEntryRoute: AddEntryRoute,
   AuthenticatedRoute: AuthenticatedRoute,
   DefaultCalendarRoute: DefaultCalendarRoute,
+  EditEntryRoute: EditEntryRoute,
   ErrorRoute: ErrorRoute,
   GetCalendarRoute: GetCalendarRoute,
   ReviewPendingEntryRoute: ReviewPendingEntryRoute,
   SignoutRoute: SignoutRoute,
+  ViewEntryRoute: ViewEntryRoute,
 }
 
 export const routeTree = rootRoute
@@ -262,10 +306,12 @@ export const routeTree = rootRoute
         "/add-entry",
         "/authenticated",
         "/default-calendar",
+        "/edit-entry",
         "/error",
         "/get-calendar",
         "/review-pending-entry",
-        "/signout"
+        "/signout",
+        "/view-entry"
       ]
     },
     "/": {
@@ -283,6 +329,9 @@ export const routeTree = rootRoute
     "/default-calendar": {
       "filePath": "default-calendar.tsx"
     },
+    "/edit-entry": {
+      "filePath": "edit-entry.tsx"
+    },
     "/error": {
       "filePath": "error.tsx"
     },
@@ -294,6 +343,9 @@ export const routeTree = rootRoute
     },
     "/signout": {
       "filePath": "signout.tsx"
+    },
+    "/view-entry": {
+      "filePath": "view-entry.tsx"
     }
   }
 }

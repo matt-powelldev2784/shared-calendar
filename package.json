@@ -14,7 +14,7 @@
     "@radix-ui/react-label": "^2.1.2",
     "@radix-ui/react-popover": "^1.1.6",
     "@radix-ui/react-select": "^2.1.6",
-    "@radix-ui/react-slot": "^1.1.2",
+    "@radix-ui/react-slot": "^1.2.0",
     "@tailwindcss/vite": "^4.0.6",
     "@tanstack/react-query": "^5.67.1",
     "@tanstack/react-router": "^1.104.1",
@@ -31,6 +31,7 @@
     "react": "^19.0.0",
     "react-day-picker": "^8.10.1",
     "react-dom": "^19.0.0",
+    "react-hook-form": "^7.55.0",
     "tailwind-merge": "^3.0.2",
     "tailwindcss": "^4.0.6",
     "tailwindcss-animate": "^1.0.7"
