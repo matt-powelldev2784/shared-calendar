@@ -2,7 +2,6 @@ import EditEntry from '@/components/editEntry/editEntry';
 import Error from '@/components/ui/error';
 import Loading from '@/components/ui/loading';
 import getUserDocument from '@/db/auth/getUserDocument';
-import getSubscribedCalendars from '@/db/calendar/getSubscribedCalendars';
 import getCalendarEntryById from '@/db/entry/getCalendarEntryById';
 import type { CustomError } from '@/ts/errorClass';
 import { createFileRoute, useLoaderData } from '@tanstack/react-router';
@@ -23,10 +22,9 @@ export const Route = createFileRoute('/edit-entry')({
   validateSearch: entrySearchSchema,
 
   loader: async ({ deps: { entryId } }) => {
-    const calendars = await getSubscribedCalendars();
     const entry = await getCalendarEntryById(entryId);
     const currentUser = await getUserDocument();
-    return { calendars, entry, currentUser };
+    return { entry, currentUser };
   },
 
   errorComponent: ({ error }) => {
@@ -35,17 +33,13 @@ export const Route = createFileRoute('/edit-entry')({
 });
 
 function EditEntryPage() {
-  const { calendars, entry, currentUser } = useLoaderData({
+  const { entry, currentUser } = useLoaderData({
     from: '/edit-entry',
   });
 
   return (
     <section className="flex h-full w-full flex-col items-center justify-center">
-      <EditEntry
-        calendars={calendars}
-        entry={entry}
-        currentUser={currentUser}
-      />
+      <EditEntry entry={entry} currentUser={currentUser} />
     </section>
   );
 }

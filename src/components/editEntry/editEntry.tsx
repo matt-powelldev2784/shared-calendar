@@ -31,11 +31,7 @@ import {
   CardTitle,
 } from '../ui/card';
 import { AtSign, CalendarPlusIcon, CircleX } from 'lucide-react';
-import type {
-  CalendarEntry,
-  Calendar as CalenderT,
-  UserDocument,
-} from '@/ts/Calendar';
+import type { CalendarEntry, UserDocument } from '@/ts/Calendar';
 import { getCalendarUrl } from '@/lib/getCalendarUrl';
 import getUserIdByEmail from '@/db/auth/getUserIdByEmail';
 import { useState } from 'react';
@@ -97,7 +93,6 @@ const formSchema = z.object({
 });
 
 type EditEntryProps = {
-  calendars: CalenderT[];
   entry: CalendarEntry;
   currentUser: UserDocument;
 };
@@ -107,7 +102,7 @@ type UserToRequest = {
   userId: string;
 };
 
-const EditEntry = ({ calendars, entry, currentUser }: EditEntryProps) => {
+const EditEntry = ({ entry, currentUser }: EditEntryProps) => {
   const [usersToRequest, setUsersToRequest] = useState<UserToRequest[]>([]);
   const [isSelectDateOpen, setIsSelectDateOpen] = useState(false);
   const [isSubscribedUserAdded, setIsSubscribedUserAdded] = useState(false);
