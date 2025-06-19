@@ -149,16 +149,29 @@ const ViewEntry = ({
           </div>
 
           {currentUserIsOwner && (
-            <Button
-              variant="destructive"
-              size="default"
-              className="mx-auto mt-4 w-full"
-              onClick={() => {
-                deleteEntry.mutate();
-              }}
-            >
-              Delete Entry
-            </Button>
+            <>
+              <Button
+                variant="default"
+                size="default"
+                className="mx-auto mt-4 w-full"
+                onClick={() => {
+                  navigate({ to: `/edit-entry?entryId=${entry.entryId}` });
+                }}
+              >
+                Edit Entry
+              </Button>
+
+              <Button
+                variant="destructive"
+                size="default"
+                className="mx-auto mt-4 w-full"
+                onClick={() => {
+                  deleteEntry.mutate();
+                }}
+              >
+                Delete Entry
+              </Button>
+            </>
           )}
 
           {!currentUserIsOwner && (
