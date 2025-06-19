@@ -25,9 +25,18 @@ export const Route = createFileRoute('/view-entry')({
   loader: async ({ deps: { entryId } }) => {
     const entry = await getCalendarEntryById(entryId);
     const entrySubscribers = await getEmailsFromUserIds(entry.subscribers);
+    const pendingSubscribers = await getEmailsFromUserIds(
+      entry.pendingRequests,
+    );
     const ownerEmails = await getEmailsFromUserIds(entry.ownerIds);
     const currentUser = await getUserDocument();
-    return { entry, entrySubscribers, ownerEmails, currentUser };
+    return {
+      entry,
+      entrySubscribers,
+      pendingSubscribers,
+      ownerEmails,
+      currentUser,
+    };
   },
 
   errorComponent: ({ error }) => {
@@ -36,7 +45,13 @@ export const Route = createFileRoute('/view-entry')({
 });
 
 function ViewEntryPage() {
-  const { entry, entrySubscribers, ownerEmails, currentUser } = useLoaderData({
+  const {
+    entry,
+    entrySubscribers,
+    pendingSubscribers,
+    ownerEmails,
+    currentUser,
+  } = useLoaderData({
     from: '/view-entry',
   });
 
@@ -44,6 +59,7 @@ function ViewEntryPage() {
     <ViewEntry
       entry={entry}
       entrySubscribers={entrySubscribers}
+      pendingSubscribers={pendingSubscribers}
       ownerEmails={ownerEmails}
       currentUser={currentUser}
     />

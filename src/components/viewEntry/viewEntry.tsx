@@ -18,6 +18,7 @@ import { Button } from '../ui/button';
 type ViewEntryProps = {
   entry: CalendarEntry;
   entrySubscribers: string[];
+  pendingSubscribers: string[];
   ownerEmails: string[];
   currentUser: UserDocument;
 };
@@ -25,6 +26,7 @@ type ViewEntryProps = {
 const ViewEntry = ({
   entry,
   entrySubscribers,
+  pendingSubscribers,
   ownerEmails,
   currentUser,
 }: ViewEntryProps) => {
@@ -139,6 +141,29 @@ const ViewEntry = ({
                     >
                       <AtSign />
                       <p className="w-full truncate text-center text-xs text-black sm:text-sm">
+                        {email}
+                      </p>
+                    </li>
+                  );
+                })}
+              </ul>
+            )}
+          </div>
+
+          <div className="mb-2 py-4">
+            <p className="text-secondary/75 pb-2 text-center text-lg font-bold">
+              Response Pending
+            </p>
+            {pendingSubscribers.length > 0 && (
+              <ul className="flex flex-wrap items-center justify-center gap-2">
+                {pendingSubscribers.map((email) => {
+                  return (
+                    <li
+                      key={email}
+                      className="border-secondary/25 text-secondary/25 flex w-full flex-grow items-center justify-between gap-2 rounded-md border-2 border-dashed px-4 py-1"
+                    >
+                      <AtSign />
+                      <p className="text-secondary/75 w-full truncate text-center text-xs sm:text-sm">
                         {email}
                       </p>
                     </li>
