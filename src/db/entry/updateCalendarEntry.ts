@@ -10,8 +10,10 @@ import { CustomError } from '@/ts/errorClass';
 import checkAuth from '../auth/checkAuth';
 import { hasDuplicates } from '@/lib/hasDuplicates';
 import { isValidStartEndDates } from '@/lib/validateStartEndDates';
+import deleteCalendarEntry from './deleteCalendarEntry';
 
-export type AddCalendarEntry = {
+export type UpdateCalendarEntry = {
+  entryId: string;
   title: string;
   description?: string;
   startDate: Date;
@@ -22,13 +24,13 @@ export type AddCalendarEntry = {
   pendingRequests?: string[];
 };
 
-const addCalendarEntry = async (entry: AddCalendarEntry) => {
+const updateCalendarEntry = async (entry: UpdateCalendarEntry) => {
   try {
     const currentUser = await checkAuth();
 
     // validate data
-    if (!entry.title || !entry.calendarId) {
-      throw new CustomError(403, 'Title and calendar Id is required');
+    if (!entry.title || !entry.calendarId || !entry.entryId) {
+      throw new CustomError(403, 'Title, calendar Id and entry Id is required');
     }
 
     // validate start and end dates
@@ -65,6 +67,10 @@ const addCalendarEntry = async (entry: AddCalendarEntry) => {
     }
 
     const entryDocRef = await runTransaction(db, async (transaction) => {
+      // delete existing calendar entry
+      // this will allow a new notification to be sent
+      await deleteCalendarEntry(entry.entryId);
+
       // add calendar entry
       const entriesRef = collection(db, 'entries');
       const newEntry = {
@@ -86,7 +92,7 @@ const addCalendarEntry = async (entry: AddCalendarEntry) => {
           entryId: entryDocRef.id,
           requesterEmail: currentUser.email,
           requestedUserIds: pendingRequests,
-          message: `${currentUser.email} has shared a calendar entry.`,
+          message: `${currentUser.email} has updated a calendar entry.`,
         };
 
         const requestDocRef = doc(requestsRef);
@@ -100,13 +106,13 @@ const addCalendarEntry = async (entry: AddCalendarEntry) => {
     });
 
     if (!entryDocRef) {
-      throw new CustomError(403, 'Error adding entry, transaction failed');
+      throw new CustomError(403, 'Error updating entry, transaction failed');
     }
     return entryDocRef.id;
   } catch (error) {
-    console.error('Error adding calendar entry: ', error);
+    console.error('Error updating calendar entry: ', error);
     throw error;
   }
 };
 
-export default addCalendarEntry;
+export default updateCalendarEntry;

@@ -16,6 +16,7 @@ import { Route as SignoutImport } from './routes/signout'
 import { Route as ReviewPendingEntryImport } from './routes/review-pending-entry'
 import { Route as GetCalendarImport } from './routes/get-calendar'
 import { Route as ErrorImport } from './routes/error'
+import { Route as EditEntryImport } from './routes/edit-entry'
 import { Route as DefaultCalendarImport } from './routes/default-calendar'
 import { Route as AuthenticatedImport } from './routes/authenticated'
 import { Route as AddEntryImport } from './routes/add-entry'
@@ -51,6 +52,12 @@ const GetCalendarRoute = GetCalendarImport.update({
 const ErrorRoute = ErrorImport.update({
   id: '/error',
   path: '/error',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const EditEntryRoute = EditEntryImport.update({
+  id: '/edit-entry',
+  path: '/edit-entry',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -123,6 +130,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DefaultCalendarImport
       parentRoute: typeof rootRoute
     }
+    '/edit-entry': {
+      id: '/edit-entry'
+      path: '/edit-entry'
+      fullPath: '/edit-entry'
+      preLoaderRoute: typeof EditEntryImport
+      parentRoute: typeof rootRoute
+    }
     '/error': {
       id: '/error'
       path: '/error'
@@ -169,6 +183,7 @@ export interface FileRoutesByFullPath {
   '/add-entry': typeof AddEntryRoute
   '/authenticated': typeof AuthenticatedRoute
   '/default-calendar': typeof DefaultCalendarRoute
+  '/edit-entry': typeof EditEntryRoute
   '/error': typeof ErrorRoute
   '/get-calendar': typeof GetCalendarRoute
   '/review-pending-entry': typeof ReviewPendingEntryRoute
@@ -182,6 +197,7 @@ export interface FileRoutesByTo {
   '/add-entry': typeof AddEntryRoute
   '/authenticated': typeof AuthenticatedRoute
   '/default-calendar': typeof DefaultCalendarRoute
+  '/edit-entry': typeof EditEntryRoute
   '/error': typeof ErrorRoute
   '/get-calendar': typeof GetCalendarRoute
   '/review-pending-entry': typeof ReviewPendingEntryRoute
@@ -196,6 +212,7 @@ export interface FileRoutesById {
   '/add-entry': typeof AddEntryRoute
   '/authenticated': typeof AuthenticatedRoute
   '/default-calendar': typeof DefaultCalendarRoute
+  '/edit-entry': typeof EditEntryRoute
   '/error': typeof ErrorRoute
   '/get-calendar': typeof GetCalendarRoute
   '/review-pending-entry': typeof ReviewPendingEntryRoute
@@ -211,6 +228,7 @@ export interface FileRouteTypes {
     | '/add-entry'
     | '/authenticated'
     | '/default-calendar'
+    | '/edit-entry'
     | '/error'
     | '/get-calendar'
     | '/review-pending-entry'
@@ -223,6 +241,7 @@ export interface FileRouteTypes {
     | '/add-entry'
     | '/authenticated'
     | '/default-calendar'
+    | '/edit-entry'
     | '/error'
     | '/get-calendar'
     | '/review-pending-entry'
@@ -235,6 +254,7 @@ export interface FileRouteTypes {
     | '/add-entry'
     | '/authenticated'
     | '/default-calendar'
+    | '/edit-entry'
     | '/error'
     | '/get-calendar'
     | '/review-pending-entry'
@@ -249,6 +269,7 @@ export interface RootRouteChildren {
   AddEntryRoute: typeof AddEntryRoute
   AuthenticatedRoute: typeof AuthenticatedRoute
   DefaultCalendarRoute: typeof DefaultCalendarRoute
+  EditEntryRoute: typeof EditEntryRoute
   ErrorRoute: typeof ErrorRoute
   GetCalendarRoute: typeof GetCalendarRoute
   ReviewPendingEntryRoute: typeof ReviewPendingEntryRoute
@@ -262,6 +283,7 @@ const rootRouteChildren: RootRouteChildren = {
   AddEntryRoute: AddEntryRoute,
   AuthenticatedRoute: AuthenticatedRoute,
   DefaultCalendarRoute: DefaultCalendarRoute,
+  EditEntryRoute: EditEntryRoute,
   ErrorRoute: ErrorRoute,
   GetCalendarRoute: GetCalendarRoute,
   ReviewPendingEntryRoute: ReviewPendingEntryRoute,
@@ -284,6 +306,7 @@ export const routeTree = rootRoute
         "/add-entry",
         "/authenticated",
         "/default-calendar",
+        "/edit-entry",
         "/error",
         "/get-calendar",
         "/review-pending-entry",
@@ -305,6 +328,9 @@ export const routeTree = rootRoute
     },
     "/default-calendar": {
       "filePath": "default-calendar.tsx"
+    },
+    "/edit-entry": {
+      "filePath": "edit-entry.tsx"
     },
     "/error": {
       "filePath": "error.tsx"

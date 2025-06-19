@@ -36,6 +36,7 @@ export type Request = {
   entryId: string;
   requestedUserIds: string[];
   requesterEmail: string;
+  message: string;
 };
 
 export type UserDocument = {
