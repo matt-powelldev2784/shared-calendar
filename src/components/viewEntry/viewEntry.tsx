@@ -129,9 +129,10 @@ const ViewEntry = ({
             </p>
           </div>
 
-          <div className="mb-2 py-4">
-            <p className="pb-2 text-center text-lg font-bold">Attendees</p>
-            {entrySubscribers.length > 0 && (
+          {entrySubscribers.length > 0 && (
+            <div className="mb-2 py-4">
+              <p className="pb-2 text-center text-lg font-bold">Attendees</p>
+
               <ul className="flex flex-wrap items-center justify-center gap-2">
                 {entrySubscribers.map((email) => {
                   return (
@@ -147,14 +148,15 @@ const ViewEntry = ({
                   );
                 })}
               </ul>
-            )}
-          </div>
+            </div>
+          )}
 
-          <div className="mb-2 py-4">
-            <p className="text-secondary/75 pb-2 text-center text-lg font-bold">
-              Response Pending
-            </p>
-            {pendingSubscribers.length > 0 && (
+          {pendingSubscribers.length > 0 && (
+            <div className="mb-2 py-4">
+              <p className="text-secondary/75 pb-2 text-center text-lg font-bold">
+                Response Pending
+              </p>
+
               <ul className="flex flex-wrap items-center justify-center gap-2">
                 {pendingSubscribers.map((email) => {
                   return (
@@ -170,8 +172,8 @@ const ViewEntry = ({
                   );
                 })}
               </ul>
-            )}
-          </div>
+            </div>
+          )}
 
           {currentUserIsOwner && (
             <>

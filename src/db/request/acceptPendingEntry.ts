@@ -1,4 +1,9 @@
-import { doc, runTransaction, arrayUnion } from 'firebase/firestore';
+import {
+  doc,
+  runTransaction,
+  arrayUnion,
+  arrayRemove,
+} from 'firebase/firestore';
 import { db } from '@/db/firebaseConfig';
 import checkAuth from '../auth/checkAuth';
 import { CustomError } from '@/ts/errorClass';
@@ -32,9 +37,13 @@ const acceptPendingEntry = async ({
         throw new CustomError(404, 'Invalid request data');
       }
 
-      // add the current user to the subscribers array in the entry document
+      console.log('user.uid', user.uid);
+
+      // add the current user to the subscribers array
+      // and remove them from the pending requests
       transaction.update(entryDocRef, {
         subscribers: arrayUnion(user.uid),
+        pendingRequests: arrayRemove(user.uid),
       });
 
       // remove the user from the request
