@@ -269,9 +269,10 @@ const EditEntry = ({ calendars, entry, currentUser }: EditEntryProps) => {
     <Card className="my-8 mb-32 w-full max-w-[700px] border-0 p-0 shadow-none md:border md:p-4 md:shadow-sm">
       <CardHeader className="flex flex-col items-center">
         <CalendarPlusIcon className="text-primary mr-2 inline-block h-12 w-12" />
-        <CardTitle className="text-center">Add Calendar Entry</CardTitle>
+        <CardTitle className="text-center">Update Calendar Entry</CardTitle>
         <CardDescription className="text-center">
-          Fill in the form below and click submit to add a calendar entry.
+          Edit the form below and click the update button to make changes to the
+          calendar entry.
         </CardDescription>
       </CardHeader>
       <CardContent className="p-0">
