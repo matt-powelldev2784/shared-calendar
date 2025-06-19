@@ -5,10 +5,7 @@ import { CustomError } from '@/ts/errorClass';
 export const getEmailsFromUserIds = async (userIds: string[]) => {
   try {
     if (!userIds || userIds.length === 0) {
-      throw new CustomError(
-        400,
-        'User IDs array is required and cannot be empty.',
-      );
+      return []; 
     }
 
     const publicUsersRef = collection(db, 'publicUsers');
