@@ -40,7 +40,7 @@ const PendingEntryCard = ({ entry, requestId }: PendingEntryCardProps) => {
 
   const rejectMutation = useMutation({
     mutationFn: async () => {
-      await rejectPendingEntry({ requestId });
+      await rejectPendingEntry({ entryId: entry.entryId, requestId });
     },
     onSuccess: () => {
       const calendarUrl = getCalendarUrl({

@@ -37,8 +37,6 @@ const acceptPendingEntry = async ({
         throw new CustomError(404, 'Invalid request data');
       }
 
-      console.log('user.uid', user.uid);
-
       // add the current user to the subscribers array
       // and remove them from the pending requests
       transaction.update(entryDocRef, {
