@@ -33,13 +33,13 @@ export const Route = createFileRoute('/edit-entry')({
 });
 
 function EditEntryPage() {
-  const { entry, currentUser } = useLoaderData({
+  const editEntryProps = useLoaderData({
     from: '/edit-entry',
   });
 
   return (
     <section className="flex h-full w-full flex-col items-center justify-center">
-      <EditEntry entry={entry} currentUser={currentUser} />
+      <EditEntry {...editEntryProps} />
     </section>
   );
 }
