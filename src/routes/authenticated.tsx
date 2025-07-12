@@ -15,7 +15,7 @@ export const Route = createFileRoute('/authenticated')({
   component: AuthenticatedPage,
 
   loader: async () => {
-    // Create the initial user documents if required
+    // Create the initial user documents if the user does not exist
     // otherwise get the user
     const user = await createInitialUserDocuments();
     const calendars = await getSubscribedCalendars();
