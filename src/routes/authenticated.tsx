@@ -8,6 +8,8 @@ import { useEffect } from 'react';
 import Error from '@/components/ui/error';
 import type { CustomError } from '@/ts/errorClass';
 import { createInitialUserDocuments } from '@/db/auth/createInitialUserDocuments';
+import getSubscribedCalendars from '@/db/calendar/getSubscribedCalendars';
+import { getCalendarUrl } from '@/lib/getCalendarUrl';
 
 export const Route = createFileRoute('/authenticated')({
   component: AuthenticatedPage,
@@ -16,8 +18,10 @@ export const Route = createFileRoute('/authenticated')({
     // Create the initial user documents if required
     // otherwise get the user
     const user = await createInitialUserDocuments();
+    const calendars = await getSubscribedCalendars();
+    const defaultCalendarId = calendars[0].calendarId;
 
-    return user;
+    return { user, defaultCalendarId };
   },
 
   errorComponent: ({ error }) => {
@@ -27,10 +31,13 @@ export const Route = createFileRoute('/authenticated')({
 
 function AuthenticatedPage() {
   const navigate = useNavigate();
-  const user = useLoaderData({ from: '/authenticated' });
+  const { user, defaultCalendarId } = useLoaderData({ from: '/authenticated' });
 
   useEffect(() => {
-    if (user) navigate({ to: `/default-calendar` });
+    const calendarUrl = getCalendarUrl({ calendarIds: defaultCalendarId });
+    navigate({
+      to: calendarUrl,
+    });
   }, [user]);
 
   return (

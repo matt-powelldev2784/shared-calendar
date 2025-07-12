@@ -19,7 +19,7 @@ export const calendarMenuItem = [
   {
     id: 2,
     text: 'View Calendar',
-    route: '/default-calendar',
+    route: '/authenticated',
     icon: <Calendar className="mr-2 h-6 w-6" />,
   },
 ];
