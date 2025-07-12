@@ -38,7 +38,7 @@ const ViewEntry = ({
       await deleteCalendarEntry(entry.entryId);
     },
     onSuccess: () => {
-      navigate({ to: `/default-calendar` });
+      navigate({ to: `/authenticated` });
     },
     onError: (error: CustomError) => {
       const status = error?.status || 500;
@@ -52,7 +52,7 @@ const ViewEntry = ({
       await unsubscribeCurrentUserFromEntry(entry.entryId);
     },
     onSuccess: () => {
-      navigate({ to: `/default-calendar` });
+      navigate({ to: `/authenticated` });
     },
     onError: (error: CustomError) => {
       const status = error?.status || 500;
