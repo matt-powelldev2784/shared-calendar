@@ -63,8 +63,8 @@ export const CalendarView = ({ calendarEntries }: CalendarViewProps) => {
       </div>
 
       <section className="auto-row-[minmax(100px,1fr)] m-auto mx-4 mt-2 grid w-full grid-flow-row gap-2 px-4 lg:auto-cols-[minmax(100px,1fr)] lg:grid-flow-col">
-        {calendarEntries.map((calendarEntry, index) => {
-          const { entries, date } = calendarEntry;
+        {calendarEntries.map((calendarDay, index) => {
+          const { entries, date } = calendarDay
           return (
             <div
               key={index}
