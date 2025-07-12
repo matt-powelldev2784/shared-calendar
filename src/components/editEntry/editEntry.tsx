@@ -70,14 +70,14 @@ const formSchema = z.object({
   startTimeHour: z.number().min(0).max(23, {
     message: 'Number between 0 and 23',
   }),
-  startTimeMins: z.string().regex(/^\d{2}$/, {
-    message: 'Must be 2-digit number',
+  startTimeMins: z.string().regex(/^(0[0-9]|[1-5][0-9])$/, {
+    message: 'Start time minutes must be between 00 and 59',
   }),
   endTimeHour: z.number().min(0).max(23, {
     message: 'Number between 0 and 23',
   }),
-  endTimeMins: z.string().regex(/^\d{2}$/, {
-    message: 'Must be a 2-digit number',
+  endTimeMins: z.string().regex(/^(0[0-9]|[1-5][0-9])$/, {
+    message: 'End time minutes must be between 00 and 59',
   }),
   date: z
     .date()
@@ -191,6 +191,7 @@ const EditEntry = ({ entry, currentUser }: EditEntryProps) => {
     mutation.mutate(values);
   };
 
+  // form initial values and custom errors variables
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -209,6 +210,14 @@ const EditEntry = ({ entry, currentUser }: EditEntryProps) => {
       pendingRequests: [],
     },
   });
+  const errors = form.formState.errors;
+  const hasTimeError = [
+    errors.startTimeHour,
+    errors.startTimeMins,
+    errors.endTimeHour,
+    errors.endTimeMins,
+  ].some((error) => error !== undefined);
+  const startAndEndTimeError = errors.startAndEndTimeError?.message;
 
   const handleAddUser = async () => {
     const email = form.getValues('addUser');
@@ -482,19 +491,18 @@ const EditEntry = ({ entry, currentUser }: EditEntryProps) => {
                 </div>
               </div>
 
-              {/* Display error for any of the 4 time inputs */}
-              {(form.formState.errors.startTimeHour ||
-                form.formState.errors.startTimeMins ||
-                form.formState.errors.endTimeHour ||
-                form.formState.errors.endTimeMins) && (
-                <p className="absolute w-full max-w-[700px] translate-y-33 rounded-md px-2 text-center text-sm text-red-500 md:translate-y-10">
-                  Hours must be between 0 and 23 and minutes must be 2 digits.
+              {/* Display error if any of the 4 time inputs are invalid */}
+              {hasTimeError && (
+                <p className="absolute w-full max-w-[700px] translate-y-33 rounded-md px-2 text-center text-sm leading-tight text-red-500 md:translate-y-10">
+                  Hours must be between 0 and 23 and minutes must be between 0
+                  and 59.
                 </p>
               )}
 
-              {form.formState.errors.startAndEndTimeError && (
+              {/* Display error if combination of start and end times are invalid */}
+              {startAndEndTimeError && (
                 <p className="absolute w-full max-w-[700px] translate-y-33 rounded-md px-2 text-center text-sm text-red-500 md:translate-y-10">
-                  {form.formState.errors.startAndEndTimeError.message}
+                  Start time must be before end time
                 </p>
               )}
             </div>

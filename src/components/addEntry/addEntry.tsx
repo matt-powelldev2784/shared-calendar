@@ -67,14 +67,14 @@ const formSchema = z.object({
   startTimeHour: z.number().min(0).max(23, {
     message: 'Number between 0 and 23',
   }),
-  startTimeMins: z.string().regex(/^\d{2}$/, {
-    message: 'Must be 2-digit number',
+  startTimeMins: z.string().regex(/^(0[0-9]|[1-5][0-9])$/, {
+    message: 'Start time minutes must be between 00 and 59',
   }),
   endTimeHour: z.number().min(0).max(23, {
     message: 'Number between 0 and 23',
   }),
-  endTimeMins: z.string().regex(/^\d{2}$/, {
-    message: 'Must be a 2-digit number',
+  endTimeMins: z.string().regex(/^(0[0-9]|[1-5][0-9])$/, {
+    message: 'End time minutes must be between 00 and 59',
   }),
   date: z
     .date()
@@ -143,6 +143,7 @@ const AddEntry = ({ calendars }: AddEntryProps) => {
     mutation.mutate(values);
   };
 
+  // form initial values and custom errors variables
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -160,6 +161,14 @@ const AddEntry = ({ calendars }: AddEntryProps) => {
       pendingRequests: [],
     },
   });
+  const errors = form.formState.errors;
+  const hasTimeError = [
+    errors.startTimeHour,
+    errors.startTimeMins,
+    errors.endTimeHour,
+    errors.endTimeMins,
+  ].some((error) => error !== undefined);
+  const startAndEndTimeError = errors.startAndEndTimeError?.message;
 
   const handleAddUser = async () => {
     const email = form.getValues('addUser');
@@ -226,37 +235,6 @@ const AddEntry = ({ calendars }: AddEntryProps) => {
             onSubmit={form.handleSubmit(onSubmit)}
             className="flex w-full flex-col items-center p-4"
           >
-            {/* <FormField
-              control={form.control}
-              name="calendarId"
-              render={({ field, fieldState }) => (
-                <FormItem className="w-full max-w-[700px]">
-                  <FormLabel>Choose Calendar</FormLabel>
-                  <FormControl>
-                    <Select
-                      onValueChange={field.onChange}
-                      defaultValue={field.value}
-                    >
-                      <SelectTrigger
-                        aria-invalid={!!fieldState.error}
-                        className="w-full"
-                      >
-                        <SelectValue placeholder="Choose Calendar" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {calendars.map((calendar) => (
-                          <SelectItem key={calendar.id} value={calendar.id}>
-                            {calendar.name}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            /> */}
-
             <FormField
               control={form.control}
               name="title"
@@ -463,19 +441,18 @@ const AddEntry = ({ calendars }: AddEntryProps) => {
                 </div>
               </div>
 
-              {/* Display error for any of the 4 time inputs */}
-              {(form.formState.errors.startTimeHour ||
-                form.formState.errors.startTimeMins ||
-                form.formState.errors.endTimeHour ||
-                form.formState.errors.endTimeMins) && (
-                <p className="absolute w-full max-w-[700px] translate-y-33 rounded-md px-2 text-center text-sm text-red-500 md:translate-y-10">
-                  Hours must be between 0 and 23 and minutes must be 2 digits.
+              {/* Display error if any of the 4 time inputs are invalid */}
+              {hasTimeError && (
+                <p className="absolute w-full max-w-[700px] translate-y-33 rounded-md px-2 text-center text-sm leading-tight text-red-500 md:translate-y-10">
+                  Hours must be between 0 and 23 and minutes must be between 0
+                  and 59.
                 </p>
               )}
 
-              {form.formState.errors.startAndEndTimeError && (
+              {/* Display error if combination of start and end times are invalid */}
+              {startAndEndTimeError && (
                 <p className="absolute w-full max-w-[700px] translate-y-33 rounded-md px-2 text-center text-sm text-red-500 md:translate-y-10">
-                  {form.formState.errors.startAndEndTimeError.message}
+                  Start time must be before end time
                 </p>
               )}
             </div>
