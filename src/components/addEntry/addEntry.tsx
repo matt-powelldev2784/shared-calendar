@@ -444,7 +444,7 @@ const AddEntry = ({ calendars }: AddEntryProps) => {
               {/* Display error if any of the 4 time inputs are invalid */}
               {hasTimeError && (
                 <p className="absolute w-full max-w-[700px] translate-y-33 rounded-md px-2 text-center text-sm leading-tight text-red-500 md:translate-y-10">
-                  Hours must be between 0 and 23 and minutes must be between 0
+                  Hours must be between 0 and 23 and minutes must be between 00
                   and 59.
                 </p>
               )}
