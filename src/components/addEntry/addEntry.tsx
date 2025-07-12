@@ -143,7 +143,7 @@ const AddEntry = ({ calendars }: AddEntryProps) => {
     mutation.mutate(values);
   };
 
-  // form validation and errors variables
+  // form initial values and custom errors variables
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {

@@ -191,6 +191,7 @@ const EditEntry = ({ entry, currentUser }: EditEntryProps) => {
     mutation.mutate(values);
   };
 
+  // form initial values and custom errors variables
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
