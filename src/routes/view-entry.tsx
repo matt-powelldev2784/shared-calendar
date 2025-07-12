@@ -30,6 +30,7 @@ export const Route = createFileRoute('/view-entry')({
     );
     const ownerEmails = await getEmailsFromUserIds(entry.ownerIds);
     const currentUser = await getUserDocument();
+    
     return {
       entry,
       entrySubscribers,
@@ -45,23 +46,9 @@ export const Route = createFileRoute('/view-entry')({
 });
 
 function ViewEntryPage() {
-  const {
-    entry,
-    entrySubscribers,
-    pendingSubscribers,
-    ownerEmails,
-    currentUser,
-  } = useLoaderData({
+  const viewEntryProps = useLoaderData({
     from: '/view-entry',
   });
 
-  return (
-    <ViewEntry
-      entry={entry}
-      entrySubscribers={entrySubscribers}
-      pendingSubscribers={pendingSubscribers}
-      ownerEmails={ownerEmails}
-      currentUser={currentUser}
-    />
-  );
+  return <ViewEntry {...viewEntryProps} />;
 }

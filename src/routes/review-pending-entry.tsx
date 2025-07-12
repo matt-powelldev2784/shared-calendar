@@ -60,18 +60,22 @@ export const Route = createFileRoute('/review-pending-entry')({
 });
 
 function ReviewPendingEntryPage() {
-  const { entryId, requestId } = useSearch({ from: '/review-pending-entry' });
-  const sortedCalendarEntries = useLoaderData({
+  const { entryId, requestId } = useSearch({
+    from: '/review-pending-entry',
+  });
+  const calendarEntries = useLoaderData({
     from: '/review-pending-entry',
   });
 
+  const reviewPendingEntryProps = {
+    calendarEntries,
+    pendingEntry: entryId,
+    requestId,
+  };
+
   return (
     <section className="flex h-full w-full flex-col items-center">
-      <ReviewPendingEntry
-        calendarEntries={sortedCalendarEntries}
-        pendingEntry={entryId}
-        requestId={requestId}
-      />
+      <ReviewPendingEntry {...reviewPendingEntryProps} />
     </section>
   );
 }
