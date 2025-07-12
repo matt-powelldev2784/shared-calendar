@@ -117,6 +117,7 @@ const DropDownMenu = ({
     setMenuIsOpen((prev) => !prev);
   };
 
+  // logic to close the menu when the user clicks outside of it
   useEffect(() => {
     if (!menuRef.current) return;
 
