@@ -96,7 +96,7 @@ export const CalendarView = ({ calendarEntries }: CalendarViewProps) => {
                   return (
                     <p
                       key={hourTimeSlot.hour}
-                      className="flex h-14 -translate-y-1 items-center justify-center bg-zinc-100 p-2 text-center text-sm"
+                      className="bg-lightPink text-darkPink flex h-14 w-full cursor-pointer flex-row items-center gap-1"
                     >
                       No calendar for this hour {hourTimeSlot.hour}:00
                     </p>
