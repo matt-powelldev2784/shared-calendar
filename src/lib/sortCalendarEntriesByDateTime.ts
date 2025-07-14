@@ -1,15 +1,3 @@
-// Querying entries from the database only returns a group of entries
-// To render the calendar view, the following is required:
-// - Calendar entries sorted into arrays by date and time
-// - A date title for each day which is used to display a header row
-//
-// This function will return the calendar entries in a 2D array with the date title merged in.
-// The 2D array will have the following structure:
-// [
-//   { date: Date, entries: CalendarEntry[] },
-//   { date: Date, entries: CalendarEntry[] },
-// ]
-
 import type { CalendarEntry } from '@/ts/Calendar';
 import { addDays, format } from 'date-fns';
 
@@ -37,10 +25,10 @@ const sortCalendarEntriesByDateTime = ({
       return [...accumulator, addDays(firstDateToDisplay, index)];
     }, [] as Date[]) || [];
 
-  // merge the calendar entires with the days to display
-  // this returns an array of objects with the date and the calendar entries for that date
-  // dates without entries will will return an array with a date but no entries
-  // the entries will then be sorted by start time
+  // merge the calendar entires with the days and hours to display
+  // this returns an array of days
+  // each day is split into 24 hours
+  // each hour has an array of calendar entries for that hour
   const calendarEntries = dateTitles.map((date, index) => {
     const entries = calendarData
       .filter((entry) => format(date, 'd') === format(entry.startDate, 'd'))
@@ -49,9 +37,25 @@ const sortCalendarEntriesByDateTime = ({
           new Date(a.startDate).getTime() - new Date(b.startDate).getTime(),
       );
 
-    return entries.length > 0
-      ? { date: dateTitles[index], entries: [...entries] }
-      : { date: dateTitles[index], entries: [] };
+    // create an array of 24 objects, one for each hour of the day
+    // each object will have an hour and an array of entries for that hour
+    const entiresByHour = Array.from({ length: 24 }).map((_, i) => ({
+      hour: i,
+      entries: [] as CalendarEntry[],
+    }));
+
+    // loop through the entries and push them into the correct hour
+    entries.forEach((entry) => {
+      if (format(date, 'd') === format(entry.startDate, 'd')) {
+        const hour = new Date(entry.startDate).getHours();
+        entiresByHour[hour].entries.push(entry);
+      }
+    });
+
+    // populate the entries for each day
+    const day = { date: dateTitles[index], entries: [...entiresByHour] };
+
+    return day;
   });
 
   return calendarEntries;

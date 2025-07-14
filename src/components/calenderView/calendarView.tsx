@@ -9,7 +9,11 @@ import {
   PopoverTrigger,
 } from '@/components/ui/popover';
 import { useState } from 'react';
-import type { CalendarEntry, CalendarEntriesData } from '@/ts/Calendar';
+import type {
+  CalendarEntry,
+  CalendarEntriesData,
+  Timeslot,
+} from '@/ts/Calendar';
 import { CalendarCard } from '../ui/calendarCard';
 import { useSearch, useNavigate } from '@tanstack/react-router';
 import { getCalendarUrl } from '@/lib/getCalendarUrl';
@@ -64,7 +68,9 @@ export const CalendarView = ({ calendarEntries }: CalendarViewProps) => {
 
       <section className="auto-row-[minmax(100px,1fr)] m-auto mx-4 mt-2 grid w-full grid-flow-row gap-2 px-4 lg:auto-cols-[minmax(100px,1fr)] lg:grid-flow-col">
         {calendarEntries.map((calendarDay, index) => {
-          const { entries, date } = calendarDay
+          const { date } = calendarDay;
+          const hourTimeslots = calendarDay.entries;
+          console.log('hourTimeslots', hourTimeslots);
           return (
             <div
               key={index}
@@ -82,16 +88,33 @@ export const CalendarView = ({ calendarEntries }: CalendarViewProps) => {
                 </p>
               </div>
 
-              {!entries.length && (
-                <p className="flex h-14 -translate-y-1 items-center justify-center bg-zinc-100 p-2 text-center text-sm">
-                  No calendar entries today
-                </p>
-              )}
+              {hourTimeslots.map((hourTimeSlot: Timeslot) => {
+                console.log('hourTimeSlot', hourTimeSlot);
 
-              {entries.map((entry: CalendarEntry) => {
-                return (
-                  <CalendarCard key={entry.id} entry={entry} variant="purple" />
-                );
+                // Render each hour's entries as CalendarCard components
+                if (!hourTimeSlot.entries.length) {
+                  return (
+                    <p
+                      key={hourTimeSlot.hour}
+                      className="flex h-14 -translate-y-1 items-center justify-center bg-zinc-100 p-2 text-center text-sm"
+                    >
+                      No calendar for this hour {hourTimeSlot.hour}:00
+                    </p>
+                  );
+                }
+
+                return hourTimeSlot.entries.map((entry: CalendarEntry) => {
+                  console.log('entry', entry);
+
+                  // If there are entries, render them as CalendarCard components
+                  return (
+                    <CalendarCard
+                      key={hourTimeSlot.hour + '-' + entry.id}
+                      entry={entry}
+                      variant="purple"
+                    />
+                  );
+                });
               })}
             </div>
           );
@@ -100,3 +123,4 @@ export const CalendarView = ({ calendarEntries }: CalendarViewProps) => {
     </div>
   );
 };
+

@@ -25,9 +25,14 @@ export type Calendar = {
   color?: string;
 };
 
-export type CalendarEntriesData = {
-  date: Date;
+export type Timeslot = {
+  hour: number;
   entries: CalendarEntry[];
+};
+
+export type CalendarEntriesData = {
+  date: string;
+  entries: Timeslot[];
 };
 
 export type Request = {
