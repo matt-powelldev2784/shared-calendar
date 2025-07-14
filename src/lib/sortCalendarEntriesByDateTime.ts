@@ -30,19 +30,21 @@ const sortCalendarEntriesByDateTime = ({
   // each day is split into 24 hours
   // each hour has an array of calendar entries for that hour
   const calendarEntries = dateTitles.map((date, index) => {
-    const entries = calendarData
-      .filter((entry) => format(date, 'd') === format(entry.startDate, 'd'))
-      .sort(
-        (a, b) =>
-          new Date(a.startDate).getTime() - new Date(b.startDate).getTime(),
-      );
-
     // create an array of 24 objects, one for each hour of the day
     // each object will have an hour and an array of entries for that hour
     const entiresByHour = Array.from({ length: 24 }).map((_, i) => ({
       hour: i,
       entries: [] as CalendarEntry[],
     }));
+
+    // filter the calendar data for the current date
+    // and sort them by time
+    const entries = calendarData
+      .filter((entry) => format(date, 'd') === format(entry.startDate, 'd'))
+      .sort(
+        (a, b) =>
+          new Date(a.startDate).getTime() - new Date(b.startDate).getTime(),
+      );
 
     // loop through the entries and push them into the correct hour
     entries.forEach((entry) => {
