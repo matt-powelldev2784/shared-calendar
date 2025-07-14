@@ -157,7 +157,7 @@ const DropDownMenu = ({
   return (
     <div ref={menuRef} className="flex items-center gap-5">
       <NavIconButton
-        className={`${notificationCount > 0 ? 'h-8 w-8 rounded-full bg-yellow-400' : 'bg-none'}`}
+        className={`${notificationCount > 0 ? 'h-8 w-8 cursor-pointer rounded-full bg-yellow-400' : 'cursor-pointer bg-none'}`}
         onClick={handleMenuClick}
         ariaLabel={
           menuIsOpen ? `Close ${menuName} menu` : `Open ${menuName} menu`
