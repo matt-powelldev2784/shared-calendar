@@ -89,7 +89,16 @@ export const CalendarView = ({ calendarEntries }: CalendarViewProps) => {
                 const numberOfEntries = hourTimeSlot.numberOfEntries;
 
                 return (
-                  <div className="h-20 overflow-clip border-b-1 border-gray-200">
+                  <div className="relative h-20 overflow-clip border-b-1 border-gray-200">
+                    {/* A maximum of 4 entries can be displayed per hour in the calendar view */}
+                    {/* If there are more than 4 entries in a hour display button to view all entires */}
+                    {numberOfEntries > 4 && (
+                      <button className="absolute top-0 right-0 z-2 h-20 w-20 cursor-pointer bg-blue-800 p-2 text-xs text-white">
+                        Click to view more entries for this hour...
+                      </button>
+                    )}
+
+                    {/* Calendar card for each calendar entry */}
                     {hourTimeSlot.entries.map((entry: CalendarEntry) => {
                       return (
                         <CalendarCard
