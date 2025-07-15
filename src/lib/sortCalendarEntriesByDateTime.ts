@@ -35,6 +35,7 @@ const sortCalendarEntriesByDateTime = ({
     const entiresByHour = Array.from({ length: 24 }).map((_, i) => ({
       hour: i,
       entries: [] as CalendarEntry[],
+      numberOfEntries: 0,
     }));
 
     // filter the calendar data for the current date
@@ -48,10 +49,12 @@ const sortCalendarEntriesByDateTime = ({
 
     // loop through the entries and push them into the correct hour
     entries.forEach((entry) => {
-      if (format(date, 'd') === format(entry.startDate, 'd')) {
-        const hour = new Date(entry.startDate).getHours();
-        entiresByHour[hour].entries.push(entry);
-      }
+      const hour = new Date(entry.startDate).getHours();
+      entiresByHour[hour].entries.push(entry);
+    });
+
+    entiresByHour.forEach((hourTimeSlot) => {
+      hourTimeSlot.numberOfEntries = hourTimeSlot.entries.length;
     });
 
     // populate the entries for each day

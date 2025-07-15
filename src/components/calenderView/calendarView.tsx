@@ -72,10 +72,7 @@ export const CalendarView = ({ calendarEntries }: CalendarViewProps) => {
           const hourTimeslots = calendarDay.entries;
           console.log('hourTimeslots', hourTimeslots);
           return (
-            <div
-              key={index}
-              className="mb-2 flex flex-col flex-nowrap gap-1 lg:flex-col"
-            >
+            <div key={index} className="flex flex-col flex-nowrap lg:flex-col">
               <div className="flex h-11 flex-col justify-center bg-zinc-400 p-2 text-center font-bold text-white">
                 <p className="h-4.5 text-[14px] lg:text-[13px] xl:text-[14px]">
                   {format(date, 'EEEE')}
@@ -89,32 +86,22 @@ export const CalendarView = ({ calendarEntries }: CalendarViewProps) => {
               </div>
 
               {hourTimeslots.map((hourTimeSlot: Timeslot) => {
-                console.log('hourTimeSlot', hourTimeSlot);
+                const numberOfEntries = hourTimeSlot.numberOfEntries;
 
-                // Render each hour's entries as CalendarCard components
-                if (!hourTimeSlot.entries.length) {
-                  return (
-                    <p
-                      key={hourTimeSlot.hour}
-                      className="bg-lightPink text-darkPink flex h-14 w-full cursor-pointer flex-row items-center gap-1"
-                    >
-                      No calendar for this hour {hourTimeSlot.hour}:00
-                    </p>
-                  );
-                }
-
-                return hourTimeSlot.entries.map((entry: CalendarEntry) => {
-                  console.log('entry', entry);
-
-                  // If there are entries, render them as CalendarCard components
-                  return (
-                    <CalendarCard
-                      key={hourTimeSlot.hour + '-' + entry.id}
-                      entry={entry}
-                      variant="purple"
-                    />
-                  );
-                });
+                return (
+                  <div className="h-20 overflow-clip border-b-1 border-gray-200">
+                    {hourTimeSlot.entries.map((entry: CalendarEntry) => {
+                      return (
+                        <CalendarCard
+                          key={hourTimeSlot.hour + '-' + entry.id}
+                          entry={entry}
+                          numberOfEntries={numberOfEntries}
+                          variant="blue"
+                        />
+                      );
+                    })}
+                  </div>
+                );
               })}
             </div>
           );

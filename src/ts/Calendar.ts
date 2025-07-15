@@ -28,6 +28,7 @@ export type Calendar = {
 export type Timeslot = {
   hour: number;
   entries: CalendarEntry[];
+  numberOfEntries: number;
 };
 
 export type CalendarEntriesData = {
