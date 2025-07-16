@@ -1,16 +1,20 @@
-import type { CalendarEntry } from '@/ts/Calendar';
+import type { CalendarEntry, TimeslotHeaders } from '@/ts/Calendar';
 import { addDays, format } from 'date-fns';
 
 type GetDatesToDisplay = {
   daysToReturn: number;
   calendarData: CalendarEntry[];
   firstDateToDisplay: Date;
+  startHour: number;
+  endHour: number;
 };
 
-const sortCalendarEntriesByDateTime = ({
+const generateCalendarData = ({
   daysToReturn,
   calendarData,
   firstDateToDisplay,
+  startHour,
+  endHour,
 }: GetDatesToDisplay) => {
   // initialize array where the length is the number of days to return
   const initializeDaysToReturn = Array.from(
@@ -32,11 +36,14 @@ const sortCalendarEntriesByDateTime = ({
   const calendarEntries = dateTitles.map((date, index) => {
     // create an array of 24 objects, one for each hour of the day
     // each object will have an hour and an array of entries for that hour
-    const entiresByHour = Array.from({ length: 24 }).map((_, i) => ({
-      hour: i,
-      entries: [] as CalendarEntry[],
-      numberOfEntries: 0,
-    }));
+    const hoursToDisplay = endHour - startHour;
+    const entiresByHour = Array.from({ length: hoursToDisplay }).map(
+      (_, i) => ({
+        hour: startHour + i,
+        entries: [] as CalendarEntry[],
+        numberOfEntries: 0,
+      }),
+    );
 
     // filter the calendar data for the current date
     // sort by date and time
@@ -49,9 +56,11 @@ const sortCalendarEntriesByDateTime = ({
       )
       .forEach((entry) => {
         const hour = new Date(entry.startDate).getHours();
-        entiresByHour[hour].entries.push(entry);
+        const hourIndex = hour - startHour;
+        entiresByHour[hourIndex].entries.push(entry);
       });
 
+    // add the number of entries for each hour to the entriesByHour array
     entiresByHour.forEach((hourTimeSlot) => {
       hourTimeSlot.numberOfEntries = hourTimeSlot.entries.length;
     });
@@ -62,7 +71,22 @@ const sortCalendarEntriesByDateTime = ({
     return day;
   });
 
-  return calendarEntries;
+  // generate the timeslot headers based on the start and end hour
+  const timeslotHeaders = generateTimeslotHeaders(startHour, endHour);
+
+  return { calendarEntries, timeslotHeaders };
 };
 
-export default sortCalendarEntriesByDateTime;
+export default generateCalendarData;
+
+const generateTimeslotHeaders = (
+  startHour: number,
+  endHour: number,
+): TimeslotHeaders[] => {
+  const hoursToDisplay = endHour - startHour;
+  const timeslots = Array.from({ length: hoursToDisplay }).map((_, i) => ({
+    hour: startHour + i,
+  }));
+
+  return timeslots;
+};

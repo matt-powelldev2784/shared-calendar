@@ -1,4 +1,4 @@
-import sortCalendarEntriesByDateTime from '@/lib/sortCalendarEntriesByDateTime';
+import sortCalendarEntriesByDateTime from '@/lib/generateCalendarData';
 import type { CalendarEntry } from '@/ts/Calendar';
 import { describe, expect, test } from 'vitest';
 

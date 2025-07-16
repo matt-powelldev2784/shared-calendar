@@ -7,7 +7,7 @@ import {
 import { z } from 'zod';
 import { addDays } from 'date-fns';
 import Error from '@/components/ui/error';
-import sortCalendarEntriesByDateTime from '@/lib/sortCalendarEntriesByDateTime';
+import sortCalendarEntriesByDateTime from '@/lib/generateCalendarData';
 import Loading from '@/components/ui/loading';
 import type { CustomError } from '@/ts/errorClass';
 import getCalendarEntryById from '@/db/entry/getCalendarEntryById';

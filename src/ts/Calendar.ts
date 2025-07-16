@@ -32,7 +32,7 @@ export type Timeslot = {
 };
 
 export type CalendarEntriesData = {
-  date: string;
+  date: Date;
   entries: Timeslot[];
 };
 
@@ -51,4 +51,8 @@ export type UserDocument = {
   email: string;
   subscribedCalendars: string[];
   userId: string;
+};
+
+export type TimeslotHeaders = {
+  hour: number;
 };

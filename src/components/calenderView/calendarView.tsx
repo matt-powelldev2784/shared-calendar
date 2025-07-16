@@ -13,6 +13,7 @@ import type {
   CalendarEntry,
   CalendarEntriesData,
   Timeslot,
+  TimeslotHeaders,
 } from '@/ts/Calendar';
 import { CalendarCard } from '../ui/calendarCard';
 import { useSearch, useNavigate } from '@tanstack/react-router';
@@ -20,9 +21,13 @@ import { getCalendarUrl } from '@/lib/getCalendarUrl';
 
 type CalendarViewProps = {
   calendarEntries: CalendarEntriesData[];
+  timeslotHeaders: TimeslotHeaders[];
 };
 
-export const CalendarView = ({ calendarEntries }: CalendarViewProps) => {
+export const CalendarView = ({
+  calendarEntries,
+  timeslotHeaders,
+}: CalendarViewProps) => {
   const { calendarIds, startDate } = useSearch({ from: '/get-calendar' });
   const date = new Date(startDate);
   const navigate = useNavigate();
@@ -39,8 +44,10 @@ export const CalendarView = ({ calendarEntries }: CalendarViewProps) => {
     });
   };
 
+  console.log('timeslotHeaders', timeslotHeaders);
+
   return (
-    <div className="flex w-full flex-col items-center justify-center">
+    <div className="flex w-full flex-col items-center justify-center pb-20">
       <div className="bg-primary/25 z-100s relative flex h-13 w-full items-center justify-center gap-4 p-2">
         <Popover open={isSelectDateOpen} onOpenChange={setIsSelectDateOpen}>
           <PopoverTrigger asChild>
@@ -68,27 +75,27 @@ export const CalendarView = ({ calendarEntries }: CalendarViewProps) => {
 
       <div className="flex w-full flex-row items-center justify-center">
         {/* This is the hours displayed on the left side of the calendar view */}
-        <article className="mt-2 flex h-full w-12 flex-col items-end">
+        <section className="mt-2 flex h-full w-12 flex-col items-end">
           <div className="h-11"></div>
-          {Array.from({ length: 24 }, (_, i) => (
+          {timeslotHeaders.map((timeslot) => (
             <div
-              key={i}
+              key={timeslot.hour}
               className="flex h-20 items-center justify-end border-b-1 text-xs text-gray-500"
             >
-              {i.toString().padStart(2, '0')}:00
+              {timeslot.hour.toString().padStart(2, '0')}
             </div>
           ))}
-        </article>
+        </section>
 
         {/* This is the main calendar view which displays thea appointments */}
         <section className="auto-row-[minmax(100px,1fr)] m-auto mx-4 mt-2 grid w-full grid-flow-row gap-2 px-4 lg:auto-cols-[minmax(100px,1fr)] lg:grid-flow-col">
           {calendarEntries.map((calendarDay, index) => {
             const { date } = calendarDay;
             const hourTimeslots = calendarDay.entries;
-            console.log('hourTimeslots', hourTimeslots);
+
             return (
               <div
-                key={index}
+                key={`${date.toDateString()}-${index}`}
                 className="flex flex-col flex-nowrap lg:flex-col"
               >
                 <div className="flex h-11 flex-col justify-center bg-blue-400 p-2 text-center font-bold text-white">
