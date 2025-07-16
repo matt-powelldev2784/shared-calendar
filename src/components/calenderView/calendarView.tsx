@@ -66,56 +66,75 @@ export const CalendarView = ({ calendarEntries }: CalendarViewProps) => {
         </Popover>
       </div>
 
-      <section className="auto-row-[minmax(100px,1fr)] m-auto mx-4 mt-2 grid w-full grid-flow-row gap-2 px-4 lg:auto-cols-[minmax(100px,1fr)] lg:grid-flow-col">
-        {calendarEntries.map((calendarDay, index) => {
-          const { date } = calendarDay;
-          const hourTimeslots = calendarDay.entries;
-          console.log('hourTimeslots', hourTimeslots);
-          return (
-            <div key={index} className="flex flex-col flex-nowrap lg:flex-col">
-              <div className="flex h-11 flex-col justify-center bg-zinc-400 p-2 text-center font-bold text-white">
-                <p className="h-4.5 text-[14px] lg:text-[13px] xl:text-[14px]">
-                  {format(date, 'EEEE')}
-                </p>
-                <p className="text-[15px] lg:hidden xl:block">
-                  {format(date, 'dd MMMM yyyy')}
-                </p>
-                <p className="hidden text-[14px] lg:block xl:hidden">
-                  {format(date, 'dd MMM yy')}
-                </p>
-              </div>
-
-              {hourTimeslots.map((hourTimeSlot: Timeslot) => {
-                const numberOfEntries = hourTimeSlot.numberOfEntries;
-
-                return (
-                  <div className="relative h-20 overflow-clip border-b-1 border-gray-200">
-                    {/* A maximum of 4 entries can be displayed per hour in the calendar view */}
-                    {/* If there are more than 4 entries in a hour display button to view all entires */}
-                    {numberOfEntries > 4 && (
-                      <button className="absolute top-0 right-0 z-2 h-20 w-20 cursor-pointer bg-blue-800 p-2 text-xs text-white">
-                        Click to view more entries for this hour...
-                      </button>
-                    )}
-
-                    {/* Calendar card for each calendar entry */}
-                    {hourTimeSlot.entries.map((entry: CalendarEntry) => {
-                      return (
-                        <CalendarCard
-                          key={hourTimeSlot.hour + '-' + entry.id}
-                          entry={entry}
-                          numberOfEntries={numberOfEntries}
-                          variant="blue"
-                        />
-                      );
-                    })}
-                  </div>
-                );
-              })}
+      <div className="flex w-full flex-row items-center justify-center">
+        {/* This is the hours displayed on the left side of the calendar view */}
+        <article className="mt-2 flex h-full w-12 flex-col items-end">
+          <div className="h-11"></div>
+          {Array.from({ length: 24 }, (_, i) => (
+            <div
+              key={i}
+              className="flex h-20 items-center justify-end border-b-1 text-xs text-gray-500"
+            >
+              {i.toString().padStart(2, '0')}:00
             </div>
-          );
-        })}
-      </section>
+          ))}
+        </article>
+
+        {/* This is the main calendar view which displays thea appointments */}
+        <section className="auto-row-[minmax(100px,1fr)] m-auto mx-4 mt-2 grid w-full grid-flow-row gap-2 px-4 lg:auto-cols-[minmax(100px,1fr)] lg:grid-flow-col">
+          {calendarEntries.map((calendarDay, index) => {
+            const { date } = calendarDay;
+            const hourTimeslots = calendarDay.entries;
+            console.log('hourTimeslots', hourTimeslots);
+            return (
+              <div
+                key={index}
+                className="flex flex-col flex-nowrap lg:flex-col"
+              >
+                <div className="flex h-11 flex-col justify-center bg-blue-400 p-2 text-center font-bold text-white">
+                  <p className="h-4.5 text-[14px] lg:text-[13px] xl:text-[14px]">
+                    {format(date, 'EEEE')}
+                  </p>
+                  <p className="text-[15px] lg:hidden xl:block">
+                    {format(date, 'dd MMMM yyyy')}
+                  </p>
+                  <p className="hidden text-[14px] lg:block xl:hidden">
+                    {format(date, 'dd MMM yy')}
+                  </p>
+                </div>
+
+                {hourTimeslots.map((hourTimeSlot: Timeslot) => {
+                  const numberOfEntries = hourTimeSlot.numberOfEntries;
+
+                  return (
+                    <div className="relative h-20 overflow-clip border-b-1 border-gray-200">
+                      {/* A maximum of 4 entries can be displayed per hour in the calendar view */}
+                      {/* If there are more than 4 entries in a hour display button to view all entires */}
+                      {numberOfEntries > 4 && (
+                        <button className="absolute top-0 right-0 z-2 h-20 w-20 cursor-pointer bg-blue-800 p-2 text-xs text-white">
+                          Click to view more entries for this hour...
+                        </button>
+                      )}
+
+                      {/* Calendar card for each calendar entry */}
+                      {hourTimeSlot.entries.map((entry: CalendarEntry) => {
+                        return (
+                          <CalendarCard
+                            key={hourTimeSlot.hour + '-' + entry.id}
+                            entry={entry}
+                            numberOfEntries={numberOfEntries}
+                            variant="blue"
+                          />
+                        );
+                      })}
+                    </div>
+                  );
+                })}
+              </div>
+            );
+          })}
+        </section>
+      </div>
     </div>
   );
 };
