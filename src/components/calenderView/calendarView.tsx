@@ -73,20 +73,20 @@ export const CalendarView = ({
 
       <div className="flex w-full flex-row items-center justify-center">
         {/* This is the hours displayed on the left side of the calendar view */}
-        <section className="mt-2 flex h-full w-12 flex-col items-end">
+        <section className="mt-2 ml-4 flex h-full w-8 flex-col items-end">
           <div className="h-11"></div>
           {timeslotHeaders.map((timeslot) => (
-            <div
+            <p
               key={timeslot.hour}
-              className="flex h-20 items-center justify-end border-b-1 text-xs text-gray-500"
+              className="flex h-20 w-8 items-center justify-center border-b-1 text-xs text-gray-500"
             >
               {timeslot.hour.toString().padStart(2, '0')}
-            </div>
+            </p>
           ))}
         </section>
 
         {/* This is the main calendar view which displays thea appointments */}
-        <section className="auto-row-[minmax(100px,1fr)] m-auto mx-4 mt-2 grid w-full grid-flow-row gap-2 px-4 lg:auto-cols-[minmax(100px,1fr)] lg:grid-flow-col">
+        <section className="auto-row-[minmax(100px,1fr)] m-auto mt-2 mr-4 grid w-full grid-flow-row gap-2 px-4 lg:auto-cols-[minmax(100px,1fr)] lg:grid-flow-col">
           {calendarEntries.map((calendarDay) => {
             const { date } = calendarDay;
             const hourTimeslots = calendarDay.entries;
