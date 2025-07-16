@@ -119,8 +119,9 @@ export const CalendarView = ({
                       {/* A maximum of 4 entries can be displayed per hour in the calendar view */}
                       {/* If there are more than 4 entries in a hour display button to view all entires */}
                       {numberOfEntries > 4 && (
-                        <button className="absolute top-0 right-0 z-2 h-20 w-20 cursor-pointer bg-blue-800 p-2 text-xs text-white">
-                          Click to view more entries for this hour...
+                        <button className="absolute top-0 right-0 z-2 h-20 w-24 cursor-pointer bg-blue-800 p-2 text-xs text-white">
+                          {numberOfEntries} entries in this timeslot. Click here
+                          to expand.
                         </button>
                       )}
 
