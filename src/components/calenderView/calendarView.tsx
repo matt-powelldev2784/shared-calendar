@@ -44,8 +44,6 @@ export const CalendarView = ({
     });
   };
 
-  console.log('timeslotHeaders', timeslotHeaders);
-
   return (
     <div className="flex w-full flex-col items-center justify-center pb-20">
       <div className="bg-primary/25 z-100s relative flex h-13 w-full items-center justify-center gap-4 p-2">
@@ -89,13 +87,13 @@ export const CalendarView = ({
 
         {/* This is the main calendar view which displays thea appointments */}
         <section className="auto-row-[minmax(100px,1fr)] m-auto mx-4 mt-2 grid w-full grid-flow-row gap-2 px-4 lg:auto-cols-[minmax(100px,1fr)] lg:grid-flow-col">
-          {calendarEntries.map((calendarDay, index) => {
+          {calendarEntries.map((calendarDay) => {
             const { date } = calendarDay;
             const hourTimeslots = calendarDay.entries;
 
             return (
               <div
-                key={`${date.toDateString()}-${index}`}
+                key={date.toISOString()}
                 className="flex flex-col flex-nowrap lg:flex-col"
               >
                 <div className="flex h-11 flex-col justify-center bg-blue-400 p-2 text-center font-bold text-white">
@@ -114,7 +112,10 @@ export const CalendarView = ({
                   const numberOfEntries = hourTimeSlot.numberOfEntries;
 
                   return (
-                    <div className="relative h-20 overflow-clip border-b-1 border-gray-200">
+                    <div
+                      className="relative h-20 overflow-clip border-b-1 border-gray-200"
+                      key={`${hourTimeSlot.hour}`}
+                    >
                       {/* A maximum of 4 entries can be displayed per hour in the calendar view */}
                       {/* If there are more than 4 entries in a hour display button to view all entires */}
                       {numberOfEntries > 4 && (
