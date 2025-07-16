@@ -75,12 +75,12 @@ export const CalendarView = ({
 
       <div className="flex w-full flex-row items-center justify-center">
         {/* This is the hours displayed on the left side of the calendar view */}
-        <section className="mt-2 ml-4 flex h-full w-8 flex-col items-end">
+        <section className="mt-2 ml-2 flex h-full w-8 flex-col items-end sm:ml-4">
           <div className="h-11"></div>
           {timeslotHeaders.map((timeslot) => (
             <p
               key={timeslot.hour}
-              className="flex h-20 w-8 items-center justify-center border-b-1 text-xs text-gray-500"
+              className="flex h-20 w-8 items-center justify-center border-b-1 border-gray-300 text-xs text-gray-900"
             >
               {timeslot.hour.toString().padStart(2, '0')}
             </p>
@@ -88,15 +88,17 @@ export const CalendarView = ({
         </section>
 
         {/* This is the main calendar view which displays thea appointments */}
-        <section className="auto-row-[minmax(100px,1fr)] m-auto mt-2 mr-4 grid w-full grid-flow-row gap-2 px-4 lg:auto-cols-[minmax(100px,1fr)] lg:grid-flow-col">
-          {calendarEntries.map((calendarDay) => {
+        <section className="auto-row-[minmax(100px,1fr)] m-auto mt-2 mr-2 grid w-full grid-flow-row gap-2 px-4 sm:mr-4 lg:auto-cols-[minmax(100px,1fr)] lg:grid-flow-col">
+          {calendarEntries.map((calendarDay, index) => {
             const { date } = calendarDay;
             const hourTimeslots = calendarDay.entries;
 
             return (
               <div
                 key={date.toISOString()}
-                className="flex flex-col flex-nowrap lg:flex-col"
+                className={`flex flex-col flex-nowrap lg:flex-col ${
+                  index % 2 === 0 ? 'bg-gray-100' : 'bg-white'
+                }`}
               >
                 <div className="flex h-11 flex-col justify-center bg-blue-400 p-2 text-center font-bold text-white">
                   <p className="h-4.5 text-[14px] lg:text-[13px] xl:text-[14px]">
@@ -115,7 +117,7 @@ export const CalendarView = ({
 
                   return (
                     <div
-                      className="relative h-20 overflow-clip border-b-1 border-gray-200"
+                      className="relative h-20 overflow-clip border-b-1 border-gray-300"
                       key={`${hourTimeSlot.hour}`}
                     >
                       {/* A maximum of 4 entries can be displayed per hour in the calendar view */}
@@ -123,7 +125,7 @@ export const CalendarView = ({
                       {numberOfEntries > 4 && (
                         <button className="absolute top-0 right-0 z-2 h-20 w-24 cursor-pointer bg-blue-800 p-2 text-xs text-white">
                           {numberOfEntries} entries in this timeslot. Click here
-                          to expand.
+                          to view all.
                         </button>
                       )}
 
