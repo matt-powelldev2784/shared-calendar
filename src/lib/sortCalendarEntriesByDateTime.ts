@@ -39,19 +39,18 @@ const sortCalendarEntriesByDateTime = ({
     }));
 
     // filter the calendar data for the current date
-    // and sort them by time
-    const entries = calendarData
+    // sort by date and time
+    // add the entries for each hour to the entriesByHour array
+    calendarData
       .filter((entry) => format(date, 'd') === format(entry.startDate, 'd'))
       .sort(
         (a, b) =>
           new Date(a.startDate).getTime() - new Date(b.startDate).getTime(),
-      );
-
-    // loop through the entries and push them into the correct hour
-    entries.forEach((entry) => {
-      const hour = new Date(entry.startDate).getHours();
-      entiresByHour[hour].entries.push(entry);
-    });
+      )
+      .forEach((entry) => {
+        const hour = new Date(entry.startDate).getHours();
+        entiresByHour[hour].entries.push(entry);
+      });
 
     entiresByHour.forEach((hourTimeSlot) => {
       hourTimeSlot.numberOfEntries = hourTimeSlot.entries.length;
