@@ -18,6 +18,7 @@ import type {
 import { CalendarCard } from '../ui/calendarCard';
 import { useSearch, useNavigate } from '@tanstack/react-router';
 import { getCalendarUrl } from '@/lib/getCalendarUrl';
+import { useDaysToViewResizeForSmallScreens } from '@/lib/useDaysToViewResizeForSmallScreens';
 
 type CalendarViewProps = {
   calendarEntries: CalendarEntriesData[];
@@ -32,6 +33,7 @@ export const CalendarView = ({
   const date = new Date(startDate);
   const navigate = useNavigate();
   const [isSelectDateOpen, setIsSelectDateOpen] = useState(false);
+  useDaysToViewResizeForSmallScreens();
 
   const handleDateSelect = (selectedDate: Date) => {
     setIsSelectDateOpen(false);
