@@ -61,12 +61,7 @@ const ReviewPendingEntry = ({
                 </p>
               </div>
 
-              {!hourTimeslots.length && (
-                <p className="flex h-14 -translate-y-1 items-center justify-center bg-zinc-100 p-2 text-center text-sm">
-                  No calendar entries today
-                </p>
-              )}
-
+              {/* This is the calendar entries for each hour */}
               {hourTimeslots.map((hourTimeSlot: Timeslot) => {
                 const numberOfEntries = hourTimeSlot.numberOfEntries;
 

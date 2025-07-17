@@ -109,9 +109,8 @@ export const CalendarView = ({
             <span>{`${String(startHour).padStart(2, '0')}:00`}</span>
             <span>{`${String(endHour + 1).padStart(2, '0')}:00`}</span>
           </Button>
-
-          {/* This is the hours timeslots displayed down the left hand side */}
-          <div className="mt-11"></div>
+          {/* This is the hour timeslots displayed down the left hand side */}
+          <div className="mt-11"></div> {/* Spacer for the button */}
           {timeslotHeaders.map((timeslot) => (
             <p
               key={timeslot.hour}
@@ -122,12 +121,15 @@ export const CalendarView = ({
           ))}
         </section>
 
-        {/* This is the main calendar view which displays thea appointments */}
+        {/* This is the calendar entries displayed in a grid layout */}
         <section className="auto-row-[minmax(100px,1fr)] m-auto mt-2 mr-3 ml-3 grid w-full grid-flow-row gap-2 lg:auto-cols-[minmax(100px,1fr)] lg:grid-flow-col">
           {calendarEntries.map((calendarDay, index) => {
             const { date } = calendarDay;
             const hourTimeslots = calendarDay.entries;
 
+            {
+              /* This is day headers */
+            }
             return (
               <div
                 key={date.toISOString()}
@@ -147,6 +149,7 @@ export const CalendarView = ({
                   </p>
                 </div>
 
+                {/* This is the calendar entries for each hour */}
                 {hourTimeslots.map((hourTimeSlot: Timeslot) => {
                   const numberOfEntries = hourTimeSlot.numberOfEntries;
 
