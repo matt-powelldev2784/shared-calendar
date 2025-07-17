@@ -33,7 +33,9 @@ const CalendarCard = ({
   const numberOfEntriesRounded =
     numberOfEntries % 2 === 0 ? numberOfEntries : numberOfEntries + 1;
   const cardHeight =
-    numberOfEntries === 1 ? 20 : Math.floor(20 / numberOfEntriesRounded);
+    numberOfEntries === 1
+      ? 20
+      : Math.floor(20 / Math.min(numberOfEntriesRounded, 4));
 
   const navigateToEntry = () => {
     navigate({
