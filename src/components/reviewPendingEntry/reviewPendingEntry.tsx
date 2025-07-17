@@ -49,7 +49,7 @@ const ReviewPendingEntry = ({
                 index % 2 === 0 ? 'bg-gray-100' : 'bg-white'
               }`}
             >
-              <div className="flex h-11 flex-col justify-center bg-zinc-400 p-2 text-center font-bold text-white">
+              <div className="flex h-11 flex-col justify-center bg-blue-500 p-2 text-center font-bold text-white">
                 <p className="h-4.5 text-[14px] lg:text-[13px] xl:text-[14px]">
                   {format(date, 'EEEE')}
                 </p>

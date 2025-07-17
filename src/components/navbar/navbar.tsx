@@ -3,7 +3,7 @@ import SharcLogo from '@/assets/logo/sharc_logo_white.svg';
 import SharcIcon from '@/assets/logo/sharc_icon_white.svg';
 import { useEffect, useRef, useState, type JSX } from 'react';
 import { NavIconButton } from './navIcon';
-import { Bell, CalendarFold } from 'lucide-react';
+import { Bell, CalendarFold, CalendarPlus } from 'lucide-react';
 import UserAvatar from './userAvatar';
 import { calendarMenuItem, userMenuItems } from './userMenuItems';
 import { useQuery } from '@tanstack/react-query';
@@ -39,6 +39,15 @@ export const Navbar = () => {
           </div>
 
           <div className="mr-5 flex items-center gap-5">
+            <Link
+              to={'/add-entry'}
+              className="item-center hidden h-9 w-full flex-row justify-center gap-2 rounded bg-blue-500 px-4 py-2 text-sm text-white transition hover:bg-blue-500 focus:ring-2 focus:ring-blue-400 focus:outline-none sm:flex"
+              aria-label="Add Entry"
+            >
+              <CalendarPlus className="h-5 w-5" />
+              Add Entry
+            </Link>
+
             <DropDownMenu
               icon={<CalendarFold className="h-6 w-6" />}
               menuName="Calendar Menu Items"
