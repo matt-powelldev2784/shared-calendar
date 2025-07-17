@@ -31,6 +31,7 @@ const ViewEntry = ({
   currentUser,
 }: ViewEntryProps) => {
   const currentUserIsOwner = ownerEmails.includes(currentUser.email);
+  const currentUserIsSubscriber = entrySubscribers.includes(currentUser.email);
   const navigate = useNavigate();
 
   const deleteEntry = useMutation({
@@ -201,7 +202,7 @@ const ViewEntry = ({
             </>
           )}
 
-          {!currentUserIsOwner && (
+          {currentUserIsSubscriber && (
             <Button
               variant="destructive"
               size="default"

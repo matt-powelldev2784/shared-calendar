@@ -3,7 +3,7 @@ import { createFileRoute, useLoaderData } from '@tanstack/react-router';
 import { z } from 'zod';
 import { addDays } from 'date-fns';
 import Error from '@/components/ui/error';
-import sortCalendarEntriesByDateTime from '@/lib/sortCalendarEntriesByDateTime';
+import generateCalendarData from '@/lib/generateCalendarData';
 import { CalendarView } from '@/components/calenderView/calendarView';
 import Loading from '@/components/ui/loading';
 import type { CustomError } from '@/ts/errorClass';
@@ -12,9 +12,11 @@ const calendarSearchSchema = z.object({
   calendarIds: z.string(),
   startDate: z.string(),
   daysToView: z.number(),
+  startHour: z.number(),
+  endHour: z.number(),
 });
 
-// example route : domain/get-calendar?calendarId=yw1klS3kMHGXHFHeqaJ4&startDate=2025-03-15&daysToView=7
+// example route : domain/get-calendar?calendarId=abcdefghijklmnopqrstuvwxyz&startDate=2025-03-15&daysToView=7
 export const Route = createFileRoute('/get-calendar')({
   component: GetCalendarPage,
   pendingComponent: () => <Loading classNames="w-full mx-auto mt-4" />,
@@ -25,9 +27,13 @@ export const Route = createFileRoute('/get-calendar')({
     calendarIds: search.calendarIds,
     startDate: search.startDate,
     daysToView: search.daysToView,
+    startHour: search.startHour,
+    endHour: search.endHour,
   }),
 
-  loader: async ({ deps: { calendarIds, startDate, daysToView } }) => {
+  loader: async ({
+    deps: { calendarIds, startDate, daysToView, startHour, endHour },
+  }) => {
     const start = startDate ? new Date(startDate) : new Date();
     const end = addDays(new Date(startDate), daysToView);
     const calendarIdArray = calendarIds.split(',');
@@ -38,13 +44,15 @@ export const Route = createFileRoute('/get-calendar')({
       endDate: end,
     });
 
-    const sortedCalendarEntries = sortCalendarEntriesByDateTime({
+    const calendarData = generateCalendarData({
       daysToReturn: daysToView,
       calendarData: calendarEntries,
       firstDateToDisplay: start,
+      startHour,
+      endHour,
     });
 
-    return sortedCalendarEntries;
+    return calendarData;
   },
 
   errorComponent: ({ error }) => {
@@ -53,13 +61,16 @@ export const Route = createFileRoute('/get-calendar')({
 });
 
 function GetCalendarPage() {
-  const sortedCalendarEntries = useLoaderData({
+  const { calendarEntries, timeslotHeaders } = useLoaderData({
     from: '/get-calendar',
   });
 
   return (
     <section className="flex h-full w-full flex-col items-center">
-      <CalendarView calendarEntries={sortedCalendarEntries} />
+      <CalendarView
+        calendarEntries={calendarEntries}
+        timeslotHeaders={timeslotHeaders}
+      />
     </section>
   );
 }

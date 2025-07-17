@@ -4,34 +4,39 @@ import { format } from 'date-fns';
 import { ClockIcon } from 'lucide-react';
 
 const variantClasses = {
-  default: 'w-full flex flex-row gap-1 h-14 items-center cursor-pointer',
-  pink: 'bg-lightPink text-darkPink',
-  green: 'bg-lightGreen  text-darkGreen',
-  purple: 'bg-lightPurple text-darkPurple',
-  blue: 'bg-lightBlue text-darkBlue',
-  yellow: 'bg-lightYellow text-darkYellow',
+  default: 'relative cursor-pointer flex',
+  blue: 'bg-lightBlue text-grey-900',
+  yellow: 'bg-lightYellow text-grey-900',
   white: '',
 };
 
-const dateIconClasses = {
-  default:
-    'text-xs text-white w-10 h-10 min-w-10 min-h-10 flex-col items-center justify-center rounded-full ml-2.5 flex flex lg:hidden',
-  pink: 'bg-darkPink',
-  green: 'bg-darkGreen',
-  purple: 'bg-darkPurple',
-  blue: 'bg-darkBlue',
-  yellow: 'bg-darkYellow',
-  white: 'bg-secondary',
+const tabClasses = {
+  default: '',
+  blue: 'border-lightBlue absolute h-full w-3 border-4 bg-blue-800',
+  yellow: 'border-lightYellow absolute h-full w-3 border-4 bg-yellow-800',
+  white: '',
 };
 
 interface CalendarCardProps {
   entry: CalendarEntry;
   variant: keyof typeof variantClasses;
+  numberOfEntries: number;
 }
 
-const CalendarCard = ({ entry, variant }: CalendarCardProps) => {
+const CalendarCard = ({
+  entry,
+  variant,
+  numberOfEntries,
+}: CalendarCardProps) => {
   const navigate = useNavigate();
   const { title, startDate, endDate } = entry;
+  const numberOfEntriesRounded =
+    numberOfEntries % 2 === 0 ? numberOfEntries : numberOfEntries + 1;
+  const cardHeight =
+    numberOfEntries === 1
+      ? 20
+      : Math.floor(20 / Math.min(numberOfEntriesRounded, 4));
+
   const navigateToEntry = () => {
     navigate({
       to: `/view-entry?entryId=${entry.entryId}`,
@@ -40,22 +45,25 @@ const CalendarCard = ({ entry, variant }: CalendarCardProps) => {
 
   return (
     <button
-      className={`${variantClasses.default} ${variantClasses[variant]} w-full`}
+      className={`${variantClasses.default} ${variantClasses[variant]} w-full h-${cardHeight} max-h-${cardHeight}`}
       onClick={navigateToEntry}
     >
-      <p className={`${dateIconClasses.default} ${dateIconClasses[variant]}`}>
-        {format(startDate, 'HH:mm')}
-      </p>
+      {/* This is the vertical line on the left side of the card */}
+      <div className={`${tabClasses[variant]}`}></div>
 
-      <div className="flex w-full -translate-y-0.75 flex-col items-start justify-center gap-1.5 overflow-hidden p-2 lg:gap-2">
-        <p className="text-md h-6 w-full translate-y-1 truncate overflow-hidden text-left text-ellipsis whitespace-nowrap">
+      {/* This is the rest of the card */}
+      <div className="flex w-full flex-row items-stretch justify-between overflow-hidden">
+        <p className="mr-1 flex w-full items-center justify-start truncate overflow-hidden pl-4 text-left text-sm text-ellipsis whitespace-nowrap">
           {title}
         </p>
 
-        <p className="flex flex-row items-center gap-1 text-[11px] lg:gap-2">
-          <ClockIcon size={13} />
-          {format(startDate, 'HH:mm')}-{format(endDate, 'HH:mm')}
-        </p>
+        <div className="flex w-full min-w-20 flex-row flex-nowrap items-center justify-end gap-0 overflow-hidden">
+          <ClockIcon size={10} className="w-4" />
+          <p className="overflow-clip pr-3 text-[10px]">
+            {/* {entryMinutes} */}
+            {format(startDate, 'HH:mm')}-{format(endDate, 'HH:mm')}
+          </p>
+        </div>
       </div>
     </button>
   );
