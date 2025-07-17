@@ -1,15 +1,25 @@
 import type { CalendarEntry } from '@/ts/Calendar';
 import { useNavigate } from '@tanstack/react-router';
-import { differenceInMinutes } from 'date-fns';
+import { differenceInMinutes, format } from 'date-fns';
 import { ClockIcon } from 'lucide-react';
 
 const variantClasses = {
   default: 'relative cursor-pointer flex',
+  pink: 'bg-lightPink text-grey-900',
+  green: 'bg-lightGreen  text-grey-900',
+  purple: 'bg-lightPurple text-grey-900',
+  blue: 'bg-lightBlue text-grey-900',
+  yellow: 'bg-lightYellow text-grey-900',
+  white: '',
+};
+
+const tabClasses = {
+  default: '',
   pink: 'bg-lightPink text-darkPink',
   green: 'bg-lightGreen  text-darkGreen',
   purple: 'bg-lightPurple text-darkPurple',
-  blue: 'bg-lightBlue text-grey-900',
-  yellow: 'bg-lightYellow text-darkYellow',
+  blue: 'border-lightBlue absolute h-full w-3 border-4 bg-blue-800',
+  yellow: 'border-lightYellow absolute h-full w-3 border-4 bg-yellow-800',
   white: '',
 };
 
@@ -44,18 +54,18 @@ const CalendarCard = ({
       onClick={navigateToEntry}
     >
       {/* This is the vertical line on the left side of the card */}
-      <div className="border-lightBlue absolute h-full w-3 border-4 bg-blue-800"></div>
+      <div className={`${tabClasses[variant]}`}></div>
 
       {/* This is the rest of the card */}
       <div className="flex w-full flex-row items-stretch justify-between overflow-hidden">
-        <p className="mr-1 flex w-full items-center justify-start truncate overflow-hidden pl-4 text-left text-sm text-ellipsis whitespace-nowrap">
+        <p className="mr-1 flex w-2/3 items-center justify-start truncate overflow-hidden pl-4 text-left text-sm text-ellipsis whitespace-nowrap">
           {title}
         </p>
 
-        <div className="flex flex-row items-center justify-center overflow-hidden">
+        <div className="flex w-full flex-row flex-nowrap items-center justify-end gap-0 overflow-hidden">
           <ClockIcon size={13} className="w-6" />
-          <p className="w-8 pr-1 text-sm">
-            {entryMinutes < 10 ? `0${entryMinutes}` : entryMinutes}
+          <p className="overflow-clip pr-3 text-xs sm:text-sm">
+            {format(startDate, 'HH:mm')} - {format(endDate, 'HH:mm')}
           </p>
         </div>
       </div>
