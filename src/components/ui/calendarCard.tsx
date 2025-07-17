@@ -1,6 +1,6 @@
 import type { CalendarEntry } from '@/ts/Calendar';
 import { useNavigate } from '@tanstack/react-router';
-import { differenceInMinutes, format } from 'date-fns';
+import { format } from 'date-fns';
 import { ClockIcon } from 'lucide-react';
 
 const variantClasses = {
@@ -38,7 +38,6 @@ const CalendarCard = ({
   const { title, startDate, endDate } = entry;
   const numberOfEntriesRounded =
     numberOfEntries % 2 === 0 ? numberOfEntries : numberOfEntries + 1;
-  const entryMinutes = differenceInMinutes(endDate, startDate);
   const cardHeight =
     numberOfEntries === 1 ? 20 : Math.floor(20 / numberOfEntriesRounded);
 
@@ -58,14 +57,15 @@ const CalendarCard = ({
 
       {/* This is the rest of the card */}
       <div className="flex w-full flex-row items-stretch justify-between overflow-hidden">
-        <p className="mr-1 flex w-2/3 items-center justify-start truncate overflow-hidden pl-4 text-left text-sm text-ellipsis whitespace-nowrap">
+        <p className="mr-1 flex w-full items-center justify-start truncate overflow-hidden pl-4 text-left text-sm text-ellipsis whitespace-nowrap">
           {title}
         </p>
 
-        <div className="flex w-full flex-row flex-nowrap items-center justify-end gap-0 overflow-hidden">
-          <ClockIcon size={13} className="w-6" />
-          <p className="overflow-clip pr-3 text-xs sm:text-sm">
-            {format(startDate, 'HH:mm')} - {format(endDate, 'HH:mm')}
+        <div className="flex w-full min-w-20 flex-row flex-nowrap items-center justify-end gap-0 overflow-hidden">
+          <ClockIcon size={10} className="w-4" />
+          <p className="overflow-clip pr-3 text-[10px]">
+            {/* {entryMinutes} */}
+            {format(startDate, 'HH:mm')}-{format(endDate, 'HH:mm')}
           </p>
         </div>
       </div>

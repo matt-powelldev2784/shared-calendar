@@ -19,6 +19,7 @@ import { CalendarCard } from '../ui/calendarCard';
 import { useSearch, useNavigate } from '@tanstack/react-router';
 import { getCalendarUrl } from '@/lib/getCalendarUrl';
 import { useDaysToViewResizeForSmallScreens } from '@/lib/useDaysToViewResizeForSmallScreens';
+import { ChevronsDown } from 'lucide-react';
 
 type CalendarViewProps = {
   calendarEntries: CalendarEntriesData[];
@@ -117,16 +118,13 @@ export const CalendarView = ({
 
                   return (
                     <div
-                      className="relative h-20 overflow-clip border-b-1 border-gray-300"
+                      className="relative h-20 overflow-auto border-b-1 border-gray-300"
                       key={`${hourTimeSlot.hour}`}
                     >
                       {/* A maximum of 4 entries can be displayed per hour in the calendar view */}
                       {/* If there are more than 4 entries in a hour display button to view all entires */}
                       {numberOfEntries > 4 && (
-                        <button className="absolute top-0 right-0 z-2 h-20 w-24 cursor-pointer bg-blue-800 p-2 text-xs text-white">
-                          {numberOfEntries} entries in this timeslot. Click here
-                          to view all.
-                        </button>
+                        <ChevronsDown className="absolute top-14.5 right-0 z-10 w-3 text-blue-800 opacity-80" />
                       )}
 
                       {/* Calendar card for each calendar entry */}
