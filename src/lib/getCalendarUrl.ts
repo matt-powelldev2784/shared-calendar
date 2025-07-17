@@ -15,8 +15,12 @@ export const getCalendarUrl = ({
   startHour,
   endHour,
 }: getCalendarUrlProps) => {
-  const parsedStartHour = startHour === 0 ? '0' : startHour;
   const today = format(new Date(), 'yyyy-MM-dd');
-  const url = `/get-calendar?calendarIds=${calendarIds}&startDate=${startDate || today}&daysToView=${daysToView || 7}&startHour=${parsedStartHour || 8}&endHour=${endHour || 18}`;
-  return url;
+  return (
+    `/get-calendar?calendarIds=${calendarIds}` +
+    `&startDate=${startDate || today}` +
+    `&daysToView=${daysToView ?? 7}` +
+    `&startHour=${startHour ?? 8}` +
+    `&endHour=${endHour ?? 17}`
+  );
 };
