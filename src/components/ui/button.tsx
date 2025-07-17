@@ -19,6 +19,7 @@ const buttonVariants = cva(
           'border border-1 border-secondary shadow-xs cursor-pointer text-secondary font-bold',
         secondary:
           'bg-secondary text-secondary-foreground shadow-xs hover:bg-secondary/80 cursor-pointer',
+        blue: 'bg-blue-400 text-white shadow-xs hover:bg-blue-400 cursor-pointer',
         ghost: 'hover:bg-accent hover:text-accent-foreground cursor-pointer',
         link: 'text-primary underline-offset-4 hover:underline cursor-pointer',
         datePicker:
