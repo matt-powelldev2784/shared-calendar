@@ -37,7 +37,6 @@ const ReviewPendingEntry = ({
       </section>
 
       {/* This is the calendar entries displayed in a grid layout */}
-
       <section className="auto-row-[minmax(100px,1fr)] m-auto mt-2 mr-2 grid w-full grid-flow-row gap-2 px-4 sm:mr-4 lg:auto-cols-[minmax(100px,1fr)] lg:grid-flow-col">
         {calendarEntries.map((calendarDay, index) => {
           const hourTimeslots = calendarDay.entries;

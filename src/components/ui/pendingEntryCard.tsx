@@ -40,6 +40,12 @@ const PendingEntryCard = ({
   const queryClient = useQueryClient();
   const { title, startDate, endDate } = entry;
 
+  const navigateToEntry = () => {
+    navigate({
+      to: `/view-entry?entryId=${entry.entryId}`,
+    });
+  };
+
   const acceptMutation = useMutation({
     mutationFn: async () => {
       await acceptPendingEntry({ entryId: entry.entryId, requestId });
@@ -82,6 +88,7 @@ const PendingEntryCard = ({
   return (
     <article
       className={`${variantClasses.default} ${variantClasses[variant]} w-full max-w-full overflow-hidden`}
+      onClick={navigateToEntry}
     >
       {/* This is the vertical line on the left side of the card */}
       <div className={`${tabClasses[variant]}`}></div>
@@ -100,6 +107,7 @@ const PendingEntryCard = ({
         </div>
       </div>
 
+      {/* Accept and reject buttons */}
       <div className="flex w-full max-w-22 flex-col flex-nowrap items-center justify-center sm:max-w-44 sm:flex-row sm:gap-2 sm:p-2">
         <Button
           size="default"
