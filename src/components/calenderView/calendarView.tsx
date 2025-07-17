@@ -19,18 +19,25 @@ import { CalendarCard } from '../ui/calendarCard';
 import { useSearch, useNavigate } from '@tanstack/react-router';
 import { getCalendarUrl } from '@/lib/getCalendarUrl';
 import { useDaysToViewResizeForSmallScreens } from '@/lib/useDaysToViewResizeForSmallScreens';
-import { ChevronsDown } from 'lucide-react';
+import { ChevronsDown, Clock } from 'lucide-react';
 
 type CalendarViewProps = {
   calendarEntries: CalendarEntriesData[];
   timeslotHeaders: TimeslotHeaders[];
 };
 
+const OFFICE_START_HOUR = 8;
+const OFFICE_END_HOUR = 17;
+const FULL_DAYS_START_HOUR = 0;
+const FULL_DAYS_END_HOUR = 23;
+
 export const CalendarView = ({
   calendarEntries,
   timeslotHeaders,
 }: CalendarViewProps) => {
-  const { calendarIds, startDate } = useSearch({ from: '/get-calendar' });
+  const { calendarIds, startDate, startHour, endHour } = useSearch({
+    from: '/get-calendar',
+  });
   const date = new Date(startDate);
   const navigate = useNavigate();
   const [isSelectDateOpen, setIsSelectDateOpen] = useState(false);
@@ -41,6 +48,22 @@ export const CalendarView = ({
     const calendarUrl = getCalendarUrl({
       calendarIds: calendarIds,
       startDate: format(selectedDate, 'yyyy-MM-dd'),
+    });
+    navigate({
+      to: calendarUrl,
+    });
+  };
+
+  const toggleHoursToView = () => {
+    const calendarUrl = getCalendarUrl({
+      calendarIds: calendarIds,
+      startDate: format(date, 'yyyy-MM-dd'),
+      startHour:
+        startHour === OFFICE_START_HOUR
+          ? FULL_DAYS_START_HOUR
+          : OFFICE_START_HOUR,
+      endHour:
+        startHour === OFFICE_START_HOUR ? FULL_DAYS_END_HOUR : OFFICE_END_HOUR,
     });
     navigate({
       to: calendarUrl,
@@ -75,9 +98,20 @@ export const CalendarView = ({
       </div>
 
       <div className="flex w-full flex-row items-center justify-center">
-        {/* This is the hours displayed on the left side of the calendar view */}
-        <section className="mt-2 ml-2 flex h-full w-8 flex-col items-end sm:ml-4">
-          <div className="h-11"></div>
+        {/* This is the hours toggle button displayed on the left side of the calendar view */}
+        <section className="relative mt-2 ml-3 flex h-full w-8 flex-col items-end sm:ml-4">
+          <Button
+            variant="default"
+            className="absolute -left-1 flex h-11 w-10 flex-col items-center justify-center gap-0 text-[10px] leading-tight"
+            onClick={toggleHoursToView}
+          >
+            <Clock size={2} />
+            <span>{`${String(startHour).padStart(2, '0')}:00`}</span>
+            <span>{`${String(endHour + 1).padStart(2, '0')}:00`}</span>
+          </Button>
+
+          {/* This is the hours timeslots displayed down the left hand side */}
+          <div className="mt-11"></div>
           {timeslotHeaders.map((timeslot) => (
             <p
               key={timeslot.hour}
@@ -89,7 +123,7 @@ export const CalendarView = ({
         </section>
 
         {/* This is the main calendar view which displays thea appointments */}
-        <section className="auto-row-[minmax(100px,1fr)] m-auto mt-2 mr-2 grid w-full grid-flow-row gap-2 px-4 sm:mr-4 lg:auto-cols-[minmax(100px,1fr)] lg:grid-flow-col">
+        <section className="auto-row-[minmax(100px,1fr)] m-auto mt-2 mr-3 ml-3 grid w-full grid-flow-row gap-2 lg:auto-cols-[minmax(100px,1fr)] lg:grid-flow-col">
           {calendarEntries.map((calendarDay, index) => {
             const { date } = calendarDay;
             const hourTimeslots = calendarDay.entries;
@@ -121,8 +155,7 @@ export const CalendarView = ({
                       className="relative h-20 overflow-auto border-b-1 border-gray-300"
                       key={`${hourTimeSlot.hour}`}
                     >
-                      {/* A maximum of 4 entries can be displayed per hour in the calendar view */}
-                      {/* If there are more than 4 entries in a hour display button to view all entires */}
+                      {/* Display arrow to show timeslot is scrollable if more than 4 entries*/}
                       {numberOfEntries > 4 && (
                         <ChevronsDown className="absolute top-14.5 right-0 z-10 w-3 text-blue-800 opacity-80" />
                       )}
