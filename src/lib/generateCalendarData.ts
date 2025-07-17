@@ -44,7 +44,6 @@ const generateCalendarData = ({
         numberOfEntries: 0,
       }),
     );
-    console.log('hoursToDisplay', hoursToDisplay);
 
     // filter the calendar data for the current date
     // sort by date and time
