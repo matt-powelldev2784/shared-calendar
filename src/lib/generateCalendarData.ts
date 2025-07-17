@@ -36,7 +36,7 @@ const generateCalendarData = ({
   const calendarEntries = dateTitles.map((date, index) => {
     // create an array of 24 objects, one for each hour of the day
     // each object will have an hour and an array of entries for that hour
-    const hoursToDisplay = endHour - startHour;
+    const hoursToDisplay = endHour - startHour + 1;
     const entiresByHour = Array.from({ length: hoursToDisplay }).map(
       (_, i) => ({
         hour: startHour + i,
@@ -44,6 +44,7 @@ const generateCalendarData = ({
         numberOfEntries: 0,
       }),
     );
+    console.log('hoursToDisplay', hoursToDisplay);
 
     // filter the calendar data for the current date
     // sort by date and time
@@ -83,7 +84,7 @@ const generateTimeslotHeaders = (
   startHour: number,
   endHour: number,
 ): TimeslotHeaders[] => {
-  const hoursToDisplay = endHour - startHour;
+  const hoursToDisplay = endHour - startHour + 1;
   const timeslots = Array.from({ length: hoursToDisplay }).map((_, i) => ({
     hour: startHour + i,
   }));
