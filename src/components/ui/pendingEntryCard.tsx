@@ -12,9 +12,6 @@ import { ClockIcon } from 'lucide-react';
 const variantClasses = {
   default:
     'relative flex cursor-pointer border-dotted border-2 border-orange-500',
-  pink: 'bg-lightPink text-darkPink',
-  green: 'bg-lightGreen  text-darkGreen',
-  purple: 'bg-lightPurple text-darkPurple',
   blue: 'bg-lightBlue text-grey-900',
   yellow: 'bg-lightYellow text-darkYellow',
   white: '',
@@ -22,9 +19,6 @@ const variantClasses = {
 
 const tabClasses = {
   default: '',
-  pink: 'bg-lightPink text-darkPink',
-  green: 'bg-lightGreen  text-darkGreen',
-  purple: 'bg-lightPurple text-darkPurple',
   blue: 'border-lightBlue absolute h-full w-3 border-4 bg-blue-800',
   yellow: 'border-lightYellow absolute h-full w-3 border-4 bg-yellow-800',
   white: '',

@@ -5,9 +5,6 @@ import { ClockIcon } from 'lucide-react';
 
 const variantClasses = {
   default: 'relative cursor-pointer flex',
-  pink: 'bg-lightPink text-grey-900',
-  green: 'bg-lightGreen  text-grey-900',
-  purple: 'bg-lightPurple text-grey-900',
   blue: 'bg-lightBlue text-grey-900',
   yellow: 'bg-lightYellow text-grey-900',
   white: '',
@@ -15,9 +12,6 @@ const variantClasses = {
 
 const tabClasses = {
   default: '',
-  pink: 'bg-lightPink text-darkPink',
-  green: 'bg-lightGreen  text-darkGreen',
-  purple: 'bg-lightPurple text-darkPurple',
   blue: 'border-lightBlue absolute h-full w-3 border-4 bg-blue-800',
   yellow: 'border-lightYellow absolute h-full w-3 border-4 bg-yellow-800',
   white: '',
