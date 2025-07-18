@@ -70,119 +70,116 @@ export const CalendarView = ({
     });
   };
 
-  return (
-    <div className="flex w-full flex-col items-center justify-center pb-20">
-      <div className="bg-primary/25 z-100s relative flex h-13 w-full items-center justify-center gap-4 p-2">
-        <Popover open={isSelectDateOpen} onOpenChange={setIsSelectDateOpen}>
-          <PopoverTrigger asChild>
-            <Button variant="datePicker" className="w-96">
-              <img
-                src={CalendarIcon}
-                alt="calendar"
-                className="-w-5 mr-2 h-5"
-              />
-              {date ? format(date, 'dd MMMM yyyy') : <span>Pick a date</span>}
-              <img src={DownIcon} alt="down" className="-w-5 h-5" />
-            </Button>
-          </PopoverTrigger>
-
-          <PopoverContent className="w-auto">
-            <CustomCalendar
-              mode="single"
-              selected={date}
-              onDateSelect={handleDateSelect}
-              initialFocus
-            />
-          </PopoverContent>
-        </Popover>
-      </div>
-
-      <div className="flex w-full flex-row items-center justify-center">
-        {/* This is the hours toggle button displayed on the left side of the calendar view */}
-        <section className="relative mt-2 ml-3 flex h-full w-8 flex-col items-end sm:ml-4">
-          <Button
-            variant="default"
-            className="absolute -left-1 flex h-11 w-10 flex-col items-center justify-center gap-0 text-[10px] leading-tight"
-            onClick={toggleHoursToView}
-          >
-            <Clock size={2} />
-            <span>{`${String(startHour).padStart(2, '0')}:00`}</span>
-            <span>{`${String(endHour + 1).padStart(2, '0')}:00`}</span>
+return (
+  <div className="flex w-full flex-col items-center justify-center pb-20">
+    <div className="bg-primary/25 z-100s relative flex h-13 w-full items-center justify-center gap-4 p-2">
+      <Popover open={isSelectDateOpen} onOpenChange={setIsSelectDateOpen}>
+        <PopoverTrigger asChild>
+          <Button variant="datePicker" className="w-96">
+            <img src={CalendarIcon} alt="calendar" className="-w-5 mr-2 h-5" />
+            {date ? format(date, 'dd MMMM yyyy') : <span>Pick a date</span>}
+            <img src={DownIcon} alt="down" className="-w-5 h-5" />
           </Button>
+        </PopoverTrigger>
 
-          {/* This is the hour timeslots displayed down the left hand side */}
-          <div className="mt-11"></div> {/* Spacer for the button */}
-          {timeslotHeaders.map((timeslot) => (
-            <p
-              key={timeslot.hour}
-              className="flex h-20 w-8 items-center justify-center border-b-1 border-gray-300 text-xs text-gray-900"
-            >
-              {timeslot.hour.toString().padStart(2, '0')}
-            </p>
-          ))}
-        </section>
-
-        {/* This is the calendar entries displayed in a grid layout */}
-        <section className="auto-row-[minmax(100px,1fr)] m-auto mt-2 mr-3 ml-3 grid w-full grid-flow-row gap-2 lg:auto-cols-[minmax(100px,1fr)] lg:grid-flow-col">
-          {calendarEntries.map((calendarDay, index) => {
-            const { date } = calendarDay;
-            const hourTimeslots = calendarDay.entries;
-
-            {
-              /* This is day headers */
-            }
-            return (
-              <div
-                key={date.toISOString()}
-                className={`flex flex-col flex-nowrap lg:flex-col ${
-                  index % 2 === 0 ? 'bg-gray-100' : 'bg-white'
-                }`}
-              >
-                <div className="flex h-11 flex-col justify-center bg-blue-500 p-2 text-center font-bold text-white">
-                  <p className="h-4.5 text-[14px] lg:text-[13px] xl:text-[14px]">
-                    {format(date, 'EEEE')}
-                  </p>
-                  <p className="text-[15px] lg:hidden xl:block">
-                    {format(date, 'dd MMMM yyyy')}
-                  </p>
-                  <p className="hidden text-[14px] lg:block xl:hidden">
-                    {format(date, 'dd MMM yy')}
-                  </p>
-                </div>
-
-                {/* This is the calendar entries for each hour */}
-                {hourTimeslots.map((hourTimeSlot: Timeslot) => {
-                  const numberOfEntries = hourTimeSlot.numberOfEntries;
-
-                  return (
-                    <div
-                      className="relative h-20 overflow-auto border-b-1 border-gray-300"
-                      key={`${hourTimeSlot.hour}`}
-                    >
-                      {/* Display arrow to show timeslot is scrollable if more than 4 entries*/}
-                      {numberOfEntries > 4 && (
-                        <ChevronsDown className="absolute top-14.5 right-0 z-10 w-3 text-blue-800 opacity-80" />
-                      )}
-
-                      {/* Calendar card for each calendar entry */}
-                      {hourTimeSlot.entries.map((entry: CalendarEntry) => {
-                        return (
-                          <CalendarCard
-                            key={hourTimeSlot.hour + '-' + entry.id}
-                            entry={entry}
-                            variant="blue"
-                          />
-                        );
-                      })}
-                    </div>
-                  );
-                })}
-              </div>
-            );
-          })}
-        </section>
-      </div>
+        <PopoverContent className="w-auto">
+          <CustomCalendar
+            mode="single"
+            selected={date}
+            onDateSelect={handleDateSelect}
+            initialFocus
+          />
+        </PopoverContent>
+      </Popover>
     </div>
-  );
+
+    <div className="flex w-full flex-row items-center justify-center">
+      {/* This is the hours toggle button displayed on the left side of the calendar view */}
+      <section className="relative mt-2 ml-3 flex h-full w-8 flex-col items-end sm:ml-4">
+        <Button
+          variant="default"
+          className="absolute -left-1 flex h-11 w-10 flex-col items-center justify-center gap-0 text-[10px] leading-tight"
+          onClick={toggleHoursToView}
+        >
+          <Clock size={2} />
+          <span>{`${String(startHour).padStart(2, '0')}:00`}</span>
+          <span>{`${String(endHour + 1).padStart(2, '0')}:00`}</span>
+        </Button>
+        {/* This is the hour timeslots displayed down the left hand side */}
+        <div className="mt-11"></div> {/* Spacer for the button */}
+        {timeslotHeaders.map((timeslot) => (
+          <p
+            key={timeslot.hour}
+            className="flex h-20 w-8 items-center justify-center border-b-1 border-gray-300 text-xs text-gray-900"
+          >
+            {timeslot.hour.toString().padStart(2, '0')}
+          </p>
+        ))}
+      </section>
+
+      {/* This is the calendar entries displayed in a grid layout */}
+      <section className="auto-row-[minmax(100px,1fr)] m-auto mt-2 mr-3 ml-3 grid w-full grid-flow-row gap-2 lg:auto-cols-[minmax(100px,1fr)] lg:grid-flow-col">
+        {calendarEntries.map((calendarDay, index) => {
+          const { date } = calendarDay;
+          const hourTimeslots = calendarDay.entries;
+
+          {
+            /* This is day headers */
+          }
+          return (
+            <div
+              key={date.toISOString()}
+              className={`flex flex-col flex-nowrap lg:flex-col ${
+                index % 2 === 0 ? 'bg-gray-100' : 'bg-white'
+              }`}
+            >
+              <div className="flex h-11 flex-col justify-center bg-blue-500 p-2 text-center font-bold text-white">
+                <p className="h-4.5 text-[14px] lg:text-[13px] xl:text-[14px]">
+                  {format(date, 'EEEE')}
+                </p>
+                <p className="text-[15px] lg:hidden xl:block">
+                  {format(date, 'dd MMMM yyyy')}
+                </p>
+                <p className="hidden text-[14px] lg:block xl:hidden">
+                  {format(date, 'dd MMM yy')}
+                </p>
+              </div>
+
+              {/* This is the calendar entries for each hour */}
+              {hourTimeslots.map((hourTimeSlot: Timeslot) => {
+                const numberOfEntries = hourTimeSlot.numberOfEntries;
+
+                return (
+                  <div
+                    className="relative h-[80px] overflow-auto border-b-1 border-gray-300"
+                    key={`${hourTimeSlot.hour - startHour}-${Math.random()}`}
+                  >
+                    {/* Display arrow to show timeslot is scrollable if more than 4 entries*/}
+                    {numberOfEntries > 4 && (
+                      <ChevronsDown className="absolute top-14.5 right-0 z-10 w-3 text-blue-800 opacity-80" />
+                    )}
+
+                    {/* Calendar card for each calendar entry */}
+                    {hourTimeSlot.entries.map((entry: CalendarEntry) => {
+                      return (
+                        <CalendarCard
+                          key={
+                            hourTimeSlot.hour + '-' + entry.id + Math.random()
+                          }
+                          entry={entry}
+                          variant="blue"
+                        />
+                      );
+                    })}
+                  </div>
+                );
+              })}
+            </div>
+          );
+        })}
+      </section>
+    </div>
+  </div>
+);
 };
 

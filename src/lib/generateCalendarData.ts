@@ -1,5 +1,5 @@
 import type { CalendarEntry, TimeslotHeaders } from '@/ts/Calendar';
-import { addDays, format } from 'date-fns';
+import { addDays, addMinutes, differenceInMinutes, format } from 'date-fns';
 
 type GetDatesToDisplay = {
   daysToReturn: number;
@@ -48,6 +48,7 @@ const generateCalendarData = ({
     // filter the calendar data for the current date
     // sort by date and time
     // add the entries for each hour to the entriesByHour array
+    // if the entry is longer than 60 minutes, add it to the next timeslots as required
     calendarData
       .filter((entry) => format(date, 'd') === format(entry.startDate, 'd'))
       .sort(
@@ -57,7 +58,40 @@ const generateCalendarData = ({
       .forEach((entry) => {
         const hour = new Date(entry.startDate).getHours();
         const hourIndex = hour - startHour;
-        entiresByHour[hourIndex].entries.push(entry);
+        const entryLength = differenceInMinutes(entry.endDate, entry.startDate);
+        const numberOfHourTimeslots = Math.ceil(entryLength / 60);
+
+        Array.from({ length: numberOfHourTimeslots }).forEach((_, i) => {
+          if (i === 0) {
+            // add the first hour entry
+            entiresByHour[hourIndex].entries.push(entry);
+            return;
+          }
+
+          // set the final timeslot length for the last hour
+          // this is used to calculate the height of the card in the calendar view
+          const nextHourIndex = hourIndex + i;
+
+          // if the entry is for the last timeslot, set the final timeslot length
+          // and add the entry to relevant hour
+          if (i === numberOfHourTimeslots - 1) {
+            const finalTimeslotLength = differenceInMinutes(
+              entry.endDate,
+              addMinutes(entry.startDate, i * 60),
+            );
+            const entryWithFinishedTime = {
+              ...entry,
+              finalTimeslotLength,
+            };
+            entiresByHour[nextHourIndex].entries.push(entryWithFinishedTime);
+            return;
+          }
+
+          // if this is not for the last hour, just add the entry to the correct timeslot
+          if (nextHourIndex < entiresByHour.length) {
+            entiresByHour[nextHourIndex].entries.push(entry);
+          }
+        });
       });
 
     // add the number of entries for each hour to the entriesByHour array

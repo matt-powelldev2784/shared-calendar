@@ -9,6 +9,7 @@ export type CalendarEntry = {
   ownerIds: string[];
   subscribers: string[];
   pendingRequests: string[];
+  finalTimeslotLength?: number; // length of the last timeslot in minutes
 };
 
 export type Calendar = {

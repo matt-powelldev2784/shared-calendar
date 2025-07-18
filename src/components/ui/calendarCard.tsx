@@ -25,9 +25,28 @@ interface CalendarCardProps {
 const CalendarCard = ({ entry, variant }: CalendarCardProps) => {
   const navigate = useNavigate();
   const { title, startDate, endDate } = entry;
-  const entryTimeMinutes = differenceInMinutes(endDate, startDate);
-  const cardHeight = Math.max(entryTimeMinutes / 3, 5).toFixed(0); // 5 is the min height for an entry card
-  console.log('cardHeight', cardHeight);
+
+  // Converts minutes to pixels (1 minute = 1.33px)
+  // parent container height is 80px
+  // card height is displayed using style tag as tailwind does not support dynamic values
+  const getCardHeight = () => {
+    const entryTimeMinutes = differenceInMinutes(endDate, startDate);
+    const finalTimeslotHeight = entry.finalTimeslotLength
+      ? Math.max(Math.round(entry.finalTimeslotLength * 1.33), 20) // 20px is the min height
+      : 0;
+    const standardTimeslotHeight =
+      entryTimeMinutes < 60
+        ? Math.max(Math.round(entryTimeMinutes * 1.33), 20)
+        : 80; // 80px for full hour entries
+
+    if (finalTimeslotHeight > 0) {
+      return finalTimeslotHeight;
+    } else {
+      return standardTimeslotHeight;
+    }
+  };
+
+  const cardHeight = `${getCardHeight()}px`;
 
   const navigateToEntry = () => {
     navigate({
@@ -37,8 +56,9 @@ const CalendarCard = ({ entry, variant }: CalendarCardProps) => {
 
   return (
     <button
-      className={`${variantClasses.default} ${variantClasses[variant]} w-full h-${cardHeight} min-h-${cardHeight}`}
+      className={`${variantClasses.default} ${variantClasses[variant]} w-full`}
       onClick={navigateToEntry}
+      style={{ height: cardHeight }}
     >
       {/* This is the vertical line on the left side of the card */}
       <div className={`${tabClasses[variant]}`}></div>
