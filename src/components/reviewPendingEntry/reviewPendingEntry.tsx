@@ -92,7 +92,6 @@ const ReviewPendingEntry = ({
                           <CalendarCard
                             key={hourTimeSlot.hour + '-' + entry.id}
                             entry={entry}
-                            numberOfEntries={numberOfEntries}
                             variant="blue"
                           />
                         )

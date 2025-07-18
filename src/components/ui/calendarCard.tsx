@@ -1,6 +1,6 @@
 import type { CalendarEntry } from '@/ts/Calendar';
 import { useNavigate } from '@tanstack/react-router';
-import { format } from 'date-fns';
+import { differenceInMinutes, format } from 'date-fns';
 import { ClockIcon } from 'lucide-react';
 
 const variantClasses = {
@@ -20,22 +20,14 @@ const tabClasses = {
 interface CalendarCardProps {
   entry: CalendarEntry;
   variant: keyof typeof variantClasses;
-  numberOfEntries: number;
 }
 
-const CalendarCard = ({
-  entry,
-  variant,
-  numberOfEntries,
-}: CalendarCardProps) => {
+const CalendarCard = ({ entry, variant }: CalendarCardProps) => {
   const navigate = useNavigate();
   const { title, startDate, endDate } = entry;
-  const numberOfEntriesRounded =
-    numberOfEntries % 2 === 0 ? numberOfEntries : numberOfEntries + 1;
-  const cardHeight =
-    numberOfEntries === 1
-      ? 20
-      : Math.floor(20 / Math.min(numberOfEntriesRounded, 4));
+  const entryTimeMinutes = differenceInMinutes(endDate, startDate);
+  const cardHeight = Math.max(entryTimeMinutes / 3, 5).toFixed(0); // 5 is the min height for an entry card
+  console.log('cardHeight', cardHeight);
 
   const navigateToEntry = () => {
     navigate({
@@ -45,7 +37,7 @@ const CalendarCard = ({
 
   return (
     <button
-      className={`${variantClasses.default} ${variantClasses[variant]} w-full h-${cardHeight} max-h-${cardHeight}`}
+      className={`${variantClasses.default} ${variantClasses[variant]} w-full h-${cardHeight} min-h-${cardHeight}`}
       onClick={navigateToEntry}
     >
       {/* This is the vertical line on the left side of the card */}

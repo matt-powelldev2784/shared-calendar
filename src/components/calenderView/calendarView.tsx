@@ -109,7 +109,7 @@ export const CalendarView = ({
             <span>{`${String(startHour).padStart(2, '0')}:00`}</span>
             <span>{`${String(endHour + 1).padStart(2, '0')}:00`}</span>
           </Button>
-          
+
           {/* This is the hour timeslots displayed down the left hand side */}
           <div className="mt-11"></div> {/* Spacer for the button */}
           {timeslotHeaders.map((timeslot) => (
@@ -170,7 +170,6 @@ export const CalendarView = ({
                           <CalendarCard
                             key={hourTimeSlot.hour + '-' + entry.id}
                             entry={entry}
-                            numberOfEntries={numberOfEntries}
                             variant="blue"
                           />
                         );
