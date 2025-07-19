@@ -1,9 +1,4 @@
-import type {
-  CalendarEntriesData,
-  CalendarEntry,
-  Timeslot,
-  TimeslotHeaders,
-} from '@/ts/Calendar';
+import type { CalendarEntriesData, CalendarEntry, Timeslot, TimeslotEntry, TimeslotHeaders } from '@/ts/Calendar';
 import { format } from 'date-fns';
 import { PendingEntryCard } from '@/components/ui/pendingEntryCard';
 import { CalendarCard } from '@/components/ui/calendarCard';
@@ -86,15 +81,10 @@ const ReviewPendingEntry = ({
                     })}
 
                     {/* Render existing entries at bottom of timeslot*/}
-                    {hourTimeSlot.entries.map((entry: CalendarEntry) => {
+                    {hourTimeSlot.entries.map((entry: TimeslotEntry) => {
                       return (
                         entry.entryId !== pendingEntry && (
-                          <CalendarCard
-                            key={hourTimeSlot.hour + '-' + entry.id}
-                            entry={entry}
-                            numberOfEntries={numberOfEntries}
-                            variant="blue"
-                          />
+                          <CalendarCard key={hourTimeSlot.hour + '-' + entry.id} entry={entry} variant="blue" />
                         )
                       );
                     })}

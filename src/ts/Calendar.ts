@@ -11,6 +11,10 @@ export type CalendarEntry = {
   pendingRequests: string[];
 };
 
+export type TimeslotEntry = CalendarEntry & {
+  timeslotLength: number;
+};
+
 export type Calendar = {
   id: string;
   // the calendar id is a duplicate of the id field
@@ -27,7 +31,7 @@ export type Calendar = {
 
 export type Timeslot = {
   hour: number;
-  entries: CalendarEntry[];
+  entries: TimeslotEntry[];
   numberOfEntries: number;
 };
 

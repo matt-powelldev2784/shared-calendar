@@ -3,18 +3,9 @@ import { format } from 'date-fns';
 import CalendarIcon from '../../assets/icons/cal_icon.svg';
 import DownIcon from '../../assets/icons/down_icon.svg';
 import { Calendar as CustomCalendar } from '@/components/ui/customCalendar';
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from '@/components/ui/popover';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { useState } from 'react';
-import type {
-  CalendarEntry,
-  CalendarEntriesData,
-  Timeslot,
-  TimeslotHeaders,
-} from '@/ts/Calendar';
+import type { CalendarEntriesData, Timeslot, TimeslotHeaders, TimeslotEntry } from '@/ts/Calendar';
 import { CalendarCard } from '../ui/calendarCard';
 import { useSearch, useNavigate } from '@tanstack/react-router';
 import { getCalendarUrl } from '@/lib/getCalendarUrl';
@@ -31,10 +22,7 @@ const OFFICE_END_HOUR = 17;
 const FULL_DAYS_START_HOUR = 0;
 const FULL_DAYS_END_HOUR = 23;
 
-export const CalendarView = ({
-  calendarEntries,
-  timeslotHeaders,
-}: CalendarViewProps) => {
+export const CalendarView = ({ calendarEntries, timeslotHeaders }: CalendarViewProps) => {
   const { calendarIds, startDate, startHour, endHour } = useSearch({
     from: '/get-calendar',
   });
@@ -58,12 +46,8 @@ export const CalendarView = ({
     const calendarUrl = getCalendarUrl({
       calendarIds: calendarIds,
       startDate: format(date, 'yyyy-MM-dd'),
-      startHour:
-        startHour === OFFICE_START_HOUR
-          ? FULL_DAYS_START_HOUR
-          : OFFICE_START_HOUR,
-      endHour:
-        startHour === OFFICE_START_HOUR ? FULL_DAYS_END_HOUR : OFFICE_END_HOUR,
+      startHour: startHour === OFFICE_START_HOUR ? FULL_DAYS_START_HOUR : OFFICE_START_HOUR,
+      endHour: startHour === OFFICE_START_HOUR ? FULL_DAYS_END_HOUR : OFFICE_END_HOUR,
     });
     navigate({
       to: calendarUrl,
@@ -76,23 +60,14 @@ export const CalendarView = ({
         <Popover open={isSelectDateOpen} onOpenChange={setIsSelectDateOpen}>
           <PopoverTrigger asChild>
             <Button variant="datePicker" className="w-96">
-              <img
-                src={CalendarIcon}
-                alt="calendar"
-                className="-w-5 mr-2 h-5"
-              />
+              <img src={CalendarIcon} alt="calendar" className="-w-5 mr-2 h-5" />
               {date ? format(date, 'dd MMMM yyyy') : <span>Pick a date</span>}
               <img src={DownIcon} alt="down" className="-w-5 h-5" />
             </Button>
           </PopoverTrigger>
 
           <PopoverContent className="w-auto">
-            <CustomCalendar
-              mode="single"
-              selected={date}
-              onDateSelect={handleDateSelect}
-              initialFocus
-            />
+            <CustomCalendar mode="single" selected={date} onDateSelect={handleDateSelect} initialFocus />
           </PopoverContent>
         </Popover>
       </div>
@@ -109,9 +84,11 @@ export const CalendarView = ({
             <span>{`${String(startHour).padStart(2, '0')}:00`}</span>
             <span>{`${String(endHour + 1).padStart(2, '0')}:00`}</span>
           </Button>
-          
+
+          {/* Spacer for the calendar timeslots */}
+          <div className="mt-11"></div>
+
           {/* This is the hour timeslots displayed down the left hand side */}
-          <div className="mt-11"></div> {/* Spacer for the button */}
           {timeslotHeaders.map((timeslot) => (
             <p
               key={timeslot.hour}
@@ -122,58 +99,41 @@ export const CalendarView = ({
           ))}
         </section>
 
-        {/* This is the calendar entries displayed in a grid layout */}
+        {/* This is the calendar days displayed in a grid layout */}
         <section className="auto-row-[minmax(100px,1fr)] m-auto mt-2 mr-3 ml-3 grid w-full grid-flow-row gap-2 lg:auto-cols-[minmax(100px,1fr)] lg:grid-flow-col">
           {calendarEntries.map((calendarDay, index) => {
             const { date } = calendarDay;
             const hourTimeslots = calendarDay.entries;
+            const backgroundColor = index % 2 === 0 ? 'bg-gray-100' : 'bg-white';
 
-            {
-              /* This is day headers */
-            }
             return (
-              <div
-                key={date.toISOString()}
-                className={`flex flex-col flex-nowrap lg:flex-col ${
-                  index % 2 === 0 ? 'bg-gray-100' : 'bg-white'
-                }`}
-              >
+              <div key={date.toISOString()} className={`flex flex-col flex-nowrap lg:flex-col ${backgroundColor}`}>
                 <div className="flex h-11 flex-col justify-center bg-blue-500 p-2 text-center font-bold text-white">
-                  <p className="h-4.5 text-[14px] lg:text-[13px] xl:text-[14px]">
-                    {format(date, 'EEEE')}
-                  </p>
-                  <p className="text-[15px] lg:hidden xl:block">
-                    {format(date, 'dd MMMM yyyy')}
-                  </p>
-                  <p className="hidden text-[14px] lg:block xl:hidden">
-                    {format(date, 'dd MMM yy')}
-                  </p>
+                  <p className="h-4.5 text-[14px] lg:text-[13px] xl:text-[14px]">{format(date, 'EEEE')}</p>
+                  <p className="text-[15px] lg:hidden xl:block">{format(date, 'dd MMMM yyyy')}</p>
+                  <p className="hidden text-[14px] lg:block xl:hidden">{format(date, 'dd MMM yy')}</p>
                 </div>
 
                 {/* This is the calendar entries for each hour */}
-                {hourTimeslots.map((hourTimeSlot: Timeslot) => {
-                  const numberOfEntries = hourTimeSlot.numberOfEntries;
+                {hourTimeslots.map((hourTimeslot: Timeslot) => {
+                  const timeslotLength = hourTimeslot.entries.reduce((acc, entry) => {
+                    const entryLength = entry.timeslotLength;
+                    return acc + entryLength;
+                  }, 0);
 
                   return (
                     <div
-                      className="relative h-20 overflow-auto border-b-1 border-gray-300"
-                      key={`${hourTimeSlot.hour}`}
+                      className="relative h-[80px] overflow-auto border-b-1 border-gray-300"
+                      key={`${hourTimeslot.hour - startHour}}`}
                     >
                       {/* Display arrow to show timeslot is scrollable if more than 4 entries*/}
-                      {numberOfEntries > 4 && (
-                        <ChevronsDown className="absolute top-14.5 right-0 z-10 w-3 text-blue-800 opacity-80" />
+                      {timeslotLength > 60 && (
+                        <ChevronsDown className="absolute top-15 right-0 z-10 w-3 text-blue-800 opacity-80" />
                       )}
 
                       {/* Calendar card for each calendar entry */}
-                      {hourTimeSlot.entries.map((entry: CalendarEntry) => {
-                        return (
-                          <CalendarCard
-                            key={hourTimeSlot.hour + '-' + entry.id}
-                            entry={entry}
-                            numberOfEntries={numberOfEntries}
-                            variant="blue"
-                          />
-                        );
+                      {hourTimeslot.entries.map((entry: TimeslotEntry) => {
+                        return <CalendarCard key={hourTimeslot.hour + '-' + entry.id} entry={entry} variant="blue" />;
                       })}
                     </div>
                   );

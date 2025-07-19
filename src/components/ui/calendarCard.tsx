@@ -1,4 +1,4 @@
-import type { CalendarEntry } from '@/ts/Calendar';
+import type { TimeslotEntry } from '@/ts/Calendar';
 import { useNavigate } from '@tanstack/react-router';
 import { format } from 'date-fns';
 import { ClockIcon } from 'lucide-react';
@@ -18,24 +18,20 @@ const tabClasses = {
 };
 
 interface CalendarCardProps {
-  entry: CalendarEntry;
+  entry: TimeslotEntry;
   variant: keyof typeof variantClasses;
-  numberOfEntries: number;
 }
 
-const CalendarCard = ({
-  entry,
-  variant,
-  numberOfEntries,
-}: CalendarCardProps) => {
+const CalendarCard = ({ entry, variant }: CalendarCardProps) => {
   const navigate = useNavigate();
   const { title, startDate, endDate } = entry;
-  const numberOfEntriesRounded =
-    numberOfEntries % 2 === 0 ? numberOfEntries : numberOfEntries + 1;
-  const cardHeight =
-    numberOfEntries === 1
-      ? 20
-      : Math.floor(20 / Math.min(numberOfEntriesRounded, 4));
+
+  // Converts minutes to pixels (1 minute = 1.33px)
+  // parent container height is 80px, 60mins === 80px
+  // card height is displayed using style tag as tailwind does not support dynamic values
+  // minus 1px to stop scroll bar appearing unnecessarily
+  const timeslotHeight = Math.max(Math.round(entry.timeslotLength * 1.33)) - 1;
+  const cardHeight = `${timeslotHeight}px`;
 
   const navigateToEntry = () => {
     navigate({
@@ -45,8 +41,9 @@ const CalendarCard = ({
 
   return (
     <button
-      className={`${variantClasses.default} ${variantClasses[variant]} w-full h-${cardHeight} max-h-${cardHeight}`}
+      className={`${variantClasses.default} ${variantClasses[variant]} w-full`}
       onClick={navigateToEntry}
+      style={{ height: cardHeight }}
     >
       {/* This is the vertical line on the left side of the card */}
       <div className={`${tabClasses[variant]}`}></div>
@@ -57,9 +54,12 @@ const CalendarCard = ({
           {title}
         </p>
 
-        <div className="flex w-full min-w-20 flex-row flex-nowrap items-center justify-end gap-0 overflow-hidden">
-          <ClockIcon size={10} className="w-4" />
-          <p className="overflow-clip pr-3 text-[10px]">
+        <div className="flex w-full min-w-22 flex-row flex-nowrap items-center justify-end gap-0 overflow-hidden">
+          <div className="flex h-3 w-3 items-center justify-center">
+            <ClockIcon size={10} />
+          </div>
+
+          <p className="w-[75px] overflow-clip pr-3 text-[10px]">
             {/* {entryMinutes} */}
             {format(startDate, 'HH:mm')}-{format(endDate, 'HH:mm')}
           </p>
