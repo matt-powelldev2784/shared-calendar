@@ -11,6 +11,7 @@ import { createInitialUserDocuments } from '@/db/auth/createInitialUserDocuments
 import getSubscribedCalendars from '@/db/calendar/getSubscribedCalendars';
 import { getCalendarUrl } from '@/lib/getCalendarUrl';
 import { getResponsiveStartDate } from '@/lib/getResponsiveStartDate';
+import { smallScreenSize } from '@/lib/smallScreenSize';
 
 export const Route = createFileRoute('/authenticated')({
   component: AuthenticatedPage,
@@ -33,7 +34,7 @@ export const Route = createFileRoute('/authenticated')({
 function AuthenticatedPage() {
   const navigate = useNavigate();
   const { user, defaultCalendarId } = useLoaderData({ from: '/authenticated' });
-  const isSmallScreen = window.innerWidth < 1023;
+  const isSmallScreen = window.innerWidth < smallScreenSize;
   const startDate = getResponsiveStartDate(isSmallScreen, new Date());
 
   useEffect(() => {

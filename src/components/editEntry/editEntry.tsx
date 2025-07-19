@@ -41,6 +41,8 @@ import { getEmailsFromUserIds } from '@/db/auth/getEmailsFromUserIds';
 import updateCalendarEntry, {
   type UpdateCalendarEntry,
 } from '@/db/entry/updateCalendarEntry';
+import { getResponsiveStartDate } from '@/lib/getResponsiveStartDate';
+import { smallScreenSize } from '@/lib/smallScreenSize';
 
 const convertFormValuesToEntry = (values: z.infer<typeof formSchema>) => {
   const startDate = new Date(values.date);
@@ -107,6 +109,7 @@ const EditEntry = ({ entry, currentUser }: EditEntryProps) => {
   const [isSelectDateOpen, setIsSelectDateOpen] = useState(false);
   const [isSubscribedUserAdded, setIsSubscribedUserAdded] = useState(false);
   const navigate = useNavigate();
+  const isSmallScreen = window.innerWidth < smallScreenSize;
 
   const populateSubscribedUser = async (userId: string) => {
     try {
@@ -167,12 +170,11 @@ const EditEntry = ({ entry, currentUser }: EditEntryProps) => {
       const calendarEntry = await updateCalendarEntry(entry);
 
       const calendarId = values.calendarId;
-      const startDate = format(entry.startDate, 'yyyy-MM-dd');
 
       if (calendarEntry) {
         const calendarUrl = getCalendarUrl({
           calendarIds: calendarId,
-          startDate,
+          startDate: getResponsiveStartDate(isSmallScreen, entry.startDate),
         });
         navigate({ to: calendarUrl, replace: true });
         return calendarEntry;
@@ -209,12 +211,9 @@ const EditEntry = ({ entry, currentUser }: EditEntryProps) => {
     },
   });
   const errors = form.formState.errors;
-  const hasTimeError = [
-    errors.startTimeHour,
-    errors.startTimeMins,
-    errors.endTimeHour,
-    errors.endTimeMins,
-  ].some((error) => error !== undefined);
+  const hasTimeError = [errors.startTimeHour, errors.startTimeMins, errors.endTimeHour, errors.endTimeMins].some(
+    (error) => error !== undefined,
+  );
   const startAndEndTimeError = errors.startAndEndTimeError?.message;
 
   const handleAddUser = async () => {
@@ -256,15 +255,11 @@ const EditEntry = ({ entry, currentUser }: EditEntryProps) => {
   };
 
   const handleRemoveUser = (user: UserToRequest) => {
-    const updatedUsers = form
-      .getValues('pendingRequests')
-      ?.filter((request) => request !== user.userId);
+    const updatedUsers = form.getValues('pendingRequests')?.filter((request) => request !== user.userId);
 
     form.setValue('pendingRequests', updatedUsers);
 
-    setUsersToRequest((prev) =>
-      prev.filter((requestedUser) => requestedUser.email !== user.email),
-    );
+    setUsersToRequest((prev) => prev.filter((requestedUser) => requestedUser.email !== user.email));
   };
 
   return (
@@ -273,16 +268,12 @@ const EditEntry = ({ entry, currentUser }: EditEntryProps) => {
         <CalendarPlusIcon className="text-primary mr-2 inline-block h-12 w-12" />
         <CardTitle className="text-center">Update Calendar Entry</CardTitle>
         <CardDescription className="text-center">
-          Edit the form below and click the update button to make changes to the
-          calendar entry.
+          Edit the form below and click the update button to make changes to the calendar entry.
         </CardDescription>
       </CardHeader>
       <CardContent className="p-0">
         <Form {...form}>
-          <form
-            onSubmit={form.handleSubmit(onSubmit)}
-            className="flex w-full flex-col items-center p-4"
-          >
+          <form onSubmit={form.handleSubmit(onSubmit)} className="flex w-full flex-col items-center p-4">
             <FormField
               control={form.control}
               name="title"
@@ -317,25 +308,12 @@ const EditEntry = ({ entry, currentUser }: EditEntryProps) => {
               render={({ field }) => (
                 <FormItem className="w-full max-w-[700px]">
                   <FormLabel>Date</FormLabel>
-                  <Popover
-                    open={isSelectDateOpen}
-                    onOpenChange={setIsSelectDateOpen}
-                  >
+                  <Popover open={isSelectDateOpen} onOpenChange={setIsSelectDateOpen}>
                     <PopoverTrigger asChild>
                       <FormControl>
-                        <Button
-                          variant="outlineThin"
-                          size="sm"
-                          className="w-full border-zinc-200"
-                        >
-                          <img
-                            src={CalendarIcon}
-                            alt="calendar"
-                            className="-w-5 mr-2 h-5"
-                          />
-                          {form.getValues('date')
-                            ? format(form.getValues('date'), 'dd MMMM yyyy')
-                            : 'Pick a date'}
+                        <Button variant="outlineThin" size="sm" className="w-full border-zinc-200">
+                          <img src={CalendarIcon} alt="calendar" className="-w-5 mr-2 h-5" />
+                          {form.getValues('date') ? format(form.getValues('date'), 'dd MMMM yyyy') : 'Pick a date'}
                         </Button>
                       </FormControl>
                     </PopoverTrigger>
@@ -373,16 +351,12 @@ const EditEntry = ({ entry, currentUser }: EditEntryProps) => {
                             min="0"
                             max="23"
                             {...field}
-                            onChange={(e) =>
-                              field.onChange(e.target.valueAsNumber)
-                            }
+                            onChange={(e) => field.onChange(e.target.valueAsNumber)}
                             style={{
                               WebkitAppearance: 'none',
                               MozAppearance: 'textfield',
                             }}
-                            onFocus={() =>
-                              form.clearErrors('startAndEndTimeError')
-                            }
+                            onFocus={() => form.clearErrors('startAndEndTimeError')}
                           />
                         </FormControl>
                         <FormMessage className="sr-only" />
@@ -397,9 +371,7 @@ const EditEntry = ({ entry, currentUser }: EditEntryProps) => {
                     name="startTimeMins"
                     render={({ field }) => (
                       <FormItem className="m-0 max-w-[700px] flex-grow">
-                        <FormLabel className="sr-only">
-                          Start time in minutes
-                        </FormLabel>
+                        <FormLabel className="sr-only">Start time in minutes</FormLabel>
                         <FormControl>
                           <Input
                             placeholder="Minutes 2 Digits"
@@ -411,9 +383,7 @@ const EditEntry = ({ entry, currentUser }: EditEntryProps) => {
                               WebkitAppearance: 'none',
                               MozAppearance: 'textfield',
                             }}
-                            onFocus={() =>
-                              form.clearErrors('startAndEndTimeError')
-                            }
+                            onFocus={() => form.clearErrors('startAndEndTimeError')}
                           />
                         </FormControl>
                         <FormMessage className="sr-only" />
@@ -440,12 +410,8 @@ const EditEntry = ({ entry, currentUser }: EditEntryProps) => {
                             min="0"
                             max="23"
                             {...field}
-                            onChange={(e) =>
-                              field.onChange(e.target.valueAsNumber)
-                            }
-                            onFocus={() =>
-                              form.clearErrors('startAndEndTimeError')
-                            }
+                            onChange={(e) => field.onChange(e.target.valueAsNumber)}
+                            onFocus={() => form.clearErrors('startAndEndTimeError')}
                             style={{
                               WebkitAppearance: 'none',
                               MozAppearance: 'textfield',
@@ -463,9 +429,7 @@ const EditEntry = ({ entry, currentUser }: EditEntryProps) => {
                     name="endTimeMins"
                     render={({ field }) => (
                       <FormItem className="m-0 max-w-[700px] flex-grow">
-                        <FormLabel className="sr-only">
-                          End time in minutes
-                        </FormLabel>
+                        <FormLabel className="sr-only">End time in minutes</FormLabel>
                         <FormControl>
                           <Input
                             placeholder="Minutes 2 Digits"
@@ -473,9 +437,7 @@ const EditEntry = ({ entry, currentUser }: EditEntryProps) => {
                             type="text"
                             {...field}
                             onChange={(e) => field.onChange(e.target.value)}
-                            onFocus={() =>
-                              form.clearErrors('startAndEndTimeError')
-                            }
+                            onFocus={() => form.clearErrors('startAndEndTimeError')}
                             style={{
                               WebkitAppearance: 'none',
                               MozAppearance: 'textfield',
@@ -492,8 +454,7 @@ const EditEntry = ({ entry, currentUser }: EditEntryProps) => {
               {/* Display error if any of the 4 time inputs are invalid */}
               {hasTimeError && (
                 <p className="absolute w-full max-w-[700px] translate-y-33 rounded-md px-2 text-center text-sm leading-tight text-red-500 md:translate-y-10">
-                  Hours must be between 0 and 23 and minutes must be between 00
-                  and 59.
+                  Hours must be between 0 and 23 and minutes must be between 00 and 59.
                 </p>
               )}
 
@@ -546,13 +507,8 @@ const EditEntry = ({ entry, currentUser }: EditEntryProps) => {
                         className="border-secondary/25 text-secondary flex w-full flex-grow items-center justify-between gap-2 rounded-md border-1 px-4 py-1"
                       >
                         <AtSign />
-                        <p className="w-full truncate text-center text-xs sm:text-sm">
-                          {user.email}
-                        </p>
-                        <button
-                          className="text-destructive px-2 font-bold"
-                          onClick={() => handleRemoveUser(user)}
-                        >
+                        <p className="w-full truncate text-center text-xs sm:text-sm">{user.email}</p>
+                        <button className="text-destructive px-2 font-bold" onClick={() => handleRemoveUser(user)}>
                           <CircleX />
                         </button>
                       </li>
@@ -564,11 +520,7 @@ const EditEntry = ({ entry, currentUser }: EditEntryProps) => {
 
             <div className="border-secondary/50 mt-5 w-full border-2 md:hidden"></div>
 
-            <Button
-              type="submit"
-              className="mt-8 w-full max-w-[700px]"
-              size="lg"
-            >
+            <Button type="submit" className="mt-8 w-full max-w-[700px]" size="lg">
               {mutation.isPending ? <Loading variant="sm" /> : 'Update Entry'}
             </Button>
           </form>

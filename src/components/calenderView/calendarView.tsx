@@ -12,6 +12,7 @@ import { getCalendarUrl } from '@/lib/getCalendarUrl';
 import { useResponsiveCalendarEntries } from '@/lib/useResponsiveCalendarEntries';
 import { ChevronsDown, Clock } from 'lucide-react';
 import { getResponsiveStartDate } from '@/lib/getResponsiveStartDate';
+import { smallScreenSize } from '@/lib/smallScreenSize';
 
 type CalendarViewProps = {
   calendarEntries: CalendarEntriesData[];
@@ -29,7 +30,7 @@ export const CalendarView = ({ calendarEntries, timeslotHeaders }: CalendarViewP
     from: '/get-calendar',
   });
   const date = new Date(startDate);
-  const isSmallScreen = window.innerWidth < 1023;
+  const isSmallScreen = window.innerWidth < smallScreenSize;
   const navigate = useNavigate();
   const [isSelectDateOpen, setIsSelectDateOpen] = useState(false);
   const responsiveCalendarEntries = useResponsiveCalendarEntries(calendarEntries);
