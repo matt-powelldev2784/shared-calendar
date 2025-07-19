@@ -164,13 +164,11 @@ const DropDownMenu = ({
   }, [menuIsOpen]);
 
   return (
-    <div ref={menuRef} className="flex items-center gap-5">
+    <div ref={menuRef} className="z-9999 flex items-center gap-5">
       <NavIconButton
         className={`${notificationCount > 0 ? 'h-8 w-8 cursor-pointer rounded-full bg-yellow-400' : 'cursor-pointer bg-none'}`}
         onClick={handleMenuClick}
-        ariaLabel={
-          menuIsOpen ? `Close ${menuName} menu` : `Open ${menuName} menu`
-        }
+        ariaLabel={menuIsOpen ? `Close ${menuName} menu` : `Open ${menuName} menu`}
       >
         {icon}
       </NavIconButton>
@@ -182,21 +180,10 @@ const DropDownMenu = ({
         }
       >
         {menuIsOpen &&
-          navigationItems.map((item) => (
-            <NavItem
-              key={item.id}
-              {...item}
-              onClick={() => setMenuIsOpen(false)}
-            />
-          ))}
+          navigationItems.map((item) => <NavItem key={item.id} {...item} onClick={() => setMenuIsOpen(false)} />)}
 
         {menuIsOpen && navigationItems.length === 0 && (
-          <NavItemPlaceholder
-            id={menuName}
-            text={`No ${menuName}s`}
-            icon={icon}
-            onClick={() => setMenuIsOpen(false)}
-          />
+          <NavItemPlaceholder id={menuName} text={`No ${menuName}s`} icon={icon} onClick={() => setMenuIsOpen(false)} />
         )}
       </ul>
     </div>
