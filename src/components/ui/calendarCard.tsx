@@ -31,7 +31,7 @@ const CalendarCard = ({ entry, variant }: CalendarCardProps) => {
   // card height is displayed using style tag as tailwind does not support dynamic values
   const getCardHeight = () => {
     const timeslotHeight = entry.timeslotLength
-      ? Math.max(Math.round(entry.timeslotLength * 1.33), 20) // 20px is the min height
+      ? Math.max(Math.round(entry.timeslotLength * 1.33), 20) - 0.5 // 20px is the min height
       : 0;
 
     return timeslotHeight;
@@ -60,9 +60,12 @@ const CalendarCard = ({ entry, variant }: CalendarCardProps) => {
           {title}
         </p>
 
-        <div className="flex w-full min-w-20 flex-row flex-nowrap items-center justify-end gap-0 overflow-hidden">
-          <ClockIcon size={10} className="w-4" />
-          <p className="overflow-clip pr-3 text-[10px]">
+        <div className="flex w-full min-w-22 flex-row flex-nowrap items-center justify-end gap-0 overflow-hidden">
+          <div className="flex h-3 w-3 items-center justify-center">
+            <ClockIcon size={10} />
+          </div>
+
+          <p className="w-[75px] overflow-clip pr-3 text-[10px]">
             {/* {entryMinutes} */}
             {format(startDate, 'HH:mm')}-{format(endDate, 'HH:mm')}
           </p>

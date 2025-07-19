@@ -128,7 +128,7 @@ export const CalendarView = ({ calendarEntries, timeslotHeaders }: CalendarViewP
                     >
                       {/* Display arrow to show timeslot is scrollable if more than 4 entries*/}
                       {timeslotLength > 60 && (
-                        <ChevronsDown className="absolute top-14.5 right-0 z-10 w-3 text-blue-800 opacity-80" />
+                        <ChevronsDown className="absolute top-15 right-0 z-10 w-3 text-blue-800 opacity-80" />
                       )}
 
                       {/* Calendar card for each calendar entry */}
