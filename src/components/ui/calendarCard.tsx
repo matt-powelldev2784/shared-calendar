@@ -29,15 +29,9 @@ const CalendarCard = ({ entry, variant }: CalendarCardProps) => {
   // Converts minutes to pixels (1 minute = 1.33px)
   // parent container height is 80px, 60mins === 80px
   // card height is displayed using style tag as tailwind does not support dynamic values
-  const getCardHeight = () => {
-    const timeslotHeight = entry.timeslotLength
-      ? Math.max(Math.round(entry.timeslotLength * 1.33), 20) - 0.5 // 20px is the min height
-      : 0;
-
-    return timeslotHeight;
-  };
-
-  const cardHeight = `${getCardHeight()}px`;
+  // minus 1px to stop scroll bar appearing unnecessarily
+  const timeslotHeight = Math.max(Math.round(entry.timeslotLength * 1.33)) - 1;
+  const cardHeight = `${timeslotHeight}px`;
 
   const navigateToEntry = () => {
     navigate({
