@@ -10,6 +10,7 @@ import type { CustomError } from '@/ts/errorClass';
 import { createInitialUserDocuments } from '@/db/auth/createInitialUserDocuments';
 import getSubscribedCalendars from '@/db/calendar/getSubscribedCalendars';
 import { getCalendarUrl } from '@/lib/getCalendarUrl';
+import { getResponsiveStartDate } from '@/lib/getResponsiveStartDate';
 
 export const Route = createFileRoute('/authenticated')({
   component: AuthenticatedPage,
@@ -32,9 +33,11 @@ export const Route = createFileRoute('/authenticated')({
 function AuthenticatedPage() {
   const navigate = useNavigate();
   const { user, defaultCalendarId } = useLoaderData({ from: '/authenticated' });
+  const isSmallScreen = window.innerWidth < 1023;
+  const startDate = getResponsiveStartDate(isSmallScreen, new Date());
 
   useEffect(() => {
-    const calendarUrl = getCalendarUrl({ calendarIds: defaultCalendarId });
+    const calendarUrl = getCalendarUrl({ calendarIds: defaultCalendarId, startDate });
     navigate({ to: calendarUrl, replace: true });
   }, [user]);
 
