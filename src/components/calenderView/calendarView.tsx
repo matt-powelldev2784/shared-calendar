@@ -9,7 +9,7 @@ import type { CalendarEntriesData, Timeslot, TimeslotHeaders, TimeslotEntry } fr
 import { CalendarCard } from '../ui/calendarCard';
 import { useSearch, useNavigate } from '@tanstack/react-router';
 import { getCalendarUrl } from '@/lib/getCalendarUrl';
-import { useDaysToViewResizeForSmallScreens } from '@/lib/useDaysToViewResizeForSmallScreens';
+import { useResponsiveCalendarEntries } from '@/lib/useResponsiveCalendarEntries';
 import { ChevronsDown, Clock } from 'lucide-react';
 
 type CalendarViewProps = {
@@ -29,13 +29,14 @@ export const CalendarView = ({ calendarEntries, timeslotHeaders }: CalendarViewP
   const date = new Date(startDate);
   const navigate = useNavigate();
   const [isSelectDateOpen, setIsSelectDateOpen] = useState(false);
-  useDaysToViewResizeForSmallScreens();
+  const responsiveCalendarEntries = useResponsiveCalendarEntries(calendarEntries);
 
   const handleDateSelect = (selectedDate: Date) => {
     setIsSelectDateOpen(false);
     const calendarUrl = getCalendarUrl({
       calendarIds: calendarIds,
       startDate: format(selectedDate, 'yyyy-MM-dd'),
+      daysToView: 7,
     });
     navigate({
       to: calendarUrl,
@@ -48,6 +49,7 @@ export const CalendarView = ({ calendarEntries, timeslotHeaders }: CalendarViewP
       startDate: format(date, 'yyyy-MM-dd'),
       startHour: startHour === OFFICE_START_HOUR ? FULL_DAYS_START_HOUR : OFFICE_START_HOUR,
       endHour: startHour === OFFICE_START_HOUR ? FULL_DAYS_END_HOUR : OFFICE_END_HOUR,
+      daysToView: 7,
     });
     navigate({
       to: calendarUrl,
@@ -85,7 +87,7 @@ export const CalendarView = ({ calendarEntries, timeslotHeaders }: CalendarViewP
             <span>{`${String(endHour + 1).padStart(2, '0')}:00`}</span>
           </Button>
 
-          {/* Spacer for the calendar timeslots */}
+          {/* Spacer to line up the calendar timeslots with the calendar */}
           <div className="mt-11"></div>
 
           {/* This is the hour timeslots displayed down the left hand side */}
@@ -101,7 +103,7 @@ export const CalendarView = ({ calendarEntries, timeslotHeaders }: CalendarViewP
 
         {/* This is the calendar days displayed in a grid layout */}
         <section className="auto-row-[minmax(100px,1fr)] m-auto mt-2 mr-3 ml-3 grid w-full grid-flow-row gap-2 lg:auto-cols-[minmax(100px,1fr)] lg:grid-flow-col">
-          {calendarEntries.map((calendarDay, index) => {
+          {responsiveCalendarEntries.map((calendarDay, index) => {
             const { date } = calendarDay;
             const hourTimeslots = calendarDay.entries;
             const backgroundColor = index % 2 === 0 ? 'bg-gray-100' : 'bg-white';
