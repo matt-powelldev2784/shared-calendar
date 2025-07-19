@@ -124,7 +124,7 @@ export const CalendarView = ({ calendarEntries, timeslotHeaders }: CalendarViewP
                   return (
                     <div
                       className="relative h-[80px] overflow-auto border-b-1 border-gray-300"
-                      key={`${hourTimeslot.hour - startHour}-${Math.random()}`}
+                      key={`${hourTimeslot.hour - startHour}}`}
                     >
                       {/* Display arrow to show timeslot is scrollable if more than 4 entries*/}
                       {timeslotLength > 60 && (
@@ -133,13 +133,7 @@ export const CalendarView = ({ calendarEntries, timeslotHeaders }: CalendarViewP
 
                       {/* Calendar card for each calendar entry */}
                       {hourTimeslot.entries.map((entry: CalendarEntry) => {
-                        return (
-                          <CalendarCard
-                            key={hourTimeslot.hour + '-' + entry.id + Math.random()}
-                            entry={entry}
-                            variant="blue"
-                          />
-                        );
+                        return <CalendarCard key={hourTimeslot.hour + '-' + entry.id} entry={entry} variant="blue" />;
                       })}
                     </div>
                   );
