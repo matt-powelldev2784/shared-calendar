@@ -14,6 +14,7 @@ const calendarSearchSchema = z.object({
   daysToView: z.number(),
   startHour: z.number(),
   endHour: z.number(),
+  uniqueRefreshString: z.number(),
 });
 
 // example route : domain/get-calendar?calendarId=abcdefghijklmnopqrstuvwxyz&startDate=2025-03-15&daysToView=7
@@ -29,11 +30,10 @@ export const Route = createFileRoute('/get-calendar')({
     daysToView: search.daysToView,
     startHour: search.startHour,
     endHour: search.endHour,
+    uniqueRefreshString: search.uniqueRefreshString,
   }),
 
-  loader: async ({
-    deps: { calendarIds, startDate, daysToView, startHour, endHour },
-  }) => {
+  loader: async ({ deps: { calendarIds, startDate, daysToView, startHour, endHour } }) => {
     const start = startDate ? new Date(startDate) : new Date();
     const end = addDays(new Date(startDate), daysToView);
     const calendarIdArray = calendarIds.split(',');

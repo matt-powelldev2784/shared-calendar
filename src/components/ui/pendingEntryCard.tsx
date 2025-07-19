@@ -71,7 +71,7 @@ const PendingEntryCard = ({ entry, requestId, variant }: PendingEntryCardProps) 
       });
 
       queryClient.invalidateQueries({ queryKey: ['requests'] });
-      navigate({ to: calendarUrl, replace: true });
+      navigate({ to: calendarUrl });
     },
     onError: (error: CustomError) => {
       const status = error?.status || 500;

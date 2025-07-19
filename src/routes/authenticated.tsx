@@ -39,7 +39,9 @@ function AuthenticatedPage() {
 
   useEffect(() => {
     const calendarUrl = getCalendarUrl({ calendarIds: defaultCalendarId, startDate });
-    navigate({ to: calendarUrl, replace: true });
+    setTimeout(() => {
+      navigate({ to: calendarUrl });
+    }, 500);
   }, [user]);
 
   return (

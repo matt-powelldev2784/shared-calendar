@@ -21,6 +21,7 @@ export const getCalendarUrl = ({
     `&startDate=${startDate || today}` +
     `&daysToView=${daysToView ?? 7}` +
     `&startHour=${startHour ?? 8}` +
-    `&endHour=${endHour ?? 17}`
+    `&endHour=${endHour ?? 17}` +
+    `&uniqueRefreshString=${Date.now()}`
   );
 };

@@ -176,7 +176,7 @@ const EditEntry = ({ entry, currentUser }: EditEntryProps) => {
           calendarIds: calendarId,
           startDate: getResponsiveStartDate(isSmallScreen, entry.startDate),
         });
-        navigate({ to: calendarUrl, replace: true });
+        navigate({ to: calendarUrl });
         return calendarEntry;
       }
     },

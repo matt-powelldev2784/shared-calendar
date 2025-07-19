@@ -42,7 +42,7 @@ export const CalendarView = ({ calendarEntries, timeslotHeaders }: CalendarViewP
       startDate: getResponsiveStartDate(isSmallScreen, selectedDate),
       daysToView: DEFAULT_DAYS_TO_VIEW,
     });
-    navigate({ to: calendarUrl, replace: true });
+    navigate({ to: calendarUrl });
   };
 
   const toggleHoursToView = () => {
@@ -53,7 +53,7 @@ export const CalendarView = ({ calendarEntries, timeslotHeaders }: CalendarViewP
       endHour: startHour === OFFICE_START_HOUR ? FULL_DAYS_END_HOUR : OFFICE_END_HOUR,
       daysToView: DEFAULT_DAYS_TO_VIEW,
     });
-    navigate({ to: calendarUrl, replace: true });
+    navigate({ to: calendarUrl });
   };
 
   return (
