@@ -10,17 +10,16 @@ export const createSampleEntires = async (calendarId: string) => {
     {
       title: 'Sample Entry',
       description: '',
-      startDate: setMinutes(setHours(addDays(monday, 0), 8), 0), // Monday 08:00
-      endDate: setMinutes(setHours(addDays(monday, 0), 9), 0), // Monday 09:00
+      startDate: new Date(now.getFullYear(), now.getMonth(), now.getDate(), 8, 0),
+      endDate: new Date(now.getFullYear(), now.getMonth(), now.getDate(), 9, 0),
       calendarId,
       pendingRequests: [],
     },
     {
-      title: 'https://matt-powelldev2784.github.io/founders_and_coders_feature_game/',
-      description:
-        'See my platform game project : Junior Dev Person is an 8-bit style game built with an endlessly scrolling background effect. It uses the requestAnimationFrame method to constantly update the DOM after each repaint. Game tokens are generated randomly and removed from the DOM once they have traveled across the screen. A backend built using NodeJS and Express is used to store the high scores. Touch detection logic is used to enable play on touch devices.',
-      startDate: setMinutes(setHours(addDays(monday, 1), 9), 0), // Tuesday 09:00
-      endDate: setMinutes(setHours(addDays(monday, 1), 9), 30), // Tuesday 09:30
+      title: 'https://matthew-powell-dev.com/',
+      description: 'See my website!',
+      startDate: setMinutes(setHours(addDays(monday, 1), 11), 0), // Tuesday 11:00
+      endDate: setMinutes(setHours(addDays(monday, 1), 11), 45), // Tuesday 11:45
       calendarId,
       pendingRequests: [],
     },

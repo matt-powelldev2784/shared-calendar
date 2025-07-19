@@ -8,7 +8,6 @@ import {
 } from 'firebase/firestore';
 import { db } from '@/db/firebaseConfig';
 import checkAuth from '@/db/auth/checkAuth';
-import type { User } from 'firebase/auth';
 import { createSampleEntires } from './createSampleEntries';
 
 // if the user is signing in for the first time
@@ -23,12 +22,19 @@ export const createInitialUserDocuments = async () => {
     const userDocRef = doc(db, 'users', user.uid);
     const userDoc = await getDoc(userDocRef);
 
+    if (userDoc.exists()) {
+      await updateDoc(userDocRef, {
+        firstTimeUser: false,
+      });
+    }
+
     if (!userDoc.exists()) {
       await setDoc(userDocRef, {
         displayName: user.displayName,
         email: user.email,
         subscribedCalendars: [],
         userId: user.uid,
+        firstTimeUser: true,
       });
 
       // create a public user document
@@ -62,7 +68,7 @@ export const createInitialUserDocuments = async () => {
     const currentUserDoc = await getDoc(userDocRef);
     const userData = currentUserDoc.data();
 
-    return userData as User;
+    return userData;
   } catch (error) {
     console.error('Error adding default calendar:', error);
     throw error;

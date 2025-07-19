@@ -21,6 +21,7 @@ export const Route = createFileRoute('/authenticated')({
     // otherwise get the user
     const user = await createInitialUserDocuments();
     const calendars = await getSubscribedCalendars();
+    console.log('calendars', calendars);
     const defaultCalendarId = calendars[0].calendarId;
 
     return { user, defaultCalendarId };
@@ -39,9 +40,13 @@ function AuthenticatedPage() {
 
   useEffect(() => {
     const calendarUrl = getCalendarUrl({ calendarIds: defaultCalendarId, startDate });
-    setTimeout(() => {
+    if (user?.firstTimeUser) {
+      setTimeout(() => {
+        navigate({ to: calendarUrl });
+      }, 1000);
+    } else {
       navigate({ to: calendarUrl });
-    }, 1000);
+    }
   }, [user]);
 
   return (
