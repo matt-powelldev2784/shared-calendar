@@ -75,7 +75,7 @@ export const CalendarView = ({ calendarEntries, timeslotHeaders }: CalendarViewP
       </div>
 
       <div className="flex w-full flex-row items-center justify-center">
-        {/* This is the hours toggle button displayed on the left side of the calendar view */}
+        {/* OFFICE or FULL_DAY hours toggle button displayed on the left side of the calendar view */}
         <section className="relative mt-2 ml-3 flex h-full w-8 flex-col items-end sm:ml-4">
           <Button
             variant="default"
@@ -90,7 +90,7 @@ export const CalendarView = ({ calendarEntries, timeslotHeaders }: CalendarViewP
           {/* Spacer to line up the calendar timeslots with the calendar */}
           <div className="mt-11"></div>
 
-          {/* This is the hour timeslots displayed down the left hand side */}
+          {/* Hours timeslots headers displayed down the left hand side */}
           {timeslotHeaders.map((timeslot) => (
             <p
               key={timeslot.hour}
@@ -101,7 +101,7 @@ export const CalendarView = ({ calendarEntries, timeslotHeaders }: CalendarViewP
           ))}
         </section>
 
-        {/* This is the calendar days displayed in a grid layout */}
+        {/* Calendar days displayed in a grid layout */}
         <section className="auto-row-[minmax(100px,1fr)] m-auto mt-2 mr-3 ml-3 grid w-full grid-flow-row gap-2 lg:auto-cols-[minmax(100px,1fr)] lg:grid-flow-col">
           {responsiveCalendarEntries.map((calendarDay, index) => {
             const { date } = calendarDay;
@@ -116,7 +116,7 @@ export const CalendarView = ({ calendarEntries, timeslotHeaders }: CalendarViewP
                   <p className="hidden text-[14px] lg:block xl:hidden">{format(date, 'dd MMM yy')}</p>
                 </div>
 
-                {/* This is the calendar entries for each hour */}
+                {/* Calendar entries for each hour */}
                 {hourTimeslots.map((hourTimeslot: Timeslot) => {
                   const timeslotLength = hourTimeslot.entries.reduce((acc, entry) => {
                     const entryLength = entry.timeslotLength;
@@ -128,12 +128,12 @@ export const CalendarView = ({ calendarEntries, timeslotHeaders }: CalendarViewP
                       className="relative h-[80px] overflow-auto border-b-1 border-gray-300"
                       key={`${hourTimeslot.hour - startHour}}`}
                     >
-                      {/* Display arrow to show timeslot is scrollable if more than 4 entries*/}
+                      {/* Display arrow to show timeslot is scrollable u*/}
                       {timeslotLength > 60 && (
                         <ChevronsDown className="absolute top-15 right-0 z-10 w-3 text-blue-800 opacity-80" />
                       )}
 
-                      {/* Calendar card for each calendar entry */}
+                      {/* Calendar card for each calendar timeslot */}
                       {hourTimeslot.entries.map((entry: TimeslotEntry) => {
                         return <CalendarCard key={hourTimeslot.hour + '-' + entry.id} entry={entry} variant="blue" />;
                       })}
