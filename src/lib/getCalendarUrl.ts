@@ -6,6 +6,7 @@ type getCalendarUrlProps = {
   daysToView?: number;
   startHour?: number;
   endHour?: number;
+  uniqueRefreshString?: number;
 };
 
 export const getCalendarUrl = ({
@@ -14,6 +15,7 @@ export const getCalendarUrl = ({
   daysToView,
   startHour,
   endHour,
+  uniqueRefreshString,
 }: getCalendarUrlProps) => {
   const today = format(new Date(), 'yyyy-MM-dd');
   return (
@@ -22,6 +24,6 @@ export const getCalendarUrl = ({
     `&daysToView=${daysToView ?? 7}` +
     `&startHour=${startHour ?? 8}` +
     `&endHour=${endHour ?? 17}` +
-    `&uniqueRefreshString=${Date.now()}`
+    `&uniqueRefreshString=${uniqueRefreshString ?? Date.now()}`
   );
 };
