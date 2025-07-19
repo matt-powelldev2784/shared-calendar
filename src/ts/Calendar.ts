@@ -9,7 +9,10 @@ export type CalendarEntry = {
   ownerIds: string[];
   subscribers: string[];
   pendingRequests: string[];
-  timeslotLength: number; // length of the timeslot in minutes
+};
+
+export type TimeslotEntry = CalendarEntry & {
+  timeslotLength: number;
 };
 
 export type Calendar = {
@@ -28,7 +31,7 @@ export type Calendar = {
 
 export type Timeslot = {
   hour: number;
-  entries: CalendarEntry[];
+  entries: TimeslotEntry[];
   numberOfEntries: number;
 };
 

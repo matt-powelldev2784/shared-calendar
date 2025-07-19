@@ -1,4 +1,4 @@
-import type { CalendarEntry } from '@/ts/Calendar';
+import type { TimeslotEntry } from '@/ts/Calendar';
 import { useNavigate } from '@tanstack/react-router';
 import { format } from 'date-fns';
 import { ClockIcon } from 'lucide-react';
@@ -18,7 +18,7 @@ const tabClasses = {
 };
 
 interface CalendarCardProps {
-  entry: CalendarEntry;
+  entry: TimeslotEntry;
   variant: keyof typeof variantClasses;
 }
 

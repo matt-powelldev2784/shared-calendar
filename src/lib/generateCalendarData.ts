@@ -1,4 +1,4 @@
-import type { CalendarEntry, TimeslotHeaders } from '@/ts/Calendar';
+import type { CalendarEntry, TimeslotEntry, TimeslotHeaders } from '@/ts/Calendar';
 import { addDays, addMinutes, differenceInMinutes, format } from 'date-fns';
 
 type GetDatesToDisplay = {
@@ -17,10 +17,7 @@ const generateCalendarData = ({
   endHour,
 }: GetDatesToDisplay) => {
   // initialize array where the length is the number of days to return
-  const initializeDaysToReturn = Array.from(
-    { length: daysToReturn },
-    () => undefined,
-  );
+  const initializeDaysToReturn = Array.from({ length: daysToReturn }, () => undefined);
 
   // map the dates of the days to display
   const dateTitles: Date[] =
@@ -38,7 +35,7 @@ const generateCalendarData = ({
     const hoursToDisplay = endHour - startHour + 1;
     const entiresByHour = Array.from({ length: hoursToDisplay }).map((_, i) => ({
       hour: startHour + i,
-      entries: [] as CalendarEntry[],
+      entries: [] as TimeslotEntry[],
       numberOfEntries: 0,
     }));
 
@@ -101,10 +98,7 @@ const generateCalendarData = ({
 
 export default generateCalendarData;
 
-const generateTimeslotHeaders = (
-  startHour: number,
-  endHour: number,
-): TimeslotHeaders[] => {
+const generateTimeslotHeaders = (startHour: number, endHour: number): TimeslotHeaders[] => {
   const hoursToDisplay = endHour - startHour + 1;
   const timeslots = Array.from({ length: hoursToDisplay }).map((_, i) => ({
     hour: startHour + i,

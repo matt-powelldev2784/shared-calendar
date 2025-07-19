@@ -5,7 +5,7 @@ import DownIcon from '../../assets/icons/down_icon.svg';
 import { Calendar as CustomCalendar } from '@/components/ui/customCalendar';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { useState } from 'react';
-import type { CalendarEntry, CalendarEntriesData, Timeslot, TimeslotHeaders } from '@/ts/Calendar';
+import type { CalendarEntriesData, Timeslot, TimeslotHeaders, TimeslotEntry } from '@/ts/Calendar';
 import { CalendarCard } from '../ui/calendarCard';
 import { useSearch, useNavigate } from '@tanstack/react-router';
 import { getCalendarUrl } from '@/lib/getCalendarUrl';
@@ -132,7 +132,7 @@ export const CalendarView = ({ calendarEntries, timeslotHeaders }: CalendarViewP
                       )}
 
                       {/* Calendar card for each calendar entry */}
-                      {hourTimeslot.entries.map((entry: CalendarEntry) => {
+                      {hourTimeslot.entries.map((entry: TimeslotEntry) => {
                         return <CalendarCard key={hourTimeslot.hour + '-' + entry.id} entry={entry} variant="blue" />;
                       })}
                     </div>
