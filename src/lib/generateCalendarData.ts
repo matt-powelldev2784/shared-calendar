@@ -35,15 +35,12 @@ const generateCalendarData = ({
   // each hour has an array of calendar entries for that hour
   const calendarEntries = dateTitles.map((date, index) => {
     // create an array of 24 objects, one for each hour of the day
-    // each object will have an hour and an array of entries for that hour
     const hoursToDisplay = endHour - startHour + 1;
-    const entiresByHour = Array.from({ length: hoursToDisplay }).map(
-      (_, i) => ({
-        hour: startHour + i,
-        entries: [] as CalendarEntry[],
-        numberOfEntries: 0,
-      }),
-    );
+    const entiresByHour = Array.from({ length: hoursToDisplay }).map((_, i) => ({
+      hour: startHour + i,
+      entries: [] as CalendarEntry[],
+      numberOfEntries: 0,
+    }));
 
     // filter the calendar data for the current date
     // sort by date and time
@@ -51,10 +48,7 @@ const generateCalendarData = ({
     // if the entry is longer than 60 minutes, add it to the next timeslots as required
     calendarData
       .filter((entry) => format(date, 'd') === format(entry.startDate, 'd'))
-      .sort(
-        (a, b) =>
-          new Date(a.startDate).getTime() - new Date(b.startDate).getTime(),
-      )
+      .sort((a, b) => new Date(a.startDate).getTime() - new Date(b.startDate).getTime())
       .forEach((entry) => {
         const hour = new Date(entry.startDate).getHours();
         const hourIndex = hour - startHour;
@@ -75,10 +69,7 @@ const generateCalendarData = ({
           // if the entry is for the last timeslot, set the final timeslot length
           // and add the entry to relevant hour
           if (i === numberOfHourTimeslots - 1) {
-            const finalTimeslotLength = differenceInMinutes(
-              entry.endDate,
-              addMinutes(entry.startDate, i * 60),
-            );
+            const finalTimeslotLength = differenceInMinutes(entry.endDate, addMinutes(entry.startDate, i * 60));
             const entryWithFinishedTime = {
               ...entry,
               finalTimeslotLength,

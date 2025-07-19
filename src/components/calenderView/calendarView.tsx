@@ -65,6 +65,8 @@ export const CalendarView = ({ calendarEntries, timeslotHeaders }: CalendarViewP
     });
   };
 
+  console.log('calendarEntries', calendarEntries);
+
   return (
     <div className="flex w-full flex-col items-center justify-center pb-20">
       <div className="bg-primary/25 z-100s relative flex h-13 w-full items-center justify-center gap-4 p-2">
