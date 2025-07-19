@@ -10,8 +10,7 @@ import { format } from 'date-fns';
 import { ClockIcon } from 'lucide-react';
 
 const variantClasses = {
-  default:
-    'relative flex cursor-pointer border-dotted border-2 border-orange-500',
+  default: 'relative flex cursor-pointer border-dotted border-2 border-orange-500',
   blue: 'bg-lightBlue text-grey-900',
   yellow: 'bg-lightYellow text-darkYellow',
   white: '',
@@ -31,11 +30,7 @@ type PendingEntryCardProps = {
   variant: keyof typeof variantClasses;
 };
 
-const PendingEntryCard = ({
-  entry,
-  requestId,
-  variant,
-}: PendingEntryCardProps) => {
+const PendingEntryCard = ({ entry, requestId, variant }: PendingEntryCardProps) => {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const { title, startDate, endDate } = entry;
@@ -57,7 +52,7 @@ const PendingEntryCard = ({
       });
 
       queryClient.invalidateQueries({ queryKey: ['requests'] });
-      navigate({ to: calendarUrl });
+      navigate({ to: calendarUrl, replace: true });
     },
     onError: (error: CustomError) => {
       const status = error?.status || 500;
@@ -76,7 +71,7 @@ const PendingEntryCard = ({
       });
 
       queryClient.invalidateQueries({ queryKey: ['requests'] });
-      navigate({ to: calendarUrl });
+      navigate({ to: calendarUrl, replace: true });
     },
     onError: (error: CustomError) => {
       const status = error?.status || 500;

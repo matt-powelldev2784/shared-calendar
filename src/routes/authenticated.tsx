@@ -35,9 +35,7 @@ function AuthenticatedPage() {
 
   useEffect(() => {
     const calendarUrl = getCalendarUrl({ calendarIds: defaultCalendarId });
-    navigate({
-      to: calendarUrl,
-    });
+    navigate({ to: calendarUrl, replace: true });
   }, [user]);
 
   return (

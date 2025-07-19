@@ -42,9 +42,7 @@ export const CalendarView = ({ calendarEntries, timeslotHeaders }: CalendarViewP
         : format(startOfWeek(selectedDate, { weekStartsOn: 1 }), 'yyyy-MM-dd'), // Use start of week for larger screens
       daysToView: DEFAULT_DAYS_TO_VIEW,
     });
-    navigate({
-      to: calendarUrl,
-    });
+    navigate({ to: calendarUrl, replace: true });
   };
 
   const toggleHoursToView = () => {
@@ -55,9 +53,7 @@ export const CalendarView = ({ calendarEntries, timeslotHeaders }: CalendarViewP
       endHour: startHour === OFFICE_START_HOUR ? FULL_DAYS_END_HOUR : OFFICE_END_HOUR,
       daysToView: DEFAULT_DAYS_TO_VIEW,
     });
-    navigate({
-      to: calendarUrl,
-    });
+    navigate({ to: calendarUrl, replace: true });
   };
 
   return (

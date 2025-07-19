@@ -126,9 +126,7 @@ const AddEntry = ({ calendars }: AddEntryProps) => {
           calendarIds: calendarId,
           startDate,
         });
-        navigate({
-          to: calendarUrl,
-        });
+        navigate({ to: calendarUrl, replace: true });
         return calendarEntry;
       }
     },
