@@ -3,18 +3,9 @@ import { format } from 'date-fns';
 import CalendarIcon from '../../assets/icons/cal_icon.svg';
 import DownIcon from '../../assets/icons/down_icon.svg';
 import { Calendar as CustomCalendar } from '@/components/ui/customCalendar';
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from '@/components/ui/popover';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { useState } from 'react';
-import type {
-  CalendarEntry,
-  CalendarEntriesData,
-  Timeslot,
-  TimeslotHeaders,
-} from '@/ts/Calendar';
+import type { CalendarEntry, CalendarEntriesData, Timeslot, TimeslotHeaders } from '@/ts/Calendar';
 import { CalendarCard } from '../ui/calendarCard';
 import { useSearch, useNavigate } from '@tanstack/react-router';
 import { getCalendarUrl } from '@/lib/getCalendarUrl';
@@ -30,8 +21,6 @@ const OFFICE_START_HOUR = 8;
 const OFFICE_END_HOUR = 17;
 const FULL_DAYS_START_HOUR = 0;
 const FULL_DAYS_END_HOUR = 23;
-
-
 
 export const CalendarView = ({ calendarEntries, timeslotHeaders }: CalendarViewProps) => {
   const { calendarIds, startDate, startHour, endHour } = useSearch({
@@ -64,8 +53,6 @@ export const CalendarView = ({ calendarEntries, timeslotHeaders }: CalendarViewP
       to: calendarUrl,
     });
   };
-
-  console.log('calendarEntries', calendarEntries);
 
   return (
     <div className="flex w-full flex-col items-center justify-center pb-20">
@@ -128,24 +115,27 @@ export const CalendarView = ({ calendarEntries, timeslotHeaders }: CalendarViewP
                 </div>
 
                 {/* This is the calendar entries for each hour */}
-                {hourTimeslots.map((hourTimeSlot: Timeslot) => {
-                  const numberOfEntries = hourTimeSlot.numberOfEntries;
+                {hourTimeslots.map((hourTimeslot: Timeslot) => {
+                  const timeslotLength = hourTimeslot.entries.reduce((acc, entry) => {
+                    const entryLength = entry.timeslotLength;
+                    return acc + entryLength;
+                  }, 0);
 
                   return (
                     <div
                       className="relative h-[80px] overflow-auto border-b-1 border-gray-300"
-                      key={`${hourTimeSlot.hour - startHour}-${Math.random()}`}
+                      key={`${hourTimeslot.hour - startHour}-${Math.random()}`}
                     >
                       {/* Display arrow to show timeslot is scrollable if more than 4 entries*/}
-                      {numberOfEntries > 4 && (
+                      {timeslotLength > 60 && (
                         <ChevronsDown className="absolute top-14.5 right-0 z-10 w-3 text-blue-800 opacity-80" />
                       )}
 
                       {/* Calendar card for each calendar entry */}
-                      {hourTimeSlot.entries.map((entry: CalendarEntry) => {
+                      {hourTimeslot.entries.map((entry: CalendarEntry) => {
                         return (
                           <CalendarCard
-                            key={hourTimeSlot.hour + '-' + entry.id + Math.random()}
+                            key={hourTimeslot.hour + '-' + entry.id + Math.random()}
                             entry={entry}
                             variant="blue"
                           />

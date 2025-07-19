@@ -1,6 +1,6 @@
 import type { CalendarEntry } from '@/ts/Calendar';
 import { useNavigate } from '@tanstack/react-router';
-import { differenceInMinutes, format } from 'date-fns';
+import { format } from 'date-fns';
 import { ClockIcon } from 'lucide-react';
 
 const variantClasses = {
@@ -27,23 +27,14 @@ const CalendarCard = ({ entry, variant }: CalendarCardProps) => {
   const { title, startDate, endDate } = entry;
 
   // Converts minutes to pixels (1 minute = 1.33px)
-  // parent container height is 80px
+  // parent container height is 80px, 60mins === 80px
   // card height is displayed using style tag as tailwind does not support dynamic values
   const getCardHeight = () => {
-    const entryTimeMinutes = differenceInMinutes(endDate, startDate);
-    const finalTimeslotHeight = entry.finalTimeslotLength
-      ? Math.max(Math.round(entry.finalTimeslotLength * 1.33), 20) // 20px is the min height
+    const timeslotHeight = entry.timeslotLength
+      ? Math.max(Math.round(entry.timeslotLength * 1.33), 20) // 20px is the min height
       : 0;
-    const standardTimeslotHeight =
-      entryTimeMinutes < 60
-        ? Math.max(Math.round(entryTimeMinutes * 1.33), 20)
-        : 80; // 80px for full hour entries
 
-    if (finalTimeslotHeight > 0) {
-      return finalTimeslotHeight;
-    } else {
-      return standardTimeslotHeight;
-    }
+    return timeslotHeight;
   };
 
   const cardHeight = `${getCardHeight()}px`;

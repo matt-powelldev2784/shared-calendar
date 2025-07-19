@@ -55,32 +55,29 @@ const generateCalendarData = ({
         const entryLength = differenceInMinutes(entry.endDate, entry.startDate);
         const numberOfHourTimeslots = Math.ceil(entryLength / 60);
 
+        // add the timeslot length in minutes to the entry
+        // this is used to calculate the height of the calendar card
         Array.from({ length: numberOfHourTimeslots }).forEach((_, i) => {
-          if (i === 0) {
-            // add the first hour entry
-            entiresByHour[hourIndex].entries.push(entry);
-            return;
-          }
-
-          // set the final timeslot length for the last hour
-          // this is used to calculate the height of the card in the calendar view
           const nextHourIndex = hourIndex + i;
 
-          // if the entry is for the last timeslot, set the final timeslot length
+          // if the entry is for the last timeslot, calculate the final timeslot length
           // and add the entry to relevant hour
-          if (i === numberOfHourTimeslots - 1) {
-            const finalTimeslotLength = differenceInMinutes(entry.endDate, addMinutes(entry.startDate, i * 60));
+          if (numberOfHourTimeslots === i + 1) {
+            const timeslotLength = differenceInMinutes(entry.endDate, addMinutes(entry.startDate, i * 60));
             const entryWithFinishedTime = {
               ...entry,
-              finalTimeslotLength,
+              timeslotLength,
             };
             entiresByHour[nextHourIndex].entries.push(entryWithFinishedTime);
-            return;
-          }
-
-          // if this is not for the last hour, just add the entry to the correct timeslot
-          if (nextHourIndex < entiresByHour.length) {
-            entiresByHour[nextHourIndex].entries.push(entry);
+          } else {
+            // if the entry is not for the last timeslot, set the timeslot length to 60 minutes
+            // every timeslot will be 60 minutes except the last one
+            // this is used to generate entries that span over multiple hours
+            const entryWithFinishedTime = {
+              ...entry,
+              timeslotLength: 60,
+            };
+            entiresByHour[nextHourIndex].entries.push(entryWithFinishedTime);
           }
         });
       });

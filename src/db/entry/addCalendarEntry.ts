@@ -64,17 +64,6 @@ const addCalendarEntry = async (entry: AddCalendarEntry) => {
       throw new CustomError(403, 'Pending requests userIds must be unique');
     }
 
-    const getTimeSlotLengths = (startDate: Date, endDate: Date) => {
-      const startHour = startDate.getHours();
-      const endHour = endDate.getHours();
-      const startMinutes = startDate.getMinutes();
-      const endMinutes = endDate.getMinutes();
-      const startTimeInMinutes = startHour * 60 + startMinutes;
-      const endTimeInMinutes = endHour * 60 + endMinutes;
-      const timeSlotLength = endTimeInMinutes - startTimeInMinutes;
-      return timeSlotLength;
-    };
-
     const entryDocRef = await runTransaction(db, async (transaction) => {
       // add calendar entry
       const entriesRef = collection(db, 'entries');
