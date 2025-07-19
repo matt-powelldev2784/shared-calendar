@@ -1,5 +1,5 @@
 import { Button } from '@/components/ui/button';
-import { format } from 'date-fns';
+import { format, startOfWeek } from 'date-fns';
 import CalendarIcon from '../../assets/icons/cal_icon.svg';
 import DownIcon from '../../assets/icons/down_icon.svg';
 import { Calendar as CustomCalendar } from '@/components/ui/customCalendar';
@@ -28,6 +28,7 @@ export const CalendarView = ({ calendarEntries, timeslotHeaders }: CalendarViewP
     from: '/get-calendar',
   });
   const date = new Date(startDate);
+  const isSmallScreen = window.innerWidth < 1023;
   const navigate = useNavigate();
   const [isSelectDateOpen, setIsSelectDateOpen] = useState(false);
   const responsiveCalendarEntries = useResponsiveCalendarEntries(calendarEntries);
@@ -36,7 +37,9 @@ export const CalendarView = ({ calendarEntries, timeslotHeaders }: CalendarViewP
     setIsSelectDateOpen(false);
     const calendarUrl = getCalendarUrl({
       calendarIds: calendarIds,
-      startDate: format(selectedDate, 'yyyy-MM-dd'),
+      startDate: isSmallScreen
+        ? format(selectedDate, 'yyyy-MM-dd') // Use selected date for small screens
+        : format(startOfWeek(selectedDate, { weekStartsOn: 1 }), 'yyyy-MM-dd'), // Use start of week for larger screens
       daysToView: DEFAULT_DAYS_TO_VIEW,
     });
     navigate({
