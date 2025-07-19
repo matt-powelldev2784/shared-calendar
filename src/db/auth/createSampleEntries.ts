@@ -26,7 +26,7 @@ export const createSampleEntires = async (calendarId: string) => {
     {
       title: 'https://toytoystore.vercel.app/',
       description:
-        'See Toy Shop Project projects: App built with NextJS, TypeScript, Sanity CMS, and Shopify. All Pages are server-side rendered using NextJS. Server actions are used to handle user interactions with the app. Some client side components are used at the edge of the tree for user interactivity. All Shopify data is fetched using the Shopify Storefront API using GraphQL queries. Sanity CMS is used to manage the promotional content in the app. End to end testing is implemented with Playwright.',
+        'See my Toy Shop Project projects: App built with NextJS, TypeScript, Sanity CMS, and Shopify. All Pages are server-side rendered using NextJS. Server actions are used to handle user interactions with the app. Some client side components are used at the edge of the tree for user interactivity. All Shopify data is fetched using the Shopify Storefront API using GraphQL queries. Sanity CMS is used to manage the promotional content in the app. End to end testing is implemented with Playwright.',
       startDate: setMinutes(setHours(addDays(monday, 2), 8), 0), // Wednesday 08:00
       endDate: setMinutes(setHours(addDays(monday, 2), 9), 30), // Wednesday 09:30
       calendarId,
