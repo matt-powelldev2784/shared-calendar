@@ -74,7 +74,7 @@ function ReviewPendingEntryPage() {
 
   const reviewPendingEntryProps = {
     calendarEntries,
-    pendingEntry: entryId,
+    pendingEntryId: entryId,
     requestId,
     timeslotHeaders,
   };
