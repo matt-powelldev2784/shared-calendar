@@ -9,6 +9,7 @@ import {
 import { db } from '@/db/firebaseConfig';
 import checkAuth from '@/db/auth/checkAuth';
 import type { User } from 'firebase/auth';
+import { createSampleEntires } from './createSampleEntries';
 
 // if the user is signing in for the first time
 // this function will create a user document, public user document and
@@ -54,6 +55,8 @@ export const createInitialUserDocuments = async () => {
         subscribedCalendars: arrayUnion(calendarDocRef.id),
         defaultCalendarId: calendarDocRef.id,
       });
+
+      createSampleEntires(calendarDocRef.id);
     }
 
     const currentUserDoc = await getDoc(userDocRef);
