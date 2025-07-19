@@ -21,6 +21,7 @@ const OFFICE_START_HOUR = 8;
 const OFFICE_END_HOUR = 17;
 const FULL_DAYS_START_HOUR = 0;
 const FULL_DAYS_END_HOUR = 23;
+const DEFAULT_DAYS_TO_VIEW = 7;
 
 export const CalendarView = ({ calendarEntries, timeslotHeaders }: CalendarViewProps) => {
   const { calendarIds, startDate, startHour, endHour } = useSearch({
@@ -36,7 +37,7 @@ export const CalendarView = ({ calendarEntries, timeslotHeaders }: CalendarViewP
     const calendarUrl = getCalendarUrl({
       calendarIds: calendarIds,
       startDate: format(selectedDate, 'yyyy-MM-dd'),
-      daysToView: 7,
+      daysToView: DEFAULT_DAYS_TO_VIEW,
     });
     navigate({
       to: calendarUrl,
@@ -49,7 +50,7 @@ export const CalendarView = ({ calendarEntries, timeslotHeaders }: CalendarViewP
       startDate: format(date, 'yyyy-MM-dd'),
       startHour: startHour === OFFICE_START_HOUR ? FULL_DAYS_START_HOUR : OFFICE_START_HOUR,
       endHour: startHour === OFFICE_START_HOUR ? FULL_DAYS_END_HOUR : OFFICE_END_HOUR,
-      daysToView: 7,
+      daysToView: DEFAULT_DAYS_TO_VIEW,
     });
     navigate({
       to: calendarUrl,
