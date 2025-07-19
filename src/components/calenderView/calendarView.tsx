@@ -41,6 +41,8 @@ export const CalendarView = ({ calendarEntries, timeslotHeaders }: CalendarViewP
       calendarIds: calendarIds,
       startDate: getResponsiveStartDate(isSmallScreen, selectedDate),
       daysToView: DEFAULT_DAYS_TO_VIEW,
+      startHour,
+      endHour,
     });
     navigate({ to: calendarUrl });
   };
