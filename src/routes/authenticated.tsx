@@ -41,7 +41,7 @@ function AuthenticatedPage() {
     const calendarUrl = getCalendarUrl({ calendarIds: defaultCalendarId, startDate });
     setTimeout(() => {
       navigate({ to: calendarUrl });
-    }, 500);
+    }, 1000);
   }, [user]);
 
   return (
