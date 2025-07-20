@@ -92,7 +92,7 @@ export const CalendarView = ({ calendarEntries, timeslotHeaders }: CalendarViewP
 
           <div className="mt-13">
             {timeslotHeaders.map((timeslot) => (
-              <TimeslotHeader key={timeslot.hour} hour={timeslot.hour} />
+              <TimeslotHeader key={timeslot.hour} {...timeslot} />
             ))}
           </div>
         </section>
@@ -100,7 +100,7 @@ export const CalendarView = ({ calendarEntries, timeslotHeaders }: CalendarViewP
         {/* Calendar entries */}
         <section className="auto-row-[minmax(100px,1fr)] m-auto mt-2 mr-3 ml-3 grid w-full grid-flow-row gap-2 lg:auto-cols-[minmax(100px,1fr)] lg:grid-flow-col">
           {responsiveCalendarEntries.map((calendarDay) => {
-            return <CalendarEntry {...calendarDay} key={calendarDay.date.toISOString()} />;
+            return <CalendarEntry key={calendarDay.date.toString()} {...calendarDay} />;
           })}
         </section>
       </div>
@@ -110,10 +110,7 @@ export const CalendarView = ({ calendarEntries, timeslotHeaders }: CalendarViewP
 
 const TimeslotHeader = (timeslot: TimeslotHeaders) => {
   return (
-    <p
-      key={timeslot.hour}
-      className="flex h-20 w-8 items-center justify-center border-b-1 border-gray-300 text-xs text-gray-900"
-    >
+    <p className="flex h-20 w-8 items-center justify-center border-b-1 border-gray-300 text-xs text-gray-900">
       {timeslot.hour.toString().padStart(2, '0')}
     </p>
   );
@@ -124,7 +121,7 @@ const CalendarEntry = (calendarDay: CalendarEntriesData) => {
   const hourTimeslots = calendarDay.entries;
 
   return (
-    <div key={date.toISOString()} className={`calendar-entry-bg flex flex-col flex-nowrap lg:flex-col`}>
+    <div className={`calendar-entry-bg flex flex-col flex-nowrap lg:flex-col`}>
       <div className="flex h-11 flex-col justify-center bg-blue-500 p-2 text-center font-bold text-white">
         <p className="h-4.5 text-[14px] lg:text-[13px] xl:text-[14px]">{format(date, 'EEEE')}</p>
         <p className="text-[15px] lg:hidden xl:block">{format(date, 'dd MMMM yyyy')}</p>
