@@ -120,8 +120,6 @@ export const addCalendarDayToTimeslots = ({ calendarData, date, startHour, endHo
       });
     });
 
-  console.log('timeslots', timeslots);
-
   return timeslots;
 };
 
