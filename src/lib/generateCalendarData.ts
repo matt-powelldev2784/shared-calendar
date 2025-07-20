@@ -79,7 +79,7 @@ export const getHourTimeslots = ({ startHour, endHour }: GetHourTimeslots) => {
 };
 
 // adds one day's worth of calendar entries to the timeslots
-const addCalendarDayToTimeslots = ({ calendarData, date, startHour, endHour }: AddCalendarEntryToTimeslot) => {
+export const addCalendarDayToTimeslots = ({ calendarData, date, startHour, endHour }: AddCalendarEntryToTimeslot) => {
   // generate the timeslots for the day
   const timeslots = getHourTimeslots({ startHour, endHour });
 
@@ -97,6 +97,10 @@ const addCalendarDayToTimeslots = ({ calendarData, date, startHour, endHour }: A
       // this is used to calculate the height of the calendar card
       Array.from({ length: numberOfHourTimeslots }).forEach((_, i) => {
         const nextHourIndex = hourIndex + i;
+
+        // skip if the entry is before or after the displayed hours
+        if (nextHourIndex < 0 || nextHourIndex >= timeslots.length) return;
+
         const isLastTimeslot = numberOfHourTimeslots === i + 1;
         // if the data is for last timeslot for the current entry, calculate the timeslot length
         // otherwise the timeslot length is will always be 60 minutes
