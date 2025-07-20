@@ -28,9 +28,9 @@ const CalendarCard = ({ entry, variant }: CalendarCardProps) => {
 
   // Converts minutes to pixels (1 minute = 1.33px)
   // parent container height is 80px, 60mins === 80px
-  // card height is displayed using style tag as tailwind does not support dynamic values
-  // minus 1px to stop scroll bar appearing unnecessarily
-  // minimum height is 19px
+  // each height has minus 1px from final value
+  // this is to stop the scroll bar appearing when the card is exactly the size of the parent
+  // card height is rendered using the style tag as tailwind does not support dynamic values
   const timeslotHeight = Math.max(Math.round(entry.timeslotLength * 1.33), 19) - 1;
   const cardHeight = `${timeslotHeight}px`;
 
@@ -46,10 +46,9 @@ const CalendarCard = ({ entry, variant }: CalendarCardProps) => {
       onClick={navigateToEntry}
       style={{ height: cardHeight }}
     >
-      {/* This is the vertical line on the left side of the card */}
+      {/* Vertical line on the left side of the card */}
       <div className={`${tabClasses[variant]}`}></div>
 
-      {/* This is the rest of the card */}
       <div className="flex w-full flex-row items-stretch justify-between overflow-hidden">
         <p className="mr-1 flex w-full items-center justify-start truncate overflow-hidden pl-4 text-left text-sm text-ellipsis whitespace-nowrap">
           {title}
@@ -61,7 +60,6 @@ const CalendarCard = ({ entry, variant }: CalendarCardProps) => {
           </div>
 
           <p className="w-[75px] overflow-clip pr-3 text-[10px]">
-            {/* {entryMinutes} */}
             {format(startDate, 'HH:mm')}-{format(endDate, 'HH:mm')}
           </p>
         </div>
