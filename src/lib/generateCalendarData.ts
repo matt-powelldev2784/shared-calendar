@@ -90,8 +90,11 @@ export const addCalendarDayToTimeslots = ({ calendarData, date, startHour, endHo
     .forEach((entry) => {
       const hour = new Date(entry.startDate).getHours();
       const hourIndex = hour - startHour;
-      const entryLength = differenceInMinutes(entry.endDate, entry.startDate);
-      const numberOfHourTimeslots = Math.ceil(entryLength / 60);
+
+      // get numbers of slots required for the entry
+      const entryStartHour = entry.startDate.getHours();
+      const entryEndHour = entry.endDate.getMinutes() === 0 ? entry.endDate.getHours() - 1 : entry.endDate.getHours();
+      const numberOfHourTimeslots = entryEndHour - entryStartHour + 1;
 
       // add the timeslot length in minutes to the entry
       // this is used to calculate the height of the calendar card
@@ -116,6 +119,8 @@ export const addCalendarDayToTimeslots = ({ calendarData, date, startHour, endHo
         timeslots[nextHourIndex].entries.push(entryWithTimeslotLength);
       });
     });
+
+  console.log('timeslots', timeslots);
 
   return timeslots;
 };
