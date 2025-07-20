@@ -39,10 +39,14 @@ describe('addCalendarDayToTimeslots', () => {
       endHour,
     });
 
-    expect(timeslots).toHaveLength(24); // 24 hours in a day
-    expect(timeslots[0].entries).toHaveLength(1); // 0:00 midnight slot has one entry
-    expect(timeslots[13].entries).toHaveLength(1); // 13:00 slot has one entry
-    expect(timeslots[8].entries).toHaveLength(0); // 09:00 slot has no entries
+    const midnightSlot = timeslots.find((slot) => slot.hour === 0);
+    const onePmSlot = timeslots.find((slot) => slot.hour === 13);
+    const nineAmSlot = timeslots.find((slot) => slot.hour === 9);
+
+    expect(timeslots).toHaveLength(24);
+    expect(midnightSlot?.entries).toHaveLength(1);
+    expect(onePmSlot?.entries).toHaveLength(1);
+    expect(nineAmSlot?.entries).toHaveLength(0);
   });
 
   test('should handle entries that span multiple hours and start in the middle of the first hour', () => {
@@ -96,8 +100,46 @@ describe('addCalendarDayToTimeslots', () => {
       endHour,
     });
 
-    expect(timeslots[10].entries).toHaveLength(1); // 10:00 slot has one entry
-    expect(timeslots[11].entries).toHaveLength(1); // 11:00 slot has one entry
-    expect(timeslots[12].entries).toHaveLength(1); // 12:00 slot has no entries
+    const tenAmEntry = timeslots.find((slot) => slot.hour === 10);
+    const elevenEntry = timeslots.find((slot) => slot.hour === 11);
+    const middayEntry = timeslots.find((slot) => slot.hour === 12);
+
+    expect(tenAmEntry?.entries).toHaveLength(1);
+    expect(elevenEntry?.entries).toHaveLength(1);
+    expect(middayEntry?.entries).toHaveLength(1);
+  });
+
+  test('should handle entries that start before the startHour and end after the endHour', () => {
+    const calendarData = [
+      {
+        id: '1',
+        entryId: '1',
+        title: 'Test Event With Extended Hours',
+        startDate: new Date('2025-01-01T00:00:00'),
+        endDate: new Date('2025-01-01T23:59:59'),
+        calendarId: 'calendar1',
+        ownerIds: ['user1'],
+        subscribers: [],
+        pendingRequests: [],
+      },
+    ];
+
+    const date = new Date('2025-01-01');
+    const startHour = 8;
+    const endHour = 17;
+
+    const timeslots = addCalendarDayToTimeslots({
+      calendarData,
+      date,
+      startHour,
+      endHour,
+    });
+
+    const eightAmEntry = timeslots.find((slot) => slot.hour === 8);
+    const fivePmEntry = timeslots.find((slot) => slot.hour === 17);
+
+    expect(timeslots).toHaveLength(10);
+    expect(eightAmEntry?.entries).toHaveLength(1);
+    expect(fivePmEntry?.entries).toHaveLength(1);
   });
 });
