@@ -66,21 +66,20 @@ type GenerateTimeslotHeaders = {
   endHour: number;
 };
 
-const generateCalendarDates = ({ daysToReturn, firstDateToDisplay }: GenerateCalendarDates) => {
+export const generateCalendarDates = ({ daysToReturn, firstDateToDisplay }: GenerateCalendarDates) => {
   return Array.from({ length: daysToReturn }, (_, index) => addDays(firstDateToDisplay, index));
 };
 
-const getHourTimeslots = ({ startHour, endHour }: GetHourTimeslots) => {
+export const getHourTimeslots = ({ startHour, endHour }: GetHourTimeslots) => {
   const hoursToDisplay = endHour - startHour + 1;
   return Array.from({ length: hoursToDisplay }).map((_, i) => ({
     hour: startHour + i,
     entries: [] as TimeslotEntry[],
-    numberOfEntries: 0,
   }));
 };
 
 // adds one day's worth of calendar entries to the timeslots
-const addCalendarDayToTimeslots = ({ calendarData, date, startHour, endHour }: AddCalendarEntryToTimeslot) => {
+export const addCalendarDayToTimeslots = ({ calendarData, date, startHour, endHour }: AddCalendarEntryToTimeslot) => {
   // generate the timeslots for the day
   const timeslots = getHourTimeslots({ startHour, endHour });
 
@@ -91,13 +90,20 @@ const addCalendarDayToTimeslots = ({ calendarData, date, startHour, endHour }: A
     .forEach((entry) => {
       const hour = new Date(entry.startDate).getHours();
       const hourIndex = hour - startHour;
-      const entryLength = differenceInMinutes(entry.endDate, entry.startDate);
-      const numberOfHourTimeslots = Math.ceil(entryLength / 60);
+
+      // get numbers of slots required for the entry
+      const entryStartHour = entry.startDate.getHours();
+      const entryEndHour = entry.endDate.getMinutes() === 0 ? entry.endDate.getHours() - 1 : entry.endDate.getHours();
+      const numberOfHourTimeslots = entryEndHour - entryStartHour + 1;
 
       // add the timeslot length in minutes to the entry
       // this is used to calculate the height of the calendar card
       Array.from({ length: numberOfHourTimeslots }).forEach((_, i) => {
         const nextHourIndex = hourIndex + i;
+
+        // skip if the entry is before or after the displayed hours
+        if (nextHourIndex < 0 || nextHourIndex >= timeslots.length) return;
+
         const isLastTimeslot = numberOfHourTimeslots === i + 1;
         // if the data is for last timeslot for the current entry, calculate the timeslot length
         // otherwise the timeslot length is will always be 60 minutes
@@ -113,6 +119,8 @@ const addCalendarDayToTimeslots = ({ calendarData, date, startHour, endHour }: A
         timeslots[nextHourIndex].entries.push(entryWithTimeslotLength);
       });
     });
+
+  console.log('timeslots', timeslots);
 
   return timeslots;
 };
