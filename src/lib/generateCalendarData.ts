@@ -70,12 +70,11 @@ export const generateCalendarDates = ({ daysToReturn, firstDateToDisplay }: Gene
   return Array.from({ length: daysToReturn }, (_, index) => addDays(firstDateToDisplay, index));
 };
 
-const getHourTimeslots = ({ startHour, endHour }: GetHourTimeslots) => {
+export const getHourTimeslots = ({ startHour, endHour }: GetHourTimeslots) => {
   const hoursToDisplay = endHour - startHour + 1;
   return Array.from({ length: hoursToDisplay }).map((_, i) => ({
     hour: startHour + i,
     entries: [] as TimeslotEntry[],
-    numberOfEntries: 0,
   }));
 };
 
