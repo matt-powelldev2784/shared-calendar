@@ -142,4 +142,37 @@ describe('addCalendarDayToTimeslots', () => {
     expect(eightAmEntry?.entries).toHaveLength(1);
     expect(fivePmEntry?.entries).toHaveLength(1);
   });
+
+  test('should return empty timeslots when no entries match the date', () => {
+    const calendarData = [
+      {
+        id: '1',
+        entryId: '1',
+        title: 'Test Event',
+        startDate: new Date('2025-01-02T00:00:00'),
+        endDate: new Date('2025-01-02T01:00:00'),
+        calendarId: 'calendar1',
+        ownerIds: ['user1'],
+        subscribers: [],
+        pendingRequests: [],
+      },
+    ];
+
+    const date = new Date('2025-01-01');
+    const startHour = 0;
+    const endHour = 23;
+
+    const timeslots = addCalendarDayToTimeslots({
+      calendarData,
+      date,
+      startHour,
+      endHour,
+    });
+
+    expect(timeslots).toHaveLength(24);
+    timeslots.forEach((slot) => {
+      expect(slot.entries).toHaveLength(0);
+    });
+  });
 });
+
