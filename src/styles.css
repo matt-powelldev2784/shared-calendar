@@ -17,6 +17,13 @@
   --color-darkYellow: #8b6508;
 }
 
+.calendar-entry-bg:nth-child(even) {
+  @apply bg-gray-100;
+}
+.calendar-entry-bg:nth-child(odd) {
+  @apply bg-white;
+}
+
 body {
   @apply m-0;
   font-family: "Roboto", -apple-system, BlinkMacSystemFont, "Segoe UI", "Oxygen",

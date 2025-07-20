@@ -60,6 +60,7 @@ export const CalendarView = ({ calendarEntries, timeslotHeaders }: CalendarViewP
 
   return (
     <div className="flex w-full flex-col items-center justify-center pb-20">
+      {/* Date Selector */}
       <div className="bg-primary/25 z-100s relative flex h-13 w-full items-center justify-center gap-4 p-2">
         <Popover open={isSelectDateOpen} onOpenChange={setIsSelectDateOpen}>
           <PopoverTrigger asChild>
@@ -77,11 +78,11 @@ export const CalendarView = ({ calendarEntries, timeslotHeaders }: CalendarViewP
       </div>
 
       <div className="flex w-full flex-row items-center justify-center">
-        {/* OFFICE or FULL_DAY hours toggle button displayed on the left side of the calendar view */}
-        <section className="relative mt-2 ml-3 flex h-full w-8 flex-col items-end sm:ml-4">
+        {/* Hour timeslots headers displayed to the left of calendar */}
+        <section className="relative ml-3 flex h-full w-8 flex-col items-end sm:ml-4">
           <Button
             variant="default"
-            className="absolute -left-1 flex h-11 w-10 flex-col items-center justify-center gap-0 text-[10px] leading-tight"
+            className="absolute top-2 -left-1 flex h-11 w-10 flex-col items-center justify-center gap-0 text-[10px] leading-tight"
             onClick={toggleHoursToView}
           >
             <Clock size={2} />
@@ -89,61 +90,17 @@ export const CalendarView = ({ calendarEntries, timeslotHeaders }: CalendarViewP
             <span>{`${String(endHour + 1).padStart(2, '0')}:00`}</span>
           </Button>
 
-          {/* Spacer to line up the calendar timeslots with the calendar */}
-          <div className="mt-11"></div>
-
-          {/* Hours timeslots headers displayed down the left hand side */}
-          {timeslotHeaders.map((timeslot) => (
-            <p
-              key={timeslot.hour}
-              className="flex h-20 w-8 items-center justify-center border-b-1 border-gray-300 text-xs text-gray-900"
-            >
-              {timeslot.hour.toString().padStart(2, '0')}
-            </p>
-          ))}
+          <div className="mt-13">
+            {timeslotHeaders.map((timeslot) => (
+              <TimeslotHeader key={timeslot.hour} hour={timeslot.hour} />
+            ))}
+          </div>
         </section>
 
-        {/* Calendar days displayed in a grid layout */}
+        {/* Calendar entries */}
         <section className="auto-row-[minmax(100px,1fr)] m-auto mt-2 mr-3 ml-3 grid w-full grid-flow-row gap-2 lg:auto-cols-[minmax(100px,1fr)] lg:grid-flow-col">
-          {responsiveCalendarEntries.map((calendarDay, index) => {
-            const { date } = calendarDay;
-            const hourTimeslots = calendarDay.entries;
-            const backgroundColor = index % 2 === 0 ? 'bg-gray-100' : 'bg-white';
-
-            return (
-              <div key={date.toISOString()} className={`flex flex-col flex-nowrap lg:flex-col ${backgroundColor}`}>
-                <div className="flex h-11 flex-col justify-center bg-blue-500 p-2 text-center font-bold text-white">
-                  <p className="h-4.5 text-[14px] lg:text-[13px] xl:text-[14px]">{format(date, 'EEEE')}</p>
-                  <p className="text-[15px] lg:hidden xl:block">{format(date, 'dd MMMM yyyy')}</p>
-                  <p className="hidden text-[14px] lg:block xl:hidden">{format(date, 'dd MMM yy')}</p>
-                </div>
-
-                {/* Calendar entries for each hour */}
-                {hourTimeslots.map((hourTimeslot: Timeslot) => {
-                  const timeslotLength = hourTimeslot.entries.reduce((acc, entry) => {
-                    const entryLength = entry.timeslotLength;
-                    return acc + entryLength;
-                  }, 0);
-
-                  return (
-                    <div
-                      className="relative h-[80px] overflow-auto border-b-1 border-gray-300"
-                      key={`${hourTimeslot.hour - startHour}}`}
-                    >
-                      {/* Display arrow to show timeslot is scrollable u*/}
-                      {timeslotLength > 60 && (
-                        <ChevronsDown className="absolute top-15 right-0 z-10 w-3 text-blue-800 opacity-80" />
-                      )}
-
-                      {/* Calendar card for each calendar timeslot */}
-                      {hourTimeslot.entries.map((entry: TimeslotEntry) => {
-                        return <CalendarCard key={hourTimeslot.hour + '-' + entry.id} entry={entry} variant="blue" />;
-                      })}
-                    </div>
-                  );
-                })}
-              </div>
-            );
+          {responsiveCalendarEntries.map((calendarDay) => {
+            return <CalendarEntry {...calendarDay} key={calendarDay.date.toISOString()} />;
           })}
         </section>
       </div>
@@ -151,3 +108,50 @@ export const CalendarView = ({ calendarEntries, timeslotHeaders }: CalendarViewP
   );
 };
 
+const TimeslotHeader = (timeslot: TimeslotHeaders) => {
+  return (
+    <p
+      key={timeslot.hour}
+      className="flex h-20 w-8 items-center justify-center border-b-1 border-gray-300 text-xs text-gray-900"
+    >
+      {timeslot.hour.toString().padStart(2, '0')}
+    </p>
+  );
+};
+
+const CalendarEntry = (calendarDay: CalendarEntriesData) => {
+  const { date } = calendarDay;
+  const hourTimeslots = calendarDay.entries;
+
+  return (
+    <div key={date.toISOString()} className={`calendar-entry-bg flex flex-col flex-nowrap lg:flex-col`}>
+      <div className="flex h-11 flex-col justify-center bg-blue-500 p-2 text-center font-bold text-white">
+        <p className="h-4.5 text-[14px] lg:text-[13px] xl:text-[14px]">{format(date, 'EEEE')}</p>
+        <p className="text-[15px] lg:hidden xl:block">{format(date, 'dd MMMM yyyy')}</p>
+        <p className="hidden text-[14px] lg:block xl:hidden">{format(date, 'dd MMM yy')}</p>
+      </div>
+
+      {/* Calendar entries for each hour */}
+      {hourTimeslots.map((hourTimeslot: Timeslot) => {
+        const timeslotLength = hourTimeslot.entries.reduce((acc, entry) => {
+          const entryLength = entry.timeslotLength;
+          return acc + entryLength;
+        }, 0);
+
+        return (
+          <div className="relative h-[80px] overflow-auto border-b-1 border-gray-300" key={hourTimeslot.hour}>
+            {/* Arrow which displays in timeslot if it is scrollable u*/}
+            {timeslotLength > 60 && (
+              <ChevronsDown className="absolute top-15 right-0 z-10 w-3 text-blue-800 opacity-80" />
+            )}
+
+            {/* Calendar cards */}
+            {hourTimeslot.entries.map((entry: TimeslotEntry) => {
+              return <CalendarCard key={entry.id} entry={entry} variant="blue" />;
+            })}
+          </div>
+        );
+      })}
+    </div>
+  );
+};
