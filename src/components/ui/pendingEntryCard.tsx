@@ -26,7 +26,6 @@ const tabClasses = {
 type PendingEntryCardProps = {
   entry: CalendarEntry;
   requestId: string;
-  numberOfEntries: number;
   variant: keyof typeof variantClasses;
 };
 

@@ -61,8 +61,6 @@ const ReviewPendingEntry = ({
 
               {/* This is the calendar entries for each hour */}
               {hourTimeslots.map((hourTimeSlot: Timeslot) => {
-                const numberOfEntries = hourTimeSlot.numberOfEntries;
-
                 return (
                   <div
                     className="relative h-20 max-w-full overflow-auto border-b-1 border-gray-300"
@@ -74,7 +72,6 @@ const ReviewPendingEntry = ({
                         entry={pendingEntry}
                         requestId={requestId}
                         key={pendingEntry.entryId}
-                        numberOfEntries={numberOfEntries}
                         variant="yellow"
                       />
                     )}
