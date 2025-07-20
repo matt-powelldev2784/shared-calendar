@@ -66,7 +66,7 @@ type GenerateTimeslotHeaders = {
   endHour: number;
 };
 
-const generateCalendarDates = ({ daysToReturn, firstDateToDisplay }: GenerateCalendarDates) => {
+export const generateCalendarDates = ({ daysToReturn, firstDateToDisplay }: GenerateCalendarDates) => {
   return Array.from({ length: daysToReturn }, (_, index) => addDays(firstDateToDisplay, index));
 };
 
