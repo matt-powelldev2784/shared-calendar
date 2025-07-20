@@ -1,5 +1,4 @@
 import { getHourTimeslots } from '@/lib/generateCalendarData';
-
 import { describe, expect, test } from 'vitest';
 
 describe('generateHourTimeslots', () => {
