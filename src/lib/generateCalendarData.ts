@@ -1,5 +1,5 @@
 import type { CalendarEntry, TimeslotEntry } from '@/ts/Calendar';
-import { addDays, addMinutes, differenceInMinutes, format } from 'date-fns';
+import { addDays, format } from 'date-fns';
 
 type GenerateCalendarData = {
   daysToReturn: number;
@@ -66,6 +66,13 @@ type GenerateTimeslotHeaders = {
   endHour: number;
 };
 
+type GetTimeslotLength = {
+  isFirstTimeslot: boolean;
+  isLastTimeslot: boolean;
+  startDate: Date;
+  endDate: Date;
+};
+
 export const generateCalendarDates = ({ daysToReturn, firstDateToDisplay }: GenerateCalendarDates) => {
   return Array.from({ length: daysToReturn }, (_, index) => addDays(firstDateToDisplay, index));
 };
@@ -78,6 +85,14 @@ export const getHourTimeslots = ({ startHour, endHour }: GetHourTimeslots) => {
   }));
 };
 
+const getTimeslotLength = ({ isFirstTimeslot, isLastTimeslot, startDate, endDate }: GetTimeslotLength) => {
+  const firstTimeslotLength = 60 - startDate.getMinutes();
+  const lastTimeslotLength = endDate.getMinutes() === 0 ? 60 : endDate.getMinutes();
+  if (isFirstTimeslot) return firstTimeslotLength;
+  if (isLastTimeslot) return lastTimeslotLength;
+  return 60; // for all other timeslots
+};
+
 // adds one day's worth of calendar entries to the timeslots
 export const addCalendarDayToTimeslots = ({ calendarData, date, startHour, endHour }: AddCalendarEntryToTimeslot) => {
   // generate the timeslots for the day
@@ -88,9 +103,6 @@ export const addCalendarDayToTimeslots = ({ calendarData, date, startHour, endHo
     .filter((entry) => format(date, 'd') === format(entry.startDate, 'd'))
     .sort((a, b) => new Date(a.startDate).getTime() - new Date(b.startDate).getTime())
     .forEach((entry) => {
-      const hour = new Date(entry.startDate).getHours();
-      const hourIndex = hour - startHour;
-
       // get numbers of slots required for the entry
       const entryStartHour = entry.startDate.getHours();
       const entryEndHour = entry.endDate.getMinutes() === 0 ? entry.endDate.getHours() - 1 : entry.endDate.getHours();
@@ -98,25 +110,33 @@ export const addCalendarDayToTimeslots = ({ calendarData, date, startHour, endHo
 
       // add the timeslot length in minutes to the entry
       // this is used to calculate the height of the calendar card
+      // add the entry to the timeslots
       Array.from({ length: numberOfHourTimeslots }).forEach((_, i) => {
-        const nextHourIndex = hourIndex + i;
+        const hour = new Date(entry.startDate).getHours();
+        const hourIndex = hour - startHour + i;
 
-        // skip if the entry is before or after the displayed hours
-        if (nextHourIndex < 0 || nextHourIndex >= timeslots.length) return;
+        // skip if the entry is before or after the requested hours
+        if (hourIndex < 0 || hourIndex >= timeslots.length) return;
 
-        const isLastTimeslot = numberOfHourTimeslots === i + 1;
-        // if the data is for last timeslot for the current entry, calculate the timeslot length
-        // otherwise the timeslot length is will always be 60 minutes
-        // this is used to generate entries that span over multiple hours
-        const timeslotLength = isLastTimeslot
-          ? differenceInMinutes(entry.endDate, addMinutes(entry.startDate, i * 60))
-          : 60;
+        // check if this is the first or last timeslot of the entry
+        const isFirstTimeslot = i === 0;
+        const isLastTimeslot = i === numberOfHourTimeslots - 1;
+
+        // calculate the timeslot length in minutes
+        const timeslotLength = getTimeslotLength({
+          isFirstTimeslot,
+          isLastTimeslot,
+          startDate: entry.startDate,
+          endDate: entry.endDate,
+        });
 
         const entryWithTimeslotLength = {
           ...entry,
           timeslotLength,
         };
-        timeslots[nextHourIndex].entries.push(entryWithTimeslotLength);
+
+        // add the entry to the timeslot
+        timeslots[hourIndex].entries.push(entryWithTimeslotLength);
       });
     });
 
@@ -131,3 +151,5 @@ const generateTimeslotHeaders = ({ startHour, endHour }: GenerateTimeslotHeaders
 
   return timeslots;
 };
+
+

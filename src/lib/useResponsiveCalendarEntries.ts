@@ -5,6 +5,9 @@ import { smallScreenSize } from './globalVariables';
 export function useResponsiveCalendarEntries(calendarEntries: CalendarEntriesData[]) {
   const [filteredEntries, setFilteredEntries] = useState(calendarEntries);
 
+  console.log('calendarEntries', calendarEntries);
+  console.log('filteredEntries', filteredEntries);
+
   useEffect(() => {
     const handleResize = () => {
       const isSmall = window.innerWidth < smallScreenSize;
