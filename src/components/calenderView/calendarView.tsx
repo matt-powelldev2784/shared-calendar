@@ -94,7 +94,7 @@ export const CalendarView = ({ calendarEntries, timeslotHeaders }: CalendarViewP
         {/* Calendar entries */}
         <section className="auto-row-[minmax(100px,1fr)] m-auto mt-2 mr-3 ml-3 grid w-full grid-flow-row gap-2 lg:auto-cols-[minmax(100px,1fr)] lg:grid-flow-col">
           {responsiveCalendarEntries.map((calendarDay) => {
-            return <CalendarEntry key={calendarDay.date.toString()} {...calendarDay} />;
+            return <CalendarDay key={calendarDay.date.toString()} {...calendarDay} />;
           })}
         </section>
       </div>
@@ -110,7 +110,7 @@ const TimeslotHeader = (timeslot: TimeslotHeaders) => {
   );
 };
 
-const CalendarEntry = (calendarDay: CalendarEntriesData) => {
+const CalendarDay = (calendarDay: CalendarEntriesData) => {
   const { date } = calendarDay;
   const hourTimeslots = calendarDay.entries;
 
