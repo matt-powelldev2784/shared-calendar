@@ -41,7 +41,13 @@ import { useState } from 'react';
 import { hasDuplicates } from '@/lib/hasDuplicates';
 import { CustomError } from '@/ts/errorClass';
 import { getResponsiveStartDate } from '@/lib/getResponsiveStartDate';
-import { smallScreenSize } from '@/lib/smallScreenSize';
+import {
+  FULL_DAYS_END_HOUR,
+  FULL_DAYS_START_HOUR,
+  OFFICE_END_HOUR,
+  OFFICE_START_HOUR,
+  smallScreenSize,
+} from '@/lib/globalVariables';
 
 const convertFormValuesToEntry = (values: z.infer<typeof formSchema>) => {
   const startDate = new Date(values.date);
@@ -127,8 +133,8 @@ const AddEntry = ({ calendars }: AddEntryProps) => {
         const calendarUrl = getCalendarUrl({
           calendarIds: calendarId,
           startDate: getResponsiveStartDate(isSmallScreen, entry.startDate),
-          startHour: entryIsExtendedHours ? 0 : 8,
-          endHour: entryIsExtendedHours ? 23 : 17,
+          startHour: entryIsExtendedHours ? FULL_DAYS_START_HOUR : OFFICE_START_HOUR,
+          endHour: entryIsExtendedHours ? FULL_DAYS_END_HOUR : OFFICE_END_HOUR,
         });
         navigate({ to: calendarUrl });
         return calendarEntry;

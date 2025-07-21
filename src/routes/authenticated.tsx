@@ -11,7 +11,7 @@ import { createInitialUserDocuments } from '@/db/auth/createInitialUserDocuments
 import getSubscribedCalendars from '@/db/calendar/getSubscribedCalendars';
 import { getCalendarUrl } from '@/lib/getCalendarUrl';
 import { getResponsiveStartDate } from '@/lib/getResponsiveStartDate';
-import { smallScreenSize } from '@/lib/smallScreenSize';
+import { smallScreenSize } from '@/lib/globalVariables';
 
 export const Route = createFileRoute('/authenticated')({
   component: AuthenticatedPage,
