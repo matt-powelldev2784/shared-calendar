@@ -142,4 +142,118 @@ describe('addCalendarDayToTimeslots', () => {
     expect(eightAmEntry?.entries).toHaveLength(1);
     expect(fivePmEntry?.entries).toHaveLength(1);
   });
+
+  test('should return empty timeslots when no entries match the date', () => {
+    const calendarData = [
+      {
+        id: '1',
+        entryId: '1',
+        title: 'Test Event',
+        startDate: new Date('2025-01-02T00:00:00'),
+        endDate: new Date('2025-01-02T01:00:00'),
+        calendarId: 'calendar1',
+        ownerIds: ['user1'],
+        subscribers: [],
+        pendingRequests: [],
+      },
+    ];
+
+    const date = new Date('2025-01-01');
+    const startHour = 0;
+    const endHour = 23;
+
+    const timeslots = addCalendarDayToTimeslots({
+      calendarData,
+      date,
+      startHour,
+      endHour,
+    });
+
+    expect(timeslots).toHaveLength(24);
+    timeslots.forEach((slot) => {
+      expect(slot.entries).toHaveLength(0);
+    });
+  });
+
+  test('should handle entries that start at midnight and are not a full hour long', () => {
+    const calendarData = [
+      {
+        id: '1',
+        entryId: '1',
+        title: 'Midnight Event',
+        startDate: new Date('2025-01-01T00:00:00'),
+        endDate: new Date('2025-01-01T00:30:00'),
+        calendarId: 'calendar1',
+        ownerIds: ['user1'],
+        subscribers: [],
+        pendingRequests: [],
+      },
+      {
+        id: '2',
+        entryId: '2',
+        title: 'Afternoon Event',
+        startDate: new Date('2025-01-01T13:00:00'),
+        endDate: new Date('2025-01-01T13:30:00'),
+        calendarId: 'calendar1',
+        ownerIds: ['user1'],
+        subscribers: [],
+        pendingRequests: [],
+      },
+    ];
+
+    const date = new Date('2025-01-01');
+    const startHour = 0;
+    const endHour = 23;
+
+    const timeslots = addCalendarDayToTimeslots({
+      calendarData,
+      date,
+      startHour,
+      endHour,
+    });
+
+    const midnightSlot = timeslots.find((slot) => slot.hour === 0);
+    const onePmSlot = timeslots.find((slot) => slot.hour === 13);
+    const nineAmSlot = timeslots.find((slot) => slot.hour === 9);
+    expect(timeslots).toHaveLength(24);
+    expect(midnightSlot?.entries).toHaveLength(1);
+    expect(onePmSlot?.entries).toHaveLength(1);
+    expect(nineAmSlot?.entries).toHaveLength(0);
+  });
+
+  test('should handle entries that end at midnight', () => {
+    const calendarData = [
+      {
+        id: '1',
+        entryId: '1',
+        title: 'Midnight End Event',
+        startDate: new Date('2025-01-01T23:00:00'),
+        endDate: new Date('2025-01-01T23:59:00'),
+        calendarId: 'calendar1',
+        ownerIds: ['user1'],
+        subscribers: [],
+        pendingRequests: [],
+      },
+    ];
+
+    const date = new Date('2025-01-01');
+    const startHour = 0;
+    const endHour = 23;
+
+    const timeslots = addCalendarDayToTimeslots({
+      calendarData,
+      date,
+      startHour,
+      endHour,
+    });
+
+    const elevenPmSlot = timeslots.find((slot) => slot.hour === 23);
+    expect(timeslots).toHaveLength(24);
+    expect(elevenPmSlot?.entries).toHaveLength(1);
+  });
+
 });
+
+
+
+

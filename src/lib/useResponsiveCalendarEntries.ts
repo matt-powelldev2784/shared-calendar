@@ -1,6 +1,6 @@
 import type { CalendarEntriesData } from '@/ts/Calendar';
 import { useEffect, useState } from 'react';
-import { smallScreenSize } from './smallScreenSize';
+import { smallScreenSize } from './globalVariables';
 
 export function useResponsiveCalendarEntries(calendarEntries: CalendarEntriesData[]) {
   const [filteredEntries, setFilteredEntries] = useState(calendarEntries);

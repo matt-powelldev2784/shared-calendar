@@ -1,7 +1,7 @@
 import getCalendarEntries from '@/db/entry/getCalendarEntriesByDate';
 import { createFileRoute, useLoaderData } from '@tanstack/react-router';
 import { z } from 'zod';
-import { addDays } from 'date-fns';
+import { addDays, startOfDay } from 'date-fns';
 import Error from '@/components/ui/error';
 import generateCalendarData from '@/lib/generateCalendarData';
 import { CalendarView } from '@/components/calenderView/calendarView';
@@ -34,8 +34,8 @@ export const Route = createFileRoute('/get-calendar')({
   }),
 
   loader: async ({ deps: { calendarIds, startDate, daysToView, startHour, endHour } }) => {
-    const start = startDate ? new Date(startDate) : new Date();
-    const end = addDays(new Date(startDate), daysToView);
+    const start = startDate ? startOfDay(startDate) : startOfDay(new Date());
+    const end = startOfDay(addDays(new Date(startDate), daysToView));
     const calendarIdArray = calendarIds.split(',');
 
     const calendarEntries = await getCalendarEntries({
