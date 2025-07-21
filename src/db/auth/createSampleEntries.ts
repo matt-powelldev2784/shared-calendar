@@ -10,8 +10,8 @@ export const createSampleEntires = async (calendarId: string) => {
     {
       title: 'Sample Entry',
       description: '',
-      startDate: new Date(now.getFullYear(), now.getMonth(), now.getDate(), 8, 0),
-      endDate: new Date(now.getFullYear(), now.getMonth(), now.getDate(), 9, 0),
+      startDate: new Date(now.getFullYear(), now.getMonth(), now.getDate(), 8, 0), // Today 08:00
+      endDate: new Date(now.getFullYear(), now.getMonth(), now.getDate(), 9, 0), // Today 09:00
       calendarId,
       pendingRequests: [],
     },
