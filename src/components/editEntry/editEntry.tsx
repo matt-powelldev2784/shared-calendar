@@ -168,13 +168,15 @@ const EditEntry = ({ entry, currentUser }: EditEntryProps) => {
       }
 
       const calendarEntry = await updateCalendarEntry(entry);
-
       const calendarId = values.calendarId;
+      const entryIsExtendedHours = entry.startDate.getHours() < 8 || entry.endDate.getHours() > 17;
 
       if (calendarEntry) {
         const calendarUrl = getCalendarUrl({
           calendarIds: calendarId,
           startDate: getResponsiveStartDate(isSmallScreen, entry.startDate),
+          startHour: entryIsExtendedHours ? 0 : 8,
+          endHour: entryIsExtendedHours ? 23 : 17,
         });
         navigate({ to: calendarUrl });
         return calendarEntry;
