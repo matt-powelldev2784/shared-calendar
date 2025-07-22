@@ -1,5 +1,5 @@
 import type { CalendarEntry, TimeslotEntry } from '@/ts/Calendar';
-import { addDays, format } from 'date-fns';
+import { addDays, differenceInMinutes, format } from 'date-fns';
 
 type GenerateCalendarData = {
   daysToReturn: number;
@@ -88,9 +88,11 @@ export const getHourTimeslots = ({ startHour, endHour }: GetHourTimeslots) => {
 const getTimeslotLength = ({ isFirstTimeslot, isLastTimeslot, startDate, endDate }: GetTimeslotLength) => {
   const firstTimeslotLength = 60 - startDate.getMinutes();
   const lastTimeslotLength = endDate.getMinutes() === 0 ? 60 : endDate.getMinutes();
+  const isSingleTimeSlot = differenceInMinutes(endDate, startDate) < 60;
+  if (isSingleTimeSlot) return endDate.getMinutes() - startDate.getMinutes();
   if (isFirstTimeslot) return firstTimeslotLength;
   if (isLastTimeslot) return lastTimeslotLength;
-  return 60; // for all other timeslots
+  return 60; // for other timeslots where entry spans multiple hours
 };
 
 // adds one day's worth of calendar entries to the timeslots
