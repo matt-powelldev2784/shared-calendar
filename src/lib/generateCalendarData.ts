@@ -85,7 +85,7 @@ export const getHourTimeslots = ({ startHour, endHour }: GetHourTimeslots) => {
   }));
 };
 
-const getTimeslotLength = ({ isFirstTimeslot, isLastTimeslot, startDate, endDate }: GetTimeslotLength) => {
+export const getTimeslotLength = ({ isFirstTimeslot, isLastTimeslot, startDate, endDate }: GetTimeslotLength) => {
   const firstTimeslotLength = 60 - startDate.getMinutes();
   const lastTimeslotLength = endDate.getMinutes() === 0 ? 60 : endDate.getMinutes();
   const middleTimeslotLength = 60; //  for middle timeslots where entry spans multiple hours
