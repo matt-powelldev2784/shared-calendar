@@ -40,6 +40,7 @@ const CalendarCard = ({ entry, variant }: CalendarCardProps) => {
     });
   };
 
+
   return (
     <button
       className={`${variantClasses.default} ${variantClasses[variant]} w-full`}
