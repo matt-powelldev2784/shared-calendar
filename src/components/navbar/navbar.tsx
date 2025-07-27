@@ -3,9 +3,8 @@ import SharcLogo from '@/assets/logo/sharc_logo_white.svg';
 import SharcIcon from '@/assets/logo/sharc_icon_white.svg';
 import { useEffect, useRef, useState, type JSX } from 'react';
 import { NavIconButton } from './navIcon';
-import { Bell, CalendarFold, CalendarPlus } from 'lucide-react';
-import UserAvatar from './userAvatar';
-import { calendarMenuItem, userMenuItems } from './userMenuItems';
+import { Bell, CalendarFold, CalendarPlus, LogOut } from 'lucide-react';
+import { calendarMenuItem } from './userMenuItems';
 import { useQuery } from '@tanstack/react-query';
 import checkAuth from '@/db/auth/checkAuth';
 import { NavItem, NavItemPlaceholder, type NavItemProps } from './navItem';
@@ -22,6 +21,11 @@ export const Navbar = () => {
     refetchInterval: (data) => (!data ? false : 1),
   });
 
+  const emailName = authenticatedUser?.email?.split('@')[0];
+  const emailNameWithUpperCase = emailName ? emailName.charAt(0).toUpperCase() + emailName.slice(1) : 'My';
+  const testUserDisplayName = emailNameWithUpperCase.slice(0, 8) === 'Testuser' ? 'Demo User' : '';
+  const displayName = testUserDisplayName || authenticatedUser?.displayName || emailNameWithUpperCase;
+
   return (
     <nav className="bg-primary z-1100 flex h-14 w-full items-center justify-between text-xl font-bold text-white md:h-12">
       {!authenticatedUser && (
@@ -33,9 +37,7 @@ export const Navbar = () => {
       {authenticatedUser && (
         <>
           <div className="flex flex-grow items-center">
-            <LogoWithCalendarName
-              calendarName={`${authenticatedUser.displayName}'s Calendar`}
-            />
+            <LogoWithCalendarName calendarName={`${displayName}'s Calendar`} />
           </div>
 
           <div className="mr-5 flex items-center gap-5">
@@ -61,11 +63,9 @@ export const Navbar = () => {
               notificationCount={numberOfRequests}
             />
 
-            <DropDownMenu
-              icon={<UserAvatar />}
-              menuName="User Menu Items"
-              navigationItems={userMenuItems}
-            />
+            <Link to={'/signout'} aria-label="Sign Out">
+              <LogOut className="h-6 w-6" />
+            </Link>
           </div>
         </>
       )}
