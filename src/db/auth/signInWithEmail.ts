@@ -23,7 +23,6 @@ export const signUpWithEmail = async (email: string, password: string) => {
 
 export const signInWithEmailForDemo = async () => {
   const email = `testuser${Date.now()}@testuser.com`;
-  console.log('email', email);
   const password = 'password123';
   try {
     const result = await createUserWithEmailAndPassword(auth, email, password);
