@@ -123,7 +123,7 @@ const SignInWithEmail = () => {
                 <FormItem className="w-full max-w-[700px]">
                   <FormLabel>Email</FormLabel>
                   <FormControl>
-                    <Input placeholder="email" {...field} />
+                    <Input placeholder="Enter your email" autoComplete="email" {...field} />
                   </FormControl>
                   <FormMessage className="-translate-y-3 text-xs" />
                 </FormItem>
@@ -137,7 +137,7 @@ const SignInWithEmail = () => {
                 <FormItem className="mt-2 w-full max-w-[700px]">
                   <FormLabel>Password</FormLabel>
                   <FormControl>
-                    <Input placeholder="password" {...field} />
+                    <Input placeholder="Password" type="password" {...field} />
                   </FormControl>
                   <FormMessage className="-translate-y-3 text-xs" />
                 </FormItem>
@@ -204,7 +204,7 @@ const SignUpWithEmail = () => {
                 <FormItem className="w-full max-w-[700px]">
                   <FormLabel>Email</FormLabel>
                   <FormControl>
-                    <Input placeholder="email" {...field} />
+                    <Input placeholder="Enter your email" autoComplete="email" {...field} />
                   </FormControl>
                   <FormMessage className="-translate-y-3 text-xs" />
                 </FormItem>
@@ -218,7 +218,7 @@ const SignUpWithEmail = () => {
                 <FormItem className="mt-2 w-full max-w-[700px]">
                   <FormLabel>Password</FormLabel>
                   <FormControl>
-                    <Input placeholder="password" {...field} />
+                    <Input placeholder="Password" type="password" {...field} />
                   </FormControl>
                   <FormMessage className="-translate-y-3 text-xs" />
                 </FormItem>
@@ -232,7 +232,7 @@ const SignUpWithEmail = () => {
                 <FormItem className="mt-2 w-full max-w-[700px]">
                   <FormLabel>Confirm Password</FormLabel>
                   <FormControl>
-                    <Input placeholder="password2" {...field} />
+                    <Input placeholder="Confirm password" type="password" {...field} />
                   </FormControl>
                   <FormMessage className="-translate-y-3 text-xs" />
                 </FormItem>
