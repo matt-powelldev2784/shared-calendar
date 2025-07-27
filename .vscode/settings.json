@@ -21,6 +21,7 @@
     "testuser",
     "Timeslot",
     "Timeslots",
+    "viewports",
     "VITE"
   ],
   "editor.formatOnSave": true
