@@ -18,6 +18,7 @@ import { useState, type Dispatch, type SetStateAction } from 'react';
 import { signInWithGoogle } from '@/db/auth/signInWithGoogle';
 import SharcIcon from '@/assets/logo/sharc_icon_orange.svg';
 import { Mail } from 'lucide-react';
+import Loading from '../ui/loading';
 
 const signInFormSchema = z.object({
   email: z.string().email({ message: 'Invalid email address' }),
@@ -39,6 +40,7 @@ type CurrentView = 'main' | 'signInEmail' | 'signUpEmail';
 type MainViewProps = {
   setCurrentView: Dispatch<SetStateAction<CurrentView>>;
 };
+type SignInError = 'email-already-in-use' | 'unknown-error' | null;
 
 export const SignIn = () => {
   const [currentView, setCurrentView] = useState<CurrentView>('main');
@@ -80,16 +82,20 @@ const MainView = ({ setCurrentView }: MainViewProps) => {
 };
 
 const SignInWithEmail = () => {
+  const [isError, setIsError] = useState(false);
   const form = useForm<z.infer<typeof signInFormSchema>>({
     resolver: zodResolver(signInFormSchema),
   });
+  const { isSubmitting } = form.formState;
 
   const onSubmit = async (data: z.infer<typeof signInFormSchema>) => {
+    setIsError(false);
     try {
       const { email, password } = data;
       await signInWithEmail(email, password);
-    } catch (error) {
+    } catch (error: any) {
       console.error('Sign-in error:', error);
+      setIsError(true);
     }
   };
 
@@ -100,6 +106,12 @@ const SignInWithEmail = () => {
         <CardTitle className="text-center">Sign In With Email</CardTitle>
         <CardDescription className="text-center">Enter your details below to sign in</CardDescription>
       </CardHeader>
+
+      {isError && (
+        <p className="px-8 text-center text-sm text-red-500">
+          There was an error signing in. Please check your credentials and try again.
+        </p>
+      )}
 
       <CardContent>
         <Form {...form}>
@@ -133,7 +145,7 @@ const SignInWithEmail = () => {
             />
 
             <Button className="mt-8 w-full" variant="emailButton" size="xl">
-              Sign in with Email
+              {isSubmitting ? <Loading variant={'sm'} /> : 'Sign In with Email'}
             </Button>
           </form>
         </Form>
@@ -143,22 +155,22 @@ const SignInWithEmail = () => {
 };
 
 const SignUpWithEmail = () => {
+  const [errorType, setErrorType] = useState<SignInError>(null);
   const form = useForm<z.infer<typeof signUpFormSchema>>({
     resolver: zodResolver(signUpFormSchema),
-    defaultValues: {
-      email: 'testuser@testuser.com',
-      password: 'password123',
-      password2: 'password123',
-    },
   });
+  const { isSubmitting } = form.formState;
 
   const onSubmit = async (data: z.infer<typeof signUpFormSchema>) => {
+    setErrorType(null);
     try {
       const { email, password } = data;
       await signUpWithEmail(email, password);
       await createInitialUserDocuments();
-    } catch (error) {
-      console.error('Sign-in error:', error);
+    } catch (error: any) {
+      console.error('Sign-up error:', error);
+      if (error.code === 'auth/email-already-in-use') setErrorType('email-already-in-use');
+      if (error.code !== 'auth/email-already-in-use') setErrorType('unknown-error');
     }
   };
 
@@ -169,6 +181,19 @@ const SignUpWithEmail = () => {
         <CardTitle className="text-center">Create Account</CardTitle>
         <CardDescription className="text-center">Enter email and password to create account</CardDescription>
       </CardHeader>
+
+      {errorType === 'email-already-in-use' && (
+        <p className="px-8 text-center text-sm text-red-500">
+          An account with this email already exists. Please sign in instead.
+        </p>
+      )}
+
+      {errorType === 'unknown-error' && (
+        <p className="px-8 text-center text-sm text-red-500">
+          There was an error when creating the account. Please try again later.
+        </p>
+      )}
+
       <CardContent>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="flex w-full flex-col items-center">
@@ -215,7 +240,7 @@ const SignUpWithEmail = () => {
             />
 
             <Button className="mt-8 w-full" variant="emailButton" size="xl">
-              Sign Up with Email
+              {isSubmitting ? <Loading variant={'sm'} /> : 'Create Account'}
             </Button>
           </form>
         </Form>
