@@ -14,7 +14,7 @@ import { signInWithEmail, signUpWithEmail } from '@/db/auth/signInWithEmail';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { createInitialUserDocuments } from '@/db/auth/createInitialUserDocuments';
-import { useState } from 'react';
+import { useState, type Dispatch, type SetStateAction } from 'react';
 import { signInWithGoogle } from '@/db/auth/signInWithGoogle';
 import SharcIcon from '@/assets/logo/sharc_icon_orange.svg';
 import { Mail } from 'lucide-react';
@@ -35,51 +35,53 @@ const signUpFormSchema = z
     path: ['password2'],
   });
 
-  type CurrentView = 'main' | 'signInEmail' | 'signUpEmail';
+type CurrentView = 'main' | 'signInEmail' | 'signUpEmail';
+type MainViewProps = {
+  setCurrentView: Dispatch<SetStateAction<CurrentView>>;
+};
 
-  export const SignIn = () => {
-    const [currentView, setCurrentView] = useState<CurrentView>('main');
+export const SignIn = () => {
+  const [currentView, setCurrentView] = useState<CurrentView>('main');
 
-    return (
-      <Card className="mx-auto mt-4 h-auto w-[95%] max-w-[400px]">
-        {currentView === 'main' && (
-          <>
-            <CardHeader>
-              <img src={SharcIcon} alt="Sharc Logo" className="mx-auto h-8" />
-              <CardTitle className="text-center">Sign In</CardTitle>
-              <CardDescription className="text-center">Welcome to Sharc Shared Calendar</CardDescription>
-            </CardHeader>
+  return (
+    <Card className="relative mx-auto mt-4 h-auto w-[95%] max-w-[400px]">
+      {currentView === 'main' && <MainView setCurrentView={setCurrentView} />}
+      {currentView === 'signInEmail' && <SignInWithEmail />}
+      {currentView === 'signUpEmail' && <SignUpWithEmail />}
+    </Card>
+  );
+};
 
-            <CardContent className="flex flex-col gap-4">
-              <Button className="w-full" variant="emailButton" size="xl" onClick={() => setCurrentView('signInEmail')}>
-                Sign in with Email
-              </Button>
+const MainView = ({ setCurrentView }: MainViewProps) => {
+  return (
+    <>
+      <CardHeader>
+        <img src={SharcIcon} alt="Sharc Logo" className="mx-auto h-8" />
+        <CardTitle className="text-center">Sign In</CardTitle>
+        <CardDescription className="text-center">Welcome to Sharc Shared Calendar</CardDescription>
+      </CardHeader>
 
-              <SignInWithGoogle />
+      <CardContent className="flex flex-col gap-4">
+        <Button className="w-full" variant="emailButton" size="xl" onClick={() => setCurrentView('signInEmail')}>
+          Sign in with Email
+        </Button>
 
-              <p className="text-secondary mt-4 text-center text-sm">
-                Don't have an account?{' '}
-                <span className="text-primary font-bold" onClick={() => setCurrentView('signUpEmail')}>
-                  Create one
-                </span>
-              </p>
-            </CardContent>
-          </>
-        )}
+        <SignInWithGoogle />
 
-        {currentView === 'signInEmail' && <SignInWithEmail />}
-        {currentView === 'signUpEmail' && <SignUpWithEmail />}
-      </Card>
-    );
-  };
+        <p className="text-secondary mt-4 text-center text-sm">
+          Don't have an account?{' '}
+          <span className="text-primary font-bold" onClick={() => setCurrentView('signUpEmail')}>
+            Create one
+          </span>
+        </p>
+      </CardContent>
+    </>
+  );
+};
 
 const SignInWithEmail = () => {
   const form = useForm<z.infer<typeof signInFormSchema>>({
     resolver: zodResolver(signInFormSchema),
-    defaultValues: {
-      email: 'testuser@testuser.com',
-      password: 'password123',
-    },
   });
 
   const onSubmit = async (data: z.infer<typeof signInFormSchema>) => {
