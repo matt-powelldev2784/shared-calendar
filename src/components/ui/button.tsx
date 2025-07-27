@@ -9,23 +9,19 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
-        default:
-          'bg-primary text-primary-foreground shadow-xs hover:bg-primary/90 cursor-pointer',
+        default: 'bg-primary text-primary-foreground shadow-xs hover:bg-primary/90 cursor-pointer',
         destructive:
           'bg-destructive text-white shadow-xs hover:bg-destructive/90 focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40 cursor-pointer',
-        outline:
-          'border-white border-2 border-secondary shadow-xs cursor-pointer text-secondary font-bold',
-        outlineThin:
-          'border border-1 border-secondary shadow-xs cursor-pointer text-secondary font-bold',
-        secondary:
-          'bg-secondary text-secondary-foreground shadow-xs hover:bg-secondary/80 cursor-pointer',
+        outline: 'border-white border-2 border-secondary shadow-xs cursor-pointer text-secondary font-bold',
+        outlineThin: 'border border-1 border-secondary shadow-xs cursor-pointer text-secondary font-bold',
+        secondary: 'bg-secondary text-secondary-foreground shadow-xs hover:bg-secondary/80 cursor-pointer',
         blue: 'bg-blue-400 text-white shadow-xs hover:bg-blue-400 cursor-pointer',
         ghost: 'hover:bg-accent hover:text-accent-foreground cursor-pointer',
         link: 'text-primary underline-offset-4 hover:underline cursor-pointer',
         datePicker:
           'cursor-pointer border-secondary text-secondary flex w-[96%] justify-between border-2 px-2 text-center text-lg font-bold md:max-w-96',
-        googleButton:
-          'bg-white text-secondary shadow-xs hover:bg-gray-100 border-2 border-secondary text-lg font-bold',
+        googleButton: 'bg-white text-secondary shadow-xs hover:bg-gray-100 border-2 border-secondary text-lg font-bold',
+        emailButton: 'bg-primary text-white shadow-xs hover:bg-gray-100 text-lg font-bold',
       },
       size: {
         default: 'h-9 px-4 py-2 has-[>svg]:px-3',
