@@ -10,7 +10,7 @@ import googleGIcon from '@/assets/icons/google_g_logo.svg';
 import { z } from 'zod';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '../ui/form';
 import { Input } from '../ui/input';
-import { signInWithEmail, signUpWithEmail } from '@/db/auth/signInWithEmail';
+import { signInWithEmail, signInWithEmailForDemo, signUpWithEmail } from '@/db/auth/signInWithEmail';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { createInitialUserDocuments } from '@/db/auth/createInitialUserDocuments';
@@ -63,12 +63,27 @@ const MainView = ({ setCurrentView }: MainViewProps) => {
         <CardDescription className="text-center">Welcome to Sharc Shared Calendar</CardDescription>
       </CardHeader>
 
+      <p className="px-8 text-center">
+        To demo the project, click the{' '}
+        <span onClick={async () => await signInWithEmailForDemo()} className="text-primary cursor-pointer font-bold">
+          Demo Sign In
+        </span>{' '}
+        button. This will create a dummy account with a single click.
+      </p>
+
       <CardContent className="flex flex-col gap-4">
-        <Button className="w-full" variant="emailButton" size="xl" onClick={() => setCurrentView('signInEmail')}>
-          Sign in with Email
+        <Button className="w-full" variant="emailButton" size="xl" onClick={async () => await signInWithEmailForDemo()}>
+          Demo Sign In
         </Button>
 
-        <SignInWithGoogle />
+        <Button className="w-full" variant="googleButton" size="xl" onClick={() => setCurrentView('signInEmail')}>
+          <span className="flex-grow">Sign in with Email</span>
+        </Button>
+
+        <Button onClick={async () => signInWithGoogle()} className="w-full" variant="googleButton" size="xl">
+          <img src={googleGIcon} alt="Google Icon" className="h-6" />
+          <span className="flex-grow">Sign in with Google</span>
+        </Button>
 
         <p className="text-secondary mt-4 text-center text-sm">
           Don't have an account?{' '}
@@ -249,12 +264,4 @@ const SignUpWithEmail = () => {
   );
 };
 
-const SignInWithGoogle = () => {
-  return (
-    <Button onClick={() => signInWithGoogle()} className="w-full" variant="googleButton" size="xl">
-      <img src={googleGIcon} alt="Google Icon" className="h-6" />
 
-      <span className="flex-grow font-medium text-gray-800">Sign in with Google</span>
-    </Button>
-  );
-};

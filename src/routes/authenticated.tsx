@@ -21,7 +21,6 @@ export const Route = createFileRoute('/authenticated')({
     // otherwise get the user
     const user = await createInitialUserDocuments();
     const calendars = await getSubscribedCalendars();
-    console.log('calendars', calendars);
     const defaultCalendarId = calendars[0].calendarId;
 
     return { user, defaultCalendarId };
