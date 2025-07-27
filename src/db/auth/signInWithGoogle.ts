@@ -2,7 +2,7 @@ import { signInWithPopup } from 'firebase/auth';
 import { GoogleAuthProvider } from 'firebase/auth';
 import { auth } from '@/db/firebaseConfig';
 
-export const SignInWithGoogle = async () => {
+export const signInWithGoogle = async () => {
   try {
     const provider = new GoogleAuthProvider();
     provider.setCustomParameters({
@@ -16,7 +16,7 @@ export const SignInWithGoogle = async () => {
     }
     const token = credential.accessToken;
     const user = result.user;
-    
+
     return { user, token };
   } catch (error: any) {
     console.error('Error during sign-in:', error);
