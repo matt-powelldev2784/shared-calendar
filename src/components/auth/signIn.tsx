@@ -54,32 +54,36 @@ export const SignIn = () => {
 };
 
 const MainView = ({ setCurrentView }: MainViewProps) => {
+  const [demoLoginIsLoading, setDemoLoginIsLoading] = useState(false);
+  const handleSignInWithEmailForDemo = async () => {
+    setDemoLoginIsLoading(true);
+    await signInWithEmailForDemo();
+  };
+
   return (
     <>
       <CardHeader>
         <img src={SharcIcon} alt="Sharc Logo" className="mx-auto h-8" />
         <CardTitle className="text-center">Sign In</CardTitle>
         <CardDescription className="text-center">Welcome to Sharc Shared Calendar</CardDescription>
+
+        {/* Demo sign in description */}
+        <p className="text-center">
+          To demo the project, click the{' '}
+          <span onClick={handleSignInWithEmailForDemo} className="text-primary cursor-pointer font-bold">
+            Demo Sign In
+          </span>{' '}
+          button. This will create a dummy account with a single click.
+        </p>
       </CardHeader>
 
-      <p className="px-8 text-center">
-        To demo the project, click the{' '}
-        <span onClick={async () => await signInWithEmailForDemo()} className="text-primary cursor-pointer font-bold">
-          Demo Sign In
-        </span>{' '}
-        button. This will create a dummy account with a single click.
-      </p>
-
       <CardContent className="flex flex-col gap-4">
-        <Button
-          className="w-full"
-          variant="loginButtonPrimary"
-          size="xl"
-          onClick={async () => await signInWithEmailForDemo()}
-        >
-          Demo Sign In
+        {/* Demo sign in button */}
+        <Button className="w-full" variant="loginButtonPrimary" size="xl" onClick={handleSignInWithEmailForDemo}>
+          {demoLoginIsLoading ? <Loading variant={'sm'} /> : 'Demo Sign In'}
         </Button>
 
+        {/* Email sign in button */}
         <Button
           className="w-full"
           variant="loginButtonSecondary"
@@ -89,11 +93,13 @@ const MainView = ({ setCurrentView }: MainViewProps) => {
           <span className="flex-grow">Sign in with Email</span>
         </Button>
 
+        {/* Google sign in button*/}
         <Button onClick={async () => signInWithGoogle()} className="w-full" variant="loginButtonSecondary" size="xl">
           <img src={googleGIcon} alt="Google Icon" className="h-6" />
           <span className="flex-grow">Sign in with Google</span>
         </Button>
 
+        {/* Create account link */}
         <p className="text-secondary mt-4 text-center text-sm">
           Don't have an account?{' '}
           <span className="text-primary font-bold" onClick={() => setCurrentView('signUpWithEmail')}>
