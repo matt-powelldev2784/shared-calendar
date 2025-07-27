@@ -36,7 +36,7 @@ const signUpFormSchema = z
     path: ['password2'],
   });
 
-type CurrentView = 'main' | 'signInEmail' | 'signUpEmail';
+type CurrentView = 'main' | 'signInWithEmail' | 'signUpWithEmail';
 type MainViewProps = {
   setCurrentView: Dispatch<SetStateAction<CurrentView>>;
 };
@@ -48,8 +48,8 @@ export const SignIn = () => {
   return (
     <Card className="relative mx-auto mt-4 h-auto w-[95%] max-w-[400px]">
       {currentView === 'main' && <MainView setCurrentView={setCurrentView} />}
-      {currentView === 'signInEmail' && <SignInWithEmail />}
-      {currentView === 'signUpEmail' && <SignUpWithEmail />}
+      {currentView === 'signInWithEmail' && <SignInWithEmail />}
+      {currentView === 'signUpWithEmail' && <SignUpWithEmail />}
     </Card>
   );
 };
@@ -76,7 +76,7 @@ const MainView = ({ setCurrentView }: MainViewProps) => {
           Demo Sign In
         </Button>
 
-        <Button className="w-full" variant="googleButton" size="xl" onClick={() => setCurrentView('signInEmail')}>
+        <Button className="w-full" variant="googleButton" size="xl" onClick={() => setCurrentView('signInWithEmail')}>
           <span className="flex-grow">Sign in with Email</span>
         </Button>
 
@@ -87,7 +87,7 @@ const MainView = ({ setCurrentView }: MainViewProps) => {
 
         <p className="text-secondary mt-4 text-center text-sm">
           Don't have an account?{' '}
-          <span className="text-primary font-bold" onClick={() => setCurrentView('signUpEmail')}>
+          <span className="text-primary font-bold" onClick={() => setCurrentView('signUpWithEmail')}>
             Create one
           </span>
         </p>
