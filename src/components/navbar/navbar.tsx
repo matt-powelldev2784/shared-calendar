@@ -23,7 +23,8 @@ export const Navbar = () => {
 
   const emailName = authenticatedUser?.email?.split('@')[0];
   const emailNameWithUpperCase = emailName ? emailName.charAt(0).toUpperCase() + emailName.slice(1) : 'My';
-  const displayName = authenticatedUser?.displayName || emailNameWithUpperCase;
+  const testUserDisplayName = emailNameWithUpperCase.slice(0, 8) === 'Testuser' ? 'Demo User' : '';
+  const displayName = testUserDisplayName || authenticatedUser?.displayName || emailNameWithUpperCase;
 
   return (
     <nav className="bg-primary z-1100 flex h-14 w-full items-center justify-between text-xl font-bold text-white md:h-12">
