@@ -35,55 +35,43 @@ const signUpFormSchema = z
     path: ['password2'],
   });
 
-export const SignIn = () => {
-  const [isSignInVisible, setSignInVisible] = useState(true);
-  const [signInWithEmailIsVisible, setSignInWithEmailVisible] = useState(false);
-  const [signUpWithEmailIsVisible, setSignUpWithEmailVisible] = useState(false);
+  type CurrentView = 'main' | 'signInEmail' | 'signUpEmail';
 
-  const handleSignInWithEmail = () => {
-    setSignInWithEmailVisible(true);
-    setSignUpWithEmailVisible(false);
-    setSignInVisible(false);
+  export const SignIn = () => {
+    const [currentView, setCurrentView] = useState<CurrentView>('main');
+
+    return (
+      <Card className="mx-auto mt-4 h-auto w-[95%] max-w-[400px]">
+        {currentView === 'main' && (
+          <>
+            <CardHeader>
+              <img src={SharcIcon} alt="Sharc Logo" className="mx-auto h-8" />
+              <CardTitle className="text-center">Sign In</CardTitle>
+              <CardDescription className="text-center">Welcome to Sharc Shared Calendar</CardDescription>
+            </CardHeader>
+
+            <CardContent className="flex flex-col gap-4">
+              <Button className="w-full" variant="emailButton" size="xl" onClick={() => setCurrentView('signInEmail')}>
+                Sign in with Email
+              </Button>
+
+              <SignInWithGoogle />
+
+              <p className="text-secondary mt-4 text-center text-sm">
+                Don't have an account?{' '}
+                <span className="text-primary font-bold" onClick={() => setCurrentView('signUpEmail')}>
+                  Create one
+                </span>
+              </p>
+            </CardContent>
+          </>
+        )}
+
+        {currentView === 'signInEmail' && <SignInWithEmail />}
+        {currentView === 'signUpEmail' && <SignUpWithEmail />}
+      </Card>
+    );
   };
-
-  const handleSignUpWithEmail = () => {
-    setSignUpWithEmailVisible(true);
-    setSignInWithEmailVisible(false);
-    setSignInVisible(false);
-  };
-
-  return (
-    <Card className="mx-auto mt-4 h-auto w-[95%] max-w-[400px]">
-      {isSignInVisible && (
-        <>
-          <CardHeader>
-            <img src={SharcIcon} alt="Sharc Logo" className="mx-auto h-8" />
-            <CardTitle className="text-center">Sign In</CardTitle>
-            <CardDescription className="text-center">Welcome to Sharc Shared Calendar</CardDescription>
-          </CardHeader>
-
-          <CardContent className="flex flex-col gap-4">
-            <Button className="w-full" variant="emailButton" size="xl" onClick={handleSignInWithEmail}>
-              Sign in with Email
-            </Button>
-
-            <SignInWithGoogle />
-
-            <p className="text-secondary mt-4 text-center text-sm">
-              Don't have an account?{' '}
-              <span className="text-primary font-bold" onClick={handleSignUpWithEmail}>
-                Create one
-              </span>
-            </p>
-          </CardContent>
-        </>
-      )}
-
-      {signInWithEmailIsVisible && <SignInWithEmail />}
-      {signUpWithEmailIsVisible && <SignUpWithEmail />}
-    </Card>
-  );
-};
 
 const SignInWithEmail = () => {
   const form = useForm<z.infer<typeof signInFormSchema>>({
