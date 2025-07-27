@@ -13,7 +13,6 @@ import { Input } from '../ui/input';
 import { signInWithEmail, signInWithEmailForDemo, signUpWithEmail } from '@/db/auth/signInWithEmail';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { createInitialUserDocuments } from '@/db/auth/createInitialUserDocuments';
 import { useState, type Dispatch, type SetStateAction } from 'react';
 import { signInWithGoogle } from '@/db/auth/signInWithGoogle';
 import SharcIcon from '@/assets/logo/sharc_icon_orange.svg';
@@ -191,7 +190,6 @@ const SignUpWithEmail = () => {
     try {
       const { email, password } = data;
       await signUpWithEmail(email, password);
-      await createInitialUserDocuments();
     } catch (error: any) {
       console.error('Sign-up error:', error);
       if (error.code === 'auth/email-already-in-use') setErrorType('email-already-in-use');
