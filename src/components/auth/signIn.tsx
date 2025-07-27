@@ -113,7 +113,7 @@ const SignInWithEmail = () => {
                   <FormControl>
                     <Input placeholder="email" {...field} />
                   </FormControl>
-                  <FormMessage />
+                  <FormMessage className="-translate-y-3 text-xs" />
                 </FormItem>
               )}
             />
@@ -122,17 +122,17 @@ const SignInWithEmail = () => {
               control={form.control}
               name="password"
               render={({ field }) => (
-                <FormItem className="w-full max-w-[700px]">
-                  <FormLabel>password</FormLabel>
+                <FormItem className="mt-2 w-full max-w-[700px]">
+                  <FormLabel>Password</FormLabel>
                   <FormControl>
                     <Input placeholder="password" {...field} />
                   </FormControl>
-                  <FormMessage />
+                  <FormMessage className="-translate-y-3 text-xs" />
                 </FormItem>
               )}
             />
 
-            <Button className="mt-5 w-full" variant="emailButton" size="xl">
+            <Button className="mt-8 w-full" variant="emailButton" size="xl">
               Sign in with Email
             </Button>
           </form>
@@ -181,7 +181,7 @@ const SignUpWithEmail = () => {
                   <FormControl>
                     <Input placeholder="email" {...field} />
                   </FormControl>
-                  <FormMessage className="text-xs" />
+                  <FormMessage className="-translate-y-3 text-xs" />
                 </FormItem>
               )}
             />
@@ -195,7 +195,7 @@ const SignUpWithEmail = () => {
                   <FormControl>
                     <Input placeholder="password" {...field} />
                   </FormControl>
-                  <FormMessage className="text-xs" />
+                  <FormMessage className="-translate-y-3 text-xs" />
                 </FormItem>
               )}
             />
@@ -209,12 +209,12 @@ const SignUpWithEmail = () => {
                   <FormControl>
                     <Input placeholder="password2" {...field} />
                   </FormControl>
-                  <FormMessage className="text-xs" />
+                  <FormMessage className="-translate-y-3 text-xs" />
                 </FormItem>
               )}
             />
 
-            <Button className="mt-5 w-full" variant="emailButton" size="xl">
+            <Button className="mt-8 w-full" variant="emailButton" size="xl">
               Sign Up with Email
             </Button>
           </form>
