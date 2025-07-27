@@ -20,9 +20,9 @@ const buttonVariants = cva(
         link: 'text-primary underline-offset-4 hover:underline cursor-pointer',
         datePicker:
           'cursor-pointer border-secondary text-secondary flex w-[96%] justify-between border-2 px-2 text-center text-lg font-bold md:max-w-96',
-        googleButton:
+        loginButtonSecondary:
           'bg-white text-secondary shadow-xs hover:bg-gray-100 border-2 border-secondary text-lg font-bold cursor-pointer',
-        emailButton: 'bg-primary text-white shadow-xs hover:bg-primary/90 text-lg font-bold cursor-pointer',
+        loginButtonPrimary: 'bg-primary text-white shadow-xs hover:bg-primary/90 text-lg font-bold cursor-pointer',
       },
       size: {
         default: 'h-9 px-4 py-2 has-[>svg]:px-3',

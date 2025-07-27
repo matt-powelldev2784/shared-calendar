@@ -23,18 +23,11 @@ export const SignOut = () => {
     <Card className="mx-auto mt-4 w-[95%] max-w-[400px]">
       <CardHeader>
         <CardTitle className="text-center">Sign Out</CardTitle>
-        <CardDescription className="text-center">
-          Click the button below to sign out
-        </CardDescription>
+        <CardDescription className="text-center">Click the button below to sign out</CardDescription>
       </CardHeader>
 
       <CardContent className="h-12">
-        <Button
-          onClick={signOut}
-          className="w-full"
-          variant="googleButton"
-          size="xl"
-        >
+        <Button onClick={signOut} className="w-full" variant="loginButtonSecondary" size="xl">
           Sign Out
         </Button>
       </CardContent>

@@ -72,15 +72,25 @@ const MainView = ({ setCurrentView }: MainViewProps) => {
       </p>
 
       <CardContent className="flex flex-col gap-4">
-        <Button className="w-full" variant="emailButton" size="xl" onClick={async () => await signInWithEmailForDemo()}>
+        <Button
+          className="w-full"
+          variant="loginButtonPrimary"
+          size="xl"
+          onClick={async () => await signInWithEmailForDemo()}
+        >
           Demo Sign In
         </Button>
 
-        <Button className="w-full" variant="googleButton" size="xl" onClick={() => setCurrentView('signInWithEmail')}>
+        <Button
+          className="w-full"
+          variant="loginButtonSecondary"
+          size="xl"
+          onClick={() => setCurrentView('signInWithEmail')}
+        >
           <span className="flex-grow">Sign in with Email</span>
         </Button>
 
-        <Button onClick={async () => signInWithGoogle()} className="w-full" variant="googleButton" size="xl">
+        <Button onClick={async () => signInWithGoogle()} className="w-full" variant="loginButtonSecondary" size="xl">
           <img src={googleGIcon} alt="Google Icon" className="h-6" />
           <span className="flex-grow">Sign in with Google</span>
         </Button>
@@ -159,7 +169,7 @@ const SignInWithEmail = () => {
               )}
             />
 
-            <Button className="mt-8 w-full" variant="emailButton" size="xl">
+            <Button className="mt-8 w-full" variant="loginButtonPrimary" size="xl">
               {isSubmitting ? <Loading variant={'sm'} /> : 'Sign In with Email'}
             </Button>
           </form>
@@ -254,7 +264,7 @@ const SignUpWithEmail = () => {
               )}
             />
 
-            <Button className="mt-8 w-full" variant="emailButton" size="xl">
+            <Button className="mt-8 w-full" variant="loginButtonPrimary" size="xl">
               {isSubmitting ? <Loading variant={'sm'} /> : 'Create Account'}
             </Button>
           </form>
