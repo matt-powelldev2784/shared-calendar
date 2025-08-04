@@ -4,38 +4,18 @@ import '@testing-library/jest-dom';
 import { test, expect, vi, beforeEach, describe } from 'vitest';
 import { SignIn } from '@/components/auth/signIn';
 import { signInWithEmail } from '@/db/auth/signInWithEmail';
-import { signInWithEmailForDemo } from '@/db/auth/signInWithEmail';
 
 vi.mock('@/db/auth/signInWithEmail', () => ({
   signInWithEmail: vi.fn(),
-  signInWithEmailForDemo: vi.fn(),
 }));
 
 const mockUserReturnValue = {
   user: { uid: 'test-uid', email: 'testuser@testuser.com' },
 } as any;
 
-describe('SignIn', () => {
+describe('Sign In With Email', () => {
   beforeEach(() => {
     vi.clearAllMocks();
-  });
-
-  test('user can sign in with demo login', async () => {
-    const user = userEvent.setup();
-
-    // mock the sign in with email for demo function
-    vi.mocked(signInWithEmailForDemo).mockResolvedValue(mockUserReturnValue);
-
-    // render the sign in component
-    render(<SignIn />);
-
-    // click the demo sign in button
-    const button = screen.getByRole('button', { name: /Demo Sign In/i });
-    expect(button).toBeInTheDocument();
-    await user.click(button);
-
-    // check the demo sign in function was called
-    expect(signInWithEmailForDemo).toHaveBeenCalledTimes(1);
   });
 
   test('user will get error if they try to sign in with email and password which is not registered', async () => {
@@ -84,7 +64,7 @@ describe('SignIn', () => {
     const emailInput = screen.getByPlaceholderText(/Email/i);
     const passwordInput = screen.getByPlaceholderText(/Password/i);
     const signInButton = screen.getByRole('button', { name: /Sign In/i });
-    await user.type(emailInput, 'thisIsNotAnEmailAddress');
+    await user.type(emailInput, 'this-is-not-a-valid-email');
     await user.type(passwordInput, 'password123');
     await user.click(signInButton);
 
@@ -114,7 +94,7 @@ describe('SignIn', () => {
     await user.type(passwordInput, 'Password123');
     await user.click(signInButton);
 
-    // check sign in function  was called with correct parameters
+    // check sign in function was called with correct parameters
     expect(signInWithEmail).toHaveBeenCalledWith('testuser@testuser.com', 'Password123');
     expect(signInWithEmail).toHaveBeenCalledTimes(1);
   });
