@@ -3,7 +3,6 @@ import userEvent from '@testing-library/user-event';
 import '@testing-library/jest-dom';
 import { test, expect, vi, beforeEach, describe } from 'vitest';
 import { SignIn } from '@/components/auth/signIn';
-
 import { signUpWithEmail } from '@/db/auth/signInWithEmail';
 
 vi.mock('@/db/auth/signInWithEmail', () => ({
@@ -82,7 +81,7 @@ describe('Sign Up With Email', () => {
     });
   });
 
-  test('user will get error if they try to create account with unknown error', async () => {
+  test('user will get generic error message if a unknown errors is returned when create a account ', async () => {
     const user = userEvent.setup();
 
     // mock the sign up with email function to return unknown error
@@ -166,7 +165,7 @@ describe('Sign Up With Email', () => {
     expect(screen.getByText(/Password must be at least 6 characters long/i)).toBeInTheDocument();
   });
 
-  test('user will get error if email is invalid', async () => {
+  test('user will get error if they type a invalid email address', async () => {
     const user = userEvent.setup();
 
     // render the sign in component

@@ -50,7 +50,7 @@ describe('Sign In With Email', () => {
     });
   });
 
-  test('user will get error if they try to sign in with invalid email', async () => {
+  test('user will get error if they type a invalid email address', async () => {
     const user = userEvent.setup();
 
     // render the sign in component
