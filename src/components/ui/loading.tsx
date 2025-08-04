@@ -14,7 +14,7 @@ const Loading = ({ classNames, variant }: LoadingProps) => {
   return (
     <img
       src={LoadingSpinner}
-      alt="loading spinner"
+      alt="loading..."
       className={`${variant ? variants[variant] : variants.default} ${classNames}`}
     />
   );
