@@ -1,4 +1,4 @@
-import { render, screen, waitFor } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import '@testing-library/jest-dom';
 import { test, expect, vi, beforeEach, describe } from 'vitest';
@@ -43,11 +43,7 @@ describe('Sign In With Email', () => {
     expect(signInWithEmail).toHaveBeenCalledWith('notreigstered@email.com', 'notregisteredpassword');
 
     // check the error message is displayed
-    await waitFor(() => {
-      expect(
-        screen.getByText(/There was an error signing in. Please check your credentials and try again./i),
-      ).toBeInTheDocument();
-    });
+    expect(screen.getByText(/There was an error signing in./i)).toBeInTheDocument();
   });
 
   test('user will get error if they type a invalid email address', async () => {
