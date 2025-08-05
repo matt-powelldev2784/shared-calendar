@@ -1,4 +1,4 @@
-import { render, screen, waitFor } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import '@testing-library/jest-dom';
 import { test, expect, vi, beforeEach, describe } from 'vitest';
@@ -74,11 +74,7 @@ describe('Sign Up With Email', () => {
     expect(signUpWithEmail).toHaveBeenCalledWith('existing@email.com', 'password123');
 
     // check the email already exists error message is displayed
-    await waitFor(() => {
-      expect(
-        screen.getByText(/An account with this email already exists. Please sign in instead./i),
-      ).toBeInTheDocument();
-    });
+    expect(screen.getByText(/An account with this email already exists. Please sign in instead./i)).toBeInTheDocument();
   });
 
   test('user will get generic error message if a unknown errors is returned when create a account ', async () => {
@@ -108,11 +104,9 @@ describe('Sign Up With Email', () => {
     expect(signUpWithEmail).toHaveBeenCalledWith('user@email.com', 'password123');
 
     // check the unknown error message is displayed
-    await waitFor(() => {
-      expect(
-        screen.getByText(/There was an error when creating the account. Please try again later./i),
-      ).toBeInTheDocument();
-    });
+    expect(
+      screen.getByText(/There was an error when creating the account. Please try again later./i),
+    ).toBeInTheDocument();
   });
 
   test('user will get error if the passwords do not match', async () => {
