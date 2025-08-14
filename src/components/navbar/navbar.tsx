@@ -166,7 +166,10 @@ const UserAvatar = (user: User) => {
   const userAvatar = user?.photoURL;
 
   return (
-    <Avatar className="relative flex min-h-8 min-w-8 -translate-x-0.5 items-center justify-center">
+    <Avatar
+      className="relative flex min-h-8 min-w-8 -translate-x-0.5 items-center justify-center"
+      aria-label="User Settings"
+    >
       {userAvatar && <AvatarImage className="bg-secondary absolute h-8 w-8 rounded-full" src={userAvatar} />}
       <AvatarFallback className="bg-secondary absolute h-8 w-8 text-xs">{oAuthUserInitials}</AvatarFallback>
     </Avatar>
