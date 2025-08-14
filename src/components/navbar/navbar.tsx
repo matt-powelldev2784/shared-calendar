@@ -1,14 +1,15 @@
 import { Link } from '@tanstack/react-router';
 import SharcLogo from '@/assets/logo/sharc_logo_white.svg';
 import SharcIcon from '@/assets/logo/sharc_icon_white.svg';
-import { useEffect, useRef, useState, type JSX } from 'react';
-import { NavIconButton } from './navIcon';
-import { Bell, CalendarFold, CalendarPlus, LogOut } from 'lucide-react';
-import { calendarMenuItem } from './userMenuItems';
+import { useEffect, useRef, useState, type ReactElement } from 'react';
+import { NavIconButton, NavIconLink } from './navIcon';
+import { Bell, Calendar, CalendarPlus } from 'lucide-react';
 import { useQuery } from '@tanstack/react-query';
 import checkAuth from '@/db/auth/checkAuth';
 import { NavItem, NavItemPlaceholder, type NavItemProps } from './navItem';
 import { useRequestMenuItems } from './useRequestMenuItems';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { type User } from 'firebase/auth';
 
 export const Navbar = () => {
   const { requestMenuItems, numberOfRequests } = useRequestMenuItems();
@@ -21,51 +22,35 @@ export const Navbar = () => {
     refetchInterval: (data) => (!data ? false : 1),
   });
 
-  const emailName = authenticatedUser?.email?.split('@')[0];
-  const emailNameWithUpperCase = emailName ? emailName.charAt(0).toUpperCase() + emailName.slice(1) : 'My';
-  const testUserDisplayName = emailNameWithUpperCase.slice(0, 8) === 'Testuser' ? 'Demo User' : '';
-  const displayName = testUserDisplayName || authenticatedUser?.displayName || emailNameWithUpperCase;
-
   return (
-    <nav className="bg-primary z-1100 flex h-14 w-full items-center justify-between text-xl font-bold text-white md:h-12">
+    <nav className="bg-primary flex h-16 w-full items-center text-white">
       {!authenticatedUser && (
-        <div className="flex flex-grow items-center justify-between">
-          <Logo />
-        </div>
+        <img src={SharcLogo} alt="Sharc Calendar Logo" className={`ml-0 flex h-8 w-full md:ml-8 md:w-fit`} />
       )}
 
       {authenticatedUser && (
         <>
-          <div className="flex flex-grow items-center">
-            <LogoWithCalendarName calendarName={`${displayName}'s Calendar`} />
-          </div>
+          <img src={SharcLogo} alt="Sharc Calendar Logo" className={`ml-8 hidden h-8 md:block`} />
 
-          <div className="mr-5 flex items-center gap-5">
-            <Link
-              to={'/add-entry'}
-              className="item-center hidden h-9 w-full flex-row justify-center gap-2 rounded bg-blue-500 px-4 py-2 text-sm text-white transition hover:bg-blue-500 focus:ring-2 focus:ring-blue-400 focus:outline-none sm:flex"
-              aria-label="Add Entry"
-            >
-              <CalendarPlus className="h-5 w-5" />
-              Add Entry
-            </Link>
+          <div className="flex w-full flex-row items-center justify-evenly text-white md:mr-8 md:justify-end md:gap-8">
+            <NavIconLink linkTo="/authenticated" aria-label="Add Entry">
+              <Calendar className="h-7 w-7" />
+            </NavIconLink>
+
+            <NavIconLink linkTo="/add-entry" aria-label="Add Entry">
+              <CalendarPlus className="h-7 w-7" />
+            </NavIconLink>
 
             <DropDownMenu
-              icon={<CalendarFold className="h-6 w-6" />}
-              menuName="Calendar Menu Items"
-              navigationItems={calendarMenuItem}
-            />
-
-            <DropDownMenu
-              icon={<Bell className="h-6 w-6" />}
+              icon={<Bell className="h-7 w-7" />}
               menuName="Notification"
               navigationItems={requestMenuItems}
               notificationCount={numberOfRequests}
             />
 
-            <Link to={'/signout'} aria-label="Sign Out">
-              <LogOut className="h-6 w-6" />
-            </Link>
+            <NavIconLink linkTo="/signout" aria-label="Add Entry">
+              <UserAvatar {...authenticatedUser} />
+            </NavIconLink>
           </div>
         </>
       )}
@@ -73,39 +58,21 @@ export const Navbar = () => {
   );
 };
 
-export const Logo = () => {
+type LogoProps = {
+  className?: string;
+};
+
+export const Logo = ({ className }: LogoProps) => {
   return (
     <Link to="/" aria-label="Home" className="flex h-full items-center">
-      <img src={SharcLogo} alt="sharc logo" className="ml-5 h-8" />
-    </Link>
-  );
-};
-
-type LogoWithCalendarNameProps = {
-  calendarName: string;
-};
-
-const LogoWithCalendarName = ({ calendarName }: LogoWithCalendarNameProps) => {
-  return (
-    <Link to="/" aria-label="Home" className="ml-5 flex h-full items-center">
-      <img src={SharcIcon} alt="sharc logo" className="h-8" />
-      <p
-        style={{
-          overflow: 'hidden',
-          display: '-webkit-box',
-          WebkitBoxOrient: 'vertical',
-          WebkitLineClamp: 2,
-        }}
-        className="mr-1 flex h-full max-h-12 flex-wrap items-center justify-center overflow-hidden px-2 text-[15px]/4 sm:max-w-[400px] sm:text-[16px]/5"
-      >
-        {calendarName}
-      </p>
+      <img src={SharcLogo} alt="Sharc Calendar Logo" className={`ml-5 hidden h-8 md:block ${className}`} />
+      <img src={SharcIcon} alt="Sharc Calendar Logo" className={`ml-5 block h-8 md:hidden ${className}`} />
     </Link>
   );
 };
 
 type DropDownMenuProps = {
-  icon: JSX.Element;
+  icon: ReactElement;
   menuName: string;
   navigationItems: NavItemProps[];
   notificationCount?: number;
@@ -113,12 +80,7 @@ type DropDownMenuProps = {
 
 type PressOutsideEvent = MouseEvent | TouchEvent;
 
-const DropDownMenu = ({
-  icon,
-  menuName,
-  navigationItems,
-  notificationCount = 0,
-}: DropDownMenuProps) => {
+const DropDownMenu = ({ icon, menuName, navigationItems, notificationCount = 0 }: DropDownMenuProps) => {
   const [menuIsOpen, setMenuIsOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
 
@@ -172,11 +134,12 @@ const DropDownMenu = ({
       >
         {icon}
       </NavIconButton>
+
       <ul
         className={
           menuIsOpen
-            ? 'bg-primary fixed top-12 right-0 z-1200 max-h-[400px] w-[250px] overflow-y-auto duration-500 ease-in-out md:block'
-            : 'fixed top-12 right-0 z-9999 max-h-0 w-[250px] overflow-y-auto duration-500 ease-in-out md:block'
+            ? 'bg-primary fixed top-16 right-0 z-1200 max-h-[400px] w-[250px] overflow-y-auto duration-500 ease-in-out md:block'
+            : 'fixed top-16 right-0 z-9999 max-h-0 w-[250px] overflow-y-auto duration-500 ease-in-out md:block'
         }
       >
         {menuIsOpen &&
@@ -187,5 +150,25 @@ const DropDownMenu = ({
         )}
       </ul>
     </div>
+  );
+};
+
+const UserAvatar = (user: User) => {
+  const emailName = user?.email?.split('@')[0];
+  const emailNameWithUpperCase = emailName ? emailName.charAt(0).toUpperCase() + emailName.slice(1) : 'My';
+  const testUserDisplayName = emailNameWithUpperCase.slice(0, 8) === 'Testuser' ? 'Demo User' : '';
+  const displayName = testUserDisplayName || user?.displayName || emailNameWithUpperCase;
+
+  const oAuthUserInitials = displayName
+    ?.split(' ')
+    .map((name) => name[0].slice(0))
+    .join('');
+  const userAvatar = user?.photoURL;
+
+  return (
+    <Avatar className="relative flex min-h-8 min-w-8 -translate-x-0.5 items-center justify-center">
+      {userAvatar && <AvatarImage className="bg-secondary absolute h-8 w-8 rounded-full" src={userAvatar} />}
+      <AvatarFallback className="bg-secondary absolute h-8 w-8 text-xs">{oAuthUserInitials}</AvatarFallback>
+    </Avatar>
   );
 };

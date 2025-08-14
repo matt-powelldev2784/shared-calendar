@@ -1,27 +1,21 @@
 import type { FileRoutesByTo } from '@/routeTree.gen';
 import { Link } from '@tanstack/react-router';
-import type { JSX } from 'react';
+import type { ReactElement } from 'react';
 
 interface NavIconLinkProps {
   linkTo: keyof FileRoutesByTo;
   onClick?: () => void;
-  children?: JSX.Element;
+  children?: ReactElement;
   ariaLabel?: string;
   className?: string;
 }
 
-export const NavIconLink = ({
-  linkTo,
-  onClick,
-  children,
-  ariaLabel,
-  className,
-}: NavIconLinkProps) => {
+export const NavIconLink = ({ linkTo, onClick, children, ariaLabel, className }: NavIconLinkProps) => {
   return (
     <Link
       onClick={onClick}
       to={linkTo}
-      className={`z-1400 ${className}`}
+      className={`flex items-center justify-center font-semibold ${className}`}
       aria-label={ariaLabel}
     >
       {children}
@@ -29,26 +23,22 @@ export const NavIconLink = ({
   );
 };
 
-interface NavIconProps {
+interface NavIconButtonProps {
   onClick?: (event: any) => void;
-  children?: JSX.Element;
+  children?: ReactElement;
   ariaLabel?: string;
   className?: string;
 }
 
-export const NavIconButton = ({
-  onClick,
-  children,
-  ariaLabel,
-  className,
-}: NavIconProps) => {
+export const NavIconButton = ({ onClick, children, ariaLabel, className }: NavIconButtonProps) => {
   return (
     <button
       onClick={onClick}
-      className={`z-1400 flex h-8 w-8 items-center justify-center ${className}`}
+      className={`z-1400 flex h-8 w-8 flex-row items-center justify-center gap-2 ${className}`}
       aria-label={ariaLabel}
     >
       {children}
     </button>
   );
 };
+

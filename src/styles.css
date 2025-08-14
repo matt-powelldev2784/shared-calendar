@@ -1,5 +1,11 @@
 @import "tailwindcss";
 
+/* to add border to all elements, uncomment the following lines */
+/* this is for debugging layout only, not for production */
+/* * {
+  @apply border-1 border-green-500;
+} */
+
 @plugin "tailwindcss-animate";
 
 @custom-variant dark (&:is(.dark *));
@@ -26,12 +32,14 @@
 
 body {
   @apply m-0;
-  font-family: "Roboto", -apple-system, BlinkMacSystemFont, "Segoe UI", "Oxygen",
+  font-family: "Inter", "Roboto", -apple-system, BlinkMacSystemFont, "Segoe UI", "Oxygen",
     "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+
+
 
 code {
   font-family: "Roboto", source-code-pro, Menlo, Monaco, Consolas, "Courier New",
