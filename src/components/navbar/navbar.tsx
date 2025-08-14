@@ -24,7 +24,9 @@ export const Navbar = () => {
 
   return (
     <nav className="bg-primary flex h-16 w-full items-center text-white">
-      {!authenticatedUser && <Logo className="md:w-56" />}
+      {!authenticatedUser && (
+        <img src={SharcLogo} alt="Sharc Calendar Logo" className={`ml-0 flex h-8 w-full md:ml-8 md:w-fit`} />
+      )}
 
       {authenticatedUser && (
         <>
@@ -163,15 +165,12 @@ const UserAvatar = (user: User) => {
     ?.split(' ')
     .map((name) => name[0].slice(0))
     .join('');
+  const userAvatar = user?.photoURL;
 
   return (
-    <Avatar className="flex items-center justify-center">
-      {user?.photoURL ? (
-        <AvatarImage className="bg-secondary h-8 w-8 rounded-full text-xs" src={user?.photoURL} />
-      ) : (
-        <AvatarFallback className="bg-secondary h-8 w-8 text-xs">{oAuthUserInitials}</AvatarFallback>
-      )}
-      {/* <p className="hidden text-sm md:block">{displayName?.split(' ')[0]}'s Calendar</p> */}
+    <Avatar className="relative flex min-h-8 min-w-8 -translate-x-0.5 items-center justify-center">
+      {userAvatar && <AvatarImage className="bg-secondary absolute h-8 w-8 rounded-full" src={userAvatar} />}
+      <AvatarFallback className="bg-secondary absolute h-8 w-8 text-xs">{oAuthUserInitials}</AvatarFallback>
     </Avatar>
   );
 };
