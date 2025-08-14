@@ -33,8 +33,6 @@ export const Navbar = () => {
           <img src={SharcLogo} alt="Sharc Calendar Logo" className={`ml-8 hidden h-8 md:block`} />
 
           <div className="flex w-full flex-row items-center justify-evenly text-white md:mr-8 md:justify-end md:gap-8">
-            <img src={SharcIcon} alt="Sharc Calendar Icon" className={`block h-8 md:hidden`} />
-
             <NavIconLink linkTo="/authenticated" aria-label="Add Entry">
               <Calendar className="h-7 w-7" />
             </NavIconLink>
