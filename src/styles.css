@@ -30,6 +30,10 @@
   @apply bg-white;
 }
 
+button {
+  @apply cursor-pointer
+}
+
 body {
   @apply m-0;
   font-family: "Inter", "Roboto", -apple-system, BlinkMacSystemFont, "Segoe UI", "Oxygen",

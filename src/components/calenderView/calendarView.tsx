@@ -1,18 +1,21 @@
 import { Button } from '@/components/ui/button';
-import { format } from 'date-fns';
-import CalendarIcon from '../../assets/icons/cal_icon.svg';
-import DownIcon from '../../assets/icons/down_icon.svg';
-import { Calendar as CustomCalendar } from '@/components/ui/customCalendar';
-import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import { addDays, addWeeks, format, isToday, startOfWeek, subWeeks } from 'date-fns';
 import { useState } from 'react';
 import type { CalendarEntriesData, Timeslot, TimeslotHeaders, TimeslotEntry } from '@/ts/Calendar';
 import { CalendarCard } from '../ui/calendarCard';
 import { useSearch, useNavigate } from '@tanstack/react-router';
 import { getCalendarUrl } from '@/lib/getCalendarUrl';
 import { useResponsiveCalendarEntries } from '@/lib/useResponsiveCalendarEntries';
-import { ChevronsDown, Clock } from 'lucide-react';
+import { ChevronLeft, ChevronRight, ChevronsDown, Clock } from 'lucide-react';
 import { getResponsiveStartDate } from '@/lib/getResponsiveStartDate';
-import { DEFAULT_DAYS_TO_VIEW, FULL_DAYS_END_HOUR, FULL_DAYS_START_HOUR, OFFICE_END_HOUR, OFFICE_START_HOUR, smallScreenSize } from '@/lib/globalVariables';
+import {
+  DEFAULT_DAYS_TO_VIEW,
+  FULL_DAYS_END_HOUR,
+  FULL_DAYS_START_HOUR,
+  OFFICE_END_HOUR,
+  OFFICE_START_HOUR,
+  smallScreenSize,
+} from '@/lib/globalVariables';
 
 type CalendarViewProps = {
   calendarEntries: CalendarEntriesData[];
@@ -26,11 +29,9 @@ export const CalendarView = ({ calendarEntries, timeslotHeaders }: CalendarViewP
   const date = new Date(startDate);
   const isSmallScreen = window.innerWidth < smallScreenSize;
   const navigate = useNavigate();
-  const [isSelectDateOpen, setIsSelectDateOpen] = useState(false);
   const responsiveCalendarEntries = useResponsiveCalendarEntries(calendarEntries);
 
   const handleDateSelect = (selectedDate: Date) => {
-    setIsSelectDateOpen(false);
     const calendarUrl = getCalendarUrl({
       calendarIds: calendarIds,
       startDate: getResponsiveStartDate(isSmallScreen, selectedDate),
@@ -45,7 +46,7 @@ export const CalendarView = ({ calendarEntries, timeslotHeaders }: CalendarViewP
     const calendarUrl = getCalendarUrl({
       calendarIds: calendarIds,
       startDate: format(date, 'yyyy-MM-dd'),
-      startHour: startHour === OFFICE_START_HOUR ? FULL_DAYS_START_HOUR: OFFICE_START_HOUR,
+      startHour: startHour === OFFICE_START_HOUR ? FULL_DAYS_START_HOUR : OFFICE_START_HOUR,
       endHour: startHour === OFFICE_START_HOUR ? FULL_DAYS_END_HOUR : OFFICE_END_HOUR,
       daysToView: DEFAULT_DAYS_TO_VIEW,
     });
@@ -54,22 +55,8 @@ export const CalendarView = ({ calendarEntries, timeslotHeaders }: CalendarViewP
 
   return (
     <div className="flex w-full flex-col items-center justify-center pb-20">
-      {/* Date Selector */}
-      <div className="bg-primary/25 z-100s relative flex h-13 w-full items-center justify-center gap-4 p-2">
-        <Popover open={isSelectDateOpen} onOpenChange={setIsSelectDateOpen}>
-          <PopoverTrigger asChild>
-            <Button variant="datePicker" className="w-96">
-              <img src={CalendarIcon} alt="calendar" className="-w-5 mr-2 h-5" />
-              {date ? format(date, 'dd MMMM yyyy') : <span>Pick a date</span>}
-              <img src={DownIcon} alt="down" className="-w-5 h-5" />
-            </Button>
-          </PopoverTrigger>
-
-          <PopoverContent className="w-auto">
-            <CustomCalendar mode="single" selected={date} onDateSelect={handleDateSelect} initialFocus />
-          </PopoverContent>
-        </Popover>
-      </div>
+      {/* Custom Date Selector */}
+      <CustomDateSelector selectedDate={date} handleDateSelect={handleDateSelect} />
 
       <div className="flex w-full flex-row items-center justify-center">
         {/* Hour timeslots headers displayed to the left of calendar */}
@@ -143,6 +130,85 @@ const CalendarDay = (calendarDay: CalendarEntriesData) => {
           </div>
         );
       })}
+    </div>
+  );
+};
+
+interface CustomDateSelectorProps {
+  selectedDate: Date;
+  handleDateSelect: (date: Date) => void;
+}
+
+export const CustomDateSelector = ({ selectedDate, handleDateSelect }: CustomDateSelectorProps) => {
+  const [currentWeek, setCurrentWeek] = useState(() => startOfWeek(selectedDate, { weekStartsOn: 1 }));
+
+  const weekDays = Array.from({ length: 7 }, (_, i) => addDays(currentWeek, i));
+
+  const goToPreviousWeek = () => {
+    setCurrentWeek((prev) => subWeeks(prev, 1));
+    handleDateSelect(startOfWeek(subWeeks(currentWeek, 1), { weekStartsOn: 1 }));
+  };
+
+  const goToNextWeek = () => {
+    setCurrentWeek((prev) => addWeeks(prev, 1));
+    handleDateSelect(startOfWeek(addWeeks(currentWeek, 1), { weekStartsOn: 1 }));
+  };
+
+  const handleDateClick = (date: Date) => {
+    handleDateSelect(date);
+
+  };
+
+  return (
+    <div className="bg-primary/25 w-full">
+      {/* Month/Year Header */}
+      <div className="border-primary/20 flex items-center justify-between px-4 py-1">
+        <button
+          onClick={goToPreviousWeek}
+          className="text-primary hover:bg-primary/10 flex h-8 w-8 items-center justify-center hover:rounded-lg"
+        >
+          <ChevronLeft className="h-6 w-6" />
+        </button>
+
+        <h2 className="text-primary text-xl font-semibold">{format(currentWeek, 'MMMM yyyy')}</h2>
+
+        <button
+          onClick={goToNextWeek}
+          className="text-primary hover:bg-primary/10 flex h-8 w-8 items-center justify-center hover:rounded-lg"
+        >
+          <ChevronRight className="h-6 w-6" />
+        </button>
+      </div>
+
+      {/* Days Grid */}
+      <div className="flex w-full flex-row items-center justify-center">
+        {/* Placeholder div to match timeslot header section exactly */}
+        <div className="ml-3 w-8 sm:ml-4" />
+
+        {/* Date Selector */}
+        <section className="auto-row-[minmax(100px,1fr)] m-auto mr-3 ml-3 grid w-full grid-flow-col gap-2 lg:auto-cols-[minmax(100px,1fr)]">
+          {weekDays.map((day, index) => {
+            const isCurrentDay = isToday(day);
+
+            return (
+              <button
+                key={index}
+                onClick={() => handleDateClick(day)}
+                className="hover:bg-primary/15 relative flex flex-col items-center justify-center p-3 transition-all duration-200 focus:outline-none"
+              >
+                {/* Day name */}
+                <span className="mb-1 text-xs tracking-wide uppercase">{format(day, 'EEE')}</span>
+
+                {/* Day number */}
+                <span className="text-lg font-semibold">{format(day, 'd')}</span>
+
+                {/* Today indicator dot */}
+                {isCurrentDay && <div className="absolute bottom-1 h-1.5 w-1.5 rounded-full bg-red-500" />}
+              </button>
+            );
+          })}
+        </section>
+      </div>
     </div>
   );
 };
