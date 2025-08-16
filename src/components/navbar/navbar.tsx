@@ -1,6 +1,6 @@
 import { Link, useLocation } from '@tanstack/react-router';
 import SharcLogo from '@/assets/logo/sharc_logo_blue.svg';
-import SharcIcon from '@/assets/logo/sharc_icon_blue.svg';
+import SharcIcon from '@/assets/logo/sharc_icon_white.svg';
 import { useEffect, useRef, useState, type ReactElement } from 'react';
 import { NavIconButton, NavIconLink } from './navIcon';
 import { Bell, Calendar, CalendarPlus } from 'lucide-react';
@@ -25,7 +25,7 @@ export const Navbar = () => {
   });
 
   return (
-    <nav className="relative flex h-16 w-full items-center">
+    <nav className="relative flex h-14 w-full items-center md:h-16">
       {!authenticatedUser && (
         <img src={SharcLogo} alt="Sharc Calendar Logo" className={`ml-0 flex h-8 w-full md:ml-8 md:w-fit`} />
       )}
@@ -33,8 +33,11 @@ export const Navbar = () => {
       {authenticatedUser && (
         <>
           <img src={SharcLogo} alt="Sharc Calendar Logo" className={`ml-8 hidden h-8 md:block`} />
+          <div className="bg-primary flex h-14 w-18 items-center justify-center md:hidden">
+            <img src={SharcIcon} alt="Sharc Calendar Logo" className="block h-7 md:hidden" />
+          </div>
 
-          <div className="text-primary flex h-full w-full flex-row items-center justify-evenly md:mr-4 md:justify-end md:gap-8">
+          <div className="text-primary mr-0 flex h-full w-full flex-row items-center justify-evenly md:mr-4 md:justify-end md:gap-8">
             <NavIconLink
               linkTo="/authenticated"
               aria-label="View Calendar"
