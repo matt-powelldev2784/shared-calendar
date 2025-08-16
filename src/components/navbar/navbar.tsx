@@ -32,12 +32,15 @@ export const Navbar = () => {
 
       {authenticatedUser && (
         <>
-          <img src={SharcLogo} alt="Sharc Calendar Logo" className={`ml-8 hidden h-8 md:block`} />
-          <div className="bg-primary flex h-14 w-18 items-center justify-center md:hidden">
-            <img src={SharcIcon} alt="Sharc Calendar Logo" className="block h-7 md:hidden" />
-          </div>
+          <Link to="/" className="hidden md:block">
+            <img src={SharcLogo} alt="Sharc Calendar Logo" className="ml-8 h-8" />
+          </Link>
 
-          <div className="text-primary mr-0 flex h-full w-full flex-row items-center justify-evenly md:mr-4 md:justify-end md:gap-8">
+          <Link to="/" className="bg-primary flex h-14 w-18 items-center justify-center md:hidden">
+            <img src={SharcIcon} alt="Sharc Calendar Logo" className="block h-7 md:hidden" />
+          </Link>
+
+          <div className="text-primary mr-0 grid h-full w-full grid-cols-4 items-center md:mr-4 md:flex md:justify-end md:gap-8">
             <NavIconLink
               linkTo="/authenticated"
               aria-label="View Calendar"
@@ -46,7 +49,6 @@ export const Navbar = () => {
               text="Calendar"
               isActive={pathname === '/get-calendar'}
             />
-
             <NavIconLink
               linkTo="/add-entry"
               aria-label="Add Entry"
@@ -55,14 +57,12 @@ export const Navbar = () => {
               text="Add Entry"
               isActive={pathname === '/add-entry'}
             />
-
             <DropDownMenu
               icon={<Bell className="h-6 w-6" />}
               menuName="Notifications"
               navigationItems={requestMenuItems}
               notificationCount={numberOfRequests}
             />
-
             <NavIconLink
               linkTo="/signout"
               aria-label="Sign Out"
@@ -74,19 +74,6 @@ export const Navbar = () => {
         </>
       )}
     </nav>
-  );
-};
-
-type LogoProps = {
-  className?: string;
-};
-
-export const Logo = ({ className }: LogoProps) => {
-  return (
-    <Link to="/" aria-label="Home" className="flex h-full items-center">
-      <img src={SharcLogo} alt="Sharc Calendar Logo" className={`ml-5 hidden h-8 md:block ${className}`} />
-      <img src={SharcIcon} alt="Sharc Calendar Logo" className={`ml-5 block h-8 md:hidden ${className}`} />
-    </Link>
   );
 };
 
@@ -145,7 +132,7 @@ const DropDownMenu = ({ icon, menuName, navigationItems, notificationCount = 0 }
   }, [menuIsOpen]);
 
   return (
-    <div ref={menuRef} className="z-9999 flex items-center gap-5">
+    <div ref={menuRef} className="z-9999 flex items-center justify-center gap-5">
       <NavIconButton
         onClick={handleMenuClick}
         icon={icon}
