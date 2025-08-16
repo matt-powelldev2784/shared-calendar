@@ -10,44 +10,16 @@ export type NavItemProps = {
   onClick?: (event: any) => void;
 };
 
-const NavItem = ({
-  id,
-  text,
-  route,
-  icon,
-  description,
-  onClick,
-}: NavItemProps) => {
+const NavItem = ({ id, text, route, icon, description, onClick }: NavItemProps) => {
   return (
-    <li
-      key={id}
-      className="flex items-center justify-center border-b border-white"
-    >
-      <Link
-        to={route}
-        onClick={onClick}
-        className="flex h-full w-full flex-col p-4 text-base hover:bg-orange-400"
-      >
+    <li key={id} className="calendar-entry-bg flex items-center justify-center text-black">
+      <Link to={route} onClick={onClick} className="hover:bg-primary/20 flex h-full w-full flex-col p-4">
         <div className="flex items-center gap-4">
           <span className="h-6 w-6">{icon}</span>
-          <p
-            style={{
-              overflow: 'hidden',
-              display: '-webkit-box',
-              WebkitBoxOrient: 'vertical',
-              WebkitLineClamp: 2,
-            }}
-            className="mr-1 text-sm font-bold"
-          >
-            {text}
-          </p>
+          <p className="mr-1 text-sm font-bold">{text}</p>
         </div>
 
-        {description && (
-          <span className="text-grey-400 mt-2 text-xs font-medium">
-            {description}
-          </span>
-        )}
+        {description && <span className="mt-2 text-xs">{description}</span>}
       </Link>
     </li>
   );
@@ -55,27 +27,11 @@ const NavItem = ({
 
 const NavItemPlaceholder = ({ id, text, icon, onClick }: NavItemProps) => {
   return (
-    <li
-      key={id}
-      className="flex items-center justify-center border-b border-white"
-    >
-      <div
-        onClick={onClick}
-        className="flex h-full w-full flex-col p-4 text-base hover:bg-orange-400"
-      >
+    <li key={id} className="calendar-entry-bg flex items-center justify-center text-black">
+      <div onClick={onClick} className="flex h-full w-full flex-col p-4">
         <div className="flex items-center gap-4">
           <span className="h-6 w-6">{icon}</span>
-          <p
-            style={{
-              overflow: 'hidden',
-              display: '-webkit-box',
-              WebkitBoxOrient: 'vertical',
-              WebkitLineClamp: 2,
-            }}
-            className="mr-1 text-sm font-bold"
-          >
-            {text}
-          </p>
+          <p className="mr-1 text-sm font-bold">{text}</p>
         </div>
       </div>
     </li>

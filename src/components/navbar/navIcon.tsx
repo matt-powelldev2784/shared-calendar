@@ -1,44 +1,67 @@
 import type { FileRoutesByTo } from '@/routeTree.gen';
 import { Link } from '@tanstack/react-router';
-import type { ReactElement, ReactNode } from 'react';
+import type { ReactElement } from 'react';
 
 interface NavIconLinkProps {
   linkTo: keyof FileRoutesByTo;
-  onClick?: () => void;
-  children?: ReactElement;
+  icon?: ReactElement;
+  text?: string;
   ariaLabel?: string;
   className?: string;
+  isActive?: boolean;
 }
 
-export const NavIconLink = ({ linkTo, onClick, children, ariaLabel, className }: NavIconLinkProps) => {
+export const NavIconLink = ({ linkTo, icon, text, ariaLabel, className, isActive }: NavIconLinkProps) => {
+  const isActiveStyle = isActive ? { borderBottom: '2px solid #2f75eb', color: '#2f75eb' } : { color: '#676767' };
+
   return (
-    <Link
-      onClick={onClick}
-      to={linkTo}
-      className={`flex items-center justify-center font-semibold ${className}`}
-      aria-label={ariaLabel}
-    >
-      {children}
-    </Link>
+    <>
+      {/* Mobile View */}
+      <Link
+        to={linkTo}
+        className={`flex h-full flex-col items-center justify-center font-semibold md:hidden ${className}`}
+        style={isActiveStyle}
+        aria-label={ariaLabel}
+      >
+        {icon}
+        <p className="text-[10px]">{text}</p>
+      </Link>
+
+      {/* Desktop View */}
+      <Link
+        to={linkTo}
+        className={`hidden h-full items-center justify-center gap-2 px-4 font-semibold md:flex ${className}`}
+        style={isActiveStyle}
+        aria-label={ariaLabel}
+      >
+        {icon}
+        {text && <p>{text}</p>}
+      </Link>
+    </>
   );
 };
 
 interface NavIconButtonProps {
-  onClick?: (event: any) => void;
-  children?: ReactNode;
+  onClick?: () => void;
+  icon?: ReactElement;
   ariaLabel?: string;
   className?: string;
+  isActive?: boolean;
 }
 
-export const NavIconButton = ({ onClick, children, ariaLabel, className }: NavIconButtonProps) => {
+export const NavIconButton = ({ onClick, icon, ariaLabel, className, isActive }: NavIconButtonProps) => {
+  const bottomBorderStyle = isActive ? { borderBottom: '2px solid #2f75eb' } : {};
+
   return (
-    <button
-      onClick={onClick}
-      className={`z-1400 flex h-8 w-8 flex-row items-center justify-center gap-2 ${className}`}
-      aria-label={ariaLabel}
-    >
-      {children}
-    </button>
+    <>
+      <button
+        onClick={onClick}
+        className={`flex h-full flex-col items-center justify-center font-semibold ${className} '}`}
+        style={bottomBorderStyle}
+        aria-label={ariaLabel}
+      >
+        {icon}
+      </button>
+    </>
   );
 };
-
