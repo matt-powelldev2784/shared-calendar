@@ -1,6 +1,6 @@
-import { Link } from '@tanstack/react-router';
-import SharcLogo from '@/assets/logo/sharc_logo_white.svg';
-import SharcIcon from '@/assets/logo/sharc_icon_white.svg';
+import { Link, useLocation } from '@tanstack/react-router';
+import SharcLogo from '@/assets/logo/sharc_logo_blue.svg';
+import SharcIcon from '@/assets/logo/sharc_icon_blue.svg';
 import { useEffect, useRef, useState, type ReactElement } from 'react';
 import { NavIconButton, NavIconLink } from './navIcon';
 import { Bell, Calendar, CalendarPlus } from 'lucide-react';
@@ -13,6 +13,8 @@ import { type User } from 'firebase/auth';
 
 export const Navbar = () => {
   const { requestMenuItems, numberOfRequests } = useRequestMenuItems();
+  const location = useLocation();
+  const pathname = location.pathname;
 
   const { data: authenticatedUser } = useQuery({
     queryKey: ['authenticatedUser'],
@@ -23,7 +25,7 @@ export const Navbar = () => {
   });
 
   return (
-    <nav className="bg-primary flex h-16 w-full items-center text-white">
+    <nav className="relative flex h-16 w-full items-center">
       {!authenticatedUser && (
         <img src={SharcLogo} alt="Sharc Calendar Logo" className={`ml-0 flex h-8 w-full md:ml-8 md:w-fit`} />
       )}
@@ -32,34 +34,36 @@ export const Navbar = () => {
         <>
           <img src={SharcLogo} alt="Sharc Calendar Logo" className={`ml-8 hidden h-8 md:block`} />
 
-          <div className="flex w-full flex-row items-center justify-evenly text-white md:mr-8 md:justify-end md:gap-8">
-            <Link
-              to={'/add-entry'}
-              className="item-center hidden h-9 w-fit flex-row justify-center gap-2 rounded-lg bg-blue-500 px-4 py-2 text-sm font-bold text-white transition hover:bg-blue-500 focus:ring-2 focus:ring-blue-400 focus:outline-none md:flex"
+          <div className="text-primary flex h-full w-full flex-row items-center justify-evenly md:mr-4 md:justify-end md:gap-8">
+            <NavIconLink
+              linkTo="/authenticated"
+              aria-label="View Calendar"
+              icon={<Calendar className="h-5 w-5" />}
+              text="Calendar"
+              isActive={pathname === '/get-calendar'}
+            />
+
+            <NavIconLink
+              linkTo="/add-entry"
               aria-label="Add Entry"
-            >
-              <CalendarPlus className="h-5 w-5" />
-              Add Entry
-            </Link>
-
-            <NavIconLink linkTo="/authenticated" aria-label="View Calendar">
-              <Calendar className="h-7 w-7" />
-            </NavIconLink>
-
-            <NavIconLink linkTo="/add-entry" aria-label="Add Entry" className="flex md:hidden">
-              <CalendarPlus className="h-7 w-7" />
-            </NavIconLink>
+              icon={<CalendarPlus className="h-5 w-5" />}
+              text="Add Entry"
+              isActive={pathname === '/add-entry'}
+            />
 
             <DropDownMenu
-              icon={<Bell className="h-7 w-7" />}
-              menuName="Notification"
+              icon={<Bell className="h-6 w-6" />}
+              menuName="Notifications"
               navigationItems={requestMenuItems}
               notificationCount={numberOfRequests}
             />
 
-            <NavIconLink linkTo="/signout" aria-label="Sign Out">
-              <UserAvatar {...authenticatedUser} />
-            </NavIconLink>
+            <NavIconLink
+              linkTo="/signout"
+              aria-label="Sign Out"
+              icon={<UserAvatar {...authenticatedUser} />}
+              className="px-0"
+            />
           </div>
         </>
       )}
@@ -137,25 +141,26 @@ const DropDownMenu = ({ icon, menuName, navigationItems, notificationCount = 0 }
   return (
     <div ref={menuRef} className="z-9999 flex items-center gap-5">
       <NavIconButton
-        className={`${notificationCount > 0 ? 'h-8 w-8 cursor-pointer rounded-full bg-yellow-400' : 'cursor-pointer bg-none'}`}
         onClick={handleMenuClick}
-        ariaLabel={menuIsOpen ? `Close ${menuName} menu` : `Open ${menuName} menu`}
-      >
-        {icon}
-      </NavIconButton>
+        icon={icon}
+        aria-label={menuIsOpen ? `Close ${menuName} menu` : `Open ${menuName} menu`}
+        className={`rounded-lg border-2 p-1 ${notificationCount > 0 ? 'border-primary text-primary bg-yellow-300' : 'border-secondary text-secondary bg-none'}`}
+      />
 
       <ul
-        className={
+        className={`border-secondary fixed top-15 right-0 left-0 z-[9999] mx-4 scroll-auto rounded-lg border-1 bg-white shadow-lg transition-all duration-500 ease-in-out md:top-16 md:right-4 md:left-auto md:mx-0 md:w-[300px] ${
           menuIsOpen
-            ? 'bg-primary fixed top-16 right-0 z-1200 max-h-[400px] w-[250px] overflow-y-auto duration-500 ease-in-out md:block'
-            : 'fixed top-16 right-0 z-9999 max-h-0 w-[250px] overflow-y-auto duration-500 ease-in-out md:block'
-        }
+            ? 'visible max-h-[400px] overflow-y-auto opacity-100'
+            : 'invisible max-h-0 overflow-hidden opacity-0'
+        } `}
       >
+        <p className="bg-primary w-full p-2 text-center font-bold text-white">Notifications</p>
+
         {menuIsOpen &&
           navigationItems.map((item) => <NavItem key={item.id} {...item} onClick={() => setMenuIsOpen(false)} />)}
 
         {menuIsOpen && navigationItems.length === 0 && (
-          <NavItemPlaceholder id={menuName} text={`No ${menuName}s`} icon={icon} onClick={() => setMenuIsOpen(false)} />
+          <NavItemPlaceholder id={menuName} text={`No ${menuName}`} icon={icon} onClick={() => setMenuIsOpen(false)} />
         )}
       </ul>
     </div>
@@ -175,12 +180,11 @@ const UserAvatar = (user: User) => {
   const userAvatar = user?.photoURL;
 
   return (
-    <Avatar
-      className="relative flex min-h-8 min-w-8 -translate-x-0.5 items-center justify-center"
-      aria-label="User Settings"
-    >
-      {userAvatar && <AvatarImage className="bg-secondary absolute h-8 w-8 rounded-full" src={userAvatar} />}
-      <AvatarFallback className="bg-secondary absolute h-8 w-8 text-xs">{oAuthUserInitials}</AvatarFallback>
+    <Avatar className="relative flex h-10 w-10 -translate-x-0.5 items-center justify-center" aria-label="User Settings">
+      {userAvatar && <AvatarImage className="absolute h-10 w-10 rounded-full" src={userAvatar} />}
+      <AvatarFallback className="border-secondary text-secondary absolute h-10 w-10 border-2 text-sm">
+        {oAuthUserInitials}
+      </AvatarFallback>
     </Avatar>
   );
 };

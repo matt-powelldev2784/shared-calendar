@@ -161,7 +161,7 @@ export const CustomDateSelector = ({ selectedDate, handleDateSelect }: CustomDat
   };
 
   return (
-    <div className="bg-primary/25 w-full">
+    <div className="bg-primary/10 w-full">
       {/* Month/Year Header */}
       <div className="border-primary/20 flex items-center justify-between px-4 py-1 md:py-2">
         <button
