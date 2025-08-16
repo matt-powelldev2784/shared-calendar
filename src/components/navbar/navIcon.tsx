@@ -4,15 +4,27 @@ import type { ReactElement } from 'react';
 
 interface NavIconLinkProps {
   linkTo: keyof FileRoutesByTo;
-  icon?: ReactElement;
+  desktopIcon?: ReactElement;
+  mobileIcon?: ReactElement;
   text?: string;
   ariaLabel?: string;
   className?: string;
   isActive?: boolean;
 }
 
-export const NavIconLink = ({ linkTo, icon, text, ariaLabel, className, isActive }: NavIconLinkProps) => {
-  const isActiveStyle = isActive ? { borderBottom: '2px solid #2f75eb', color: '#2f75eb' } : { color: '#676767' };
+export const NavIconLink = ({
+  linkTo,
+  desktopIcon,
+  mobileIcon,
+  text,
+  ariaLabel,
+  className,
+  isActive,
+}: NavIconLinkProps) => {
+  const isActiveStyleDesktop = isActive
+    ? { borderBottom: '2px solid #2f75eb', color: '#2f75eb' }
+    : { color: '#676767' };
+  const isActiveStyleMobile = isActive ? { color: '#2f75eb' } : { color: '#676767' };
 
   return (
     <>
@@ -20,21 +32,21 @@ export const NavIconLink = ({ linkTo, icon, text, ariaLabel, className, isActive
       <Link
         to={linkTo}
         className={`flex h-full flex-col items-center justify-center font-semibold md:hidden ${className}`}
-        style={isActiveStyle}
+        style={isActiveStyleMobile}
         aria-label={ariaLabel}
       >
-        {icon}
-        <p className="text-[10px]">{text}</p>
+        {mobileIcon}
+        {/* <p className="text-[10.5px]">{text}</p> */}
       </Link>
 
       {/* Desktop View */}
       <Link
         to={linkTo}
         className={`hidden h-full items-center justify-center gap-2 px-4 font-semibold md:flex ${className}`}
-        style={isActiveStyle}
+        style={isActiveStyleDesktop}
         aria-label={ariaLabel}
       >
-        {icon}
+        {desktopIcon}
         {text && <p>{text}</p>}
       </Link>
     </>
