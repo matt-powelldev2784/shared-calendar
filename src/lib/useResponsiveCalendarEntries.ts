@@ -1,14 +1,28 @@
 import type { CalendarEntriesData } from '@/ts/Calendar';
 import { useEffect, useState } from 'react';
 import { smallScreenSize } from './globalVariables';
+import { format } from 'date-fns';
 
-export function useResponsiveCalendarEntries(calendarEntries: CalendarEntriesData[]) {
+interface UseResponsiveCalendarEntriesProps {
+  calendarEntries: CalendarEntriesData[];
+  selectedDate: Date;
+}
+
+export function useResponsiveCalendarEntries({ calendarEntries, selectedDate }: UseResponsiveCalendarEntriesProps) {
   const [filteredEntries, setFilteredEntries] = useState(calendarEntries);
 
   useEffect(() => {
     const handleResize = () => {
       const isSmall = window.innerWidth < smallScreenSize;
-      setFilteredEntries(isSmall ? calendarEntries.slice(0, 1) : calendarEntries);
+      const selectedEntry = calendarEntries.find(
+        (entry) => format(entry.date, 'yyyy-MM-dd') === format(selectedDate, 'yyyy-MM-dd'),
+      );
+
+      if (isSmall && selectedEntry) {
+        setFilteredEntries([selectedEntry]);
+      } else {
+        setFilteredEntries(calendarEntries);
+      }
     };
 
     handleResize();

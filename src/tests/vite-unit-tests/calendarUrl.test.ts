@@ -10,14 +10,15 @@ describe('getCalendarUrl', () => {
       daysToView: 3,
       startHour: 9,
       endHour: 18,
+      selectedDate: '2025-07-20',
       uniqueRefreshString: 1234567890,
     });
     expect(url).toBe(
-      '/get-calendar?calendarIds=abcdefgh&startDate=2025-07-20&daysToView=3&startHour=9&endHour=18&uniqueRefreshString=1234567890',
+      '/get-calendar?calendarIds=abcdefgh&startDate=2025-07-20&daysToView=3&startHour=9&endHour=18&selectedDate=2025-07-20&uniqueRefreshString=1234567890',
     );
   });
 
-  test('uses today as default startDate if not provided', () => {
+  test('uses today as default startDate and selected date if not provided', () => {
     const today = format(new Date(), 'yyyy-MM-dd');
     const url = getCalendarUrl({
       calendarIds: 'abcdefgh',
@@ -27,7 +28,7 @@ describe('getCalendarUrl', () => {
       uniqueRefreshString: 987654321,
     });
     expect(url).toBe(
-      `/get-calendar?calendarIds=abcdefgh&startDate=${today}&daysToView=5&startHour=10&endHour=20&uniqueRefreshString=987654321`,
+      `/get-calendar?calendarIds=abcdefgh&startDate=${today}&daysToView=5&startHour=10&endHour=20&selectedDate=${today}&uniqueRefreshString=987654321`,
     );
   });
 
@@ -36,9 +37,10 @@ describe('getCalendarUrl', () => {
       calendarIds: 'abcdefgh',
       startDate: '2025-01-01',
       uniqueRefreshString: 555555555,
+      selectedDate: '2025-01-02',
     });
     expect(url).toBe(
-      '/get-calendar?calendarIds=abcdefgh&startDate=2025-01-01&daysToView=7&startHour=8&endHour=17&uniqueRefreshString=555555555',
+      '/get-calendar?calendarIds=abcdefgh&startDate=2025-01-01&daysToView=7&startHour=8&endHour=17&selectedDate=2025-01-02&uniqueRefreshString=555555555',
     );
   });
 
@@ -49,7 +51,7 @@ describe('getCalendarUrl', () => {
       uniqueRefreshString: 111111111,
     });
     expect(url).toBe(
-      `/get-calendar?calendarIds=abcdefgh&startDate=${today}&daysToView=7&startHour=8&endHour=17&uniqueRefreshString=111111111`,
+      `/get-calendar?calendarIds=abcdefgh&startDate=${today}&daysToView=7&startHour=8&endHour=17&selectedDate=${today}&uniqueRefreshString=111111111`,
     );
   });
 });

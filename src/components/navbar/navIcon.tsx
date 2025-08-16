@@ -1,6 +1,6 @@
 import type { FileRoutesByTo } from '@/routeTree.gen';
 import { Link } from '@tanstack/react-router';
-import type { ReactElement } from 'react';
+import type { ReactElement, ReactNode } from 'react';
 
 interface NavIconLinkProps {
   linkTo: keyof FileRoutesByTo;
@@ -25,7 +25,7 @@ export const NavIconLink = ({ linkTo, onClick, children, ariaLabel, className }:
 
 interface NavIconButtonProps {
   onClick?: (event: any) => void;
-  children?: ReactElement;
+  children?: ReactNode;
   ariaLabel?: string;
   className?: string;
 }

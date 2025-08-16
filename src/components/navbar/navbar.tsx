@@ -33,11 +33,20 @@ export const Navbar = () => {
           <img src={SharcLogo} alt="Sharc Calendar Logo" className={`ml-8 hidden h-8 md:block`} />
 
           <div className="flex w-full flex-row items-center justify-evenly text-white md:mr-8 md:justify-end md:gap-8">
-            <NavIconLink linkTo="/authenticated" aria-label="Add Entry">
+            <Link
+              to={'/add-entry'}
+              className="item-center hidden h-9 w-fit flex-row justify-center gap-2 rounded-lg bg-blue-500 px-4 py-2 text-sm font-bold text-white transition hover:bg-blue-500 focus:ring-2 focus:ring-blue-400 focus:outline-none md:flex"
+              aria-label="Add Entry"
+            >
+              <CalendarPlus className="h-5 w-5" />
+              Add Entry
+            </Link>
+
+            <NavIconLink linkTo="/authenticated" aria-label="View Calendar">
               <Calendar className="h-7 w-7" />
             </NavIconLink>
 
-            <NavIconLink linkTo="/add-entry" aria-label="Add Entry">
+            <NavIconLink linkTo="/add-entry" aria-label="Add Entry" className="flex md:hidden">
               <CalendarPlus className="h-7 w-7" />
             </NavIconLink>
 
@@ -48,7 +57,7 @@ export const Navbar = () => {
               notificationCount={numberOfRequests}
             />
 
-            <NavIconLink linkTo="/signout" aria-label="Add Entry">
+            <NavIconLink linkTo="/signout" aria-label="Sign Out">
               <UserAvatar {...authenticatedUser} />
             </NavIconLink>
           </div>

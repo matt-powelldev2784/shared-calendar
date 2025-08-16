@@ -14,6 +14,7 @@ const calendarSearchSchema = z.object({
   daysToView: z.number(),
   startHour: z.number(),
   endHour: z.number(),
+  selectedDate: z.string(),
   uniqueRefreshString: z.number(),
 });
 
@@ -30,6 +31,7 @@ export const Route = createFileRoute('/get-calendar')({
     daysToView: search.daysToView,
     startHour: search.startHour,
     endHour: search.endHour,
+    selectedDate: search.selectedDate,
     uniqueRefreshString: search.uniqueRefreshString,
   }),
 
