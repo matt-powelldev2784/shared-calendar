@@ -15,7 +15,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useState, type Dispatch, type SetStateAction } from 'react';
 import { signInWithGoogle } from '@/db/auth/signInWithGoogle';
-import SharcIcon from '@/assets/logo/sharc_icon_orange.svg';
+import SharcIcon from '@/assets/logo/sharc_icon_blue.svg';
 import { Mail } from 'lucide-react';
 import Loading from '../ui/loading';
 
