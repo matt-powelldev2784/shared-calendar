@@ -6,7 +6,7 @@ import { CalendarCard } from '../ui/calendarCard';
 import { useSearch, useNavigate } from '@tanstack/react-router';
 import { getCalendarUrl } from '@/lib/getCalendarUrl';
 import { useResponsiveCalendarEntries } from '@/lib/useResponsiveCalendarEntries';
-import { ChevronLeft, ChevronRight, ChevronsDown, Clock } from 'lucide-react';
+import {  CalendarDays, ChevronLeft, ChevronRight, ChevronsDown, Clock } from 'lucide-react';
 import { getResponsiveStartDate } from '@/lib/getResponsiveStartDate';
 import {
   DEFAULT_DAYS_TO_VIEW,
@@ -171,7 +171,15 @@ export const CustomDateSelector = ({ selectedDate, handleDateSelect }: CustomDat
           <ChevronLeft className="h-6 w-6" />
         </button>
 
-        <h2 className="text-primary text-xl font-semibold">{format(currentWeek, 'MMMM yyyy')}</h2>
+        <div className="flex flex-row items-center justify-center gap-4">
+         
+
+          <h2 className="text-primary text-xl font-semibold">{format(currentWeek, 'MMMM yyyy')}</h2>
+
+          <button className="bg-primary my-2 rounded-lg p-2">
+            <CalendarDays size={24} className="text-white" />
+          </button>
+        </div>
 
         <button
           onClick={goToNextWeek}
@@ -202,11 +210,11 @@ export const CustomDateSelector = ({ selectedDate, handleDateSelect }: CustomDat
                 <span className="text-[10px] uppercase md:text-sm">{format(day, 'EEE')}</span>
 
                 {/* Day number */}
-                <span className="text-sm font-semibold md:text-lg mb-1">{format(day, 'd')}</span>
+                <span className="mb-1 text-sm font-semibold md:text-lg">{format(day, 'd')}</span>
 
                 {/* Today indicator dot */}
                 {isCurrentDay && (
-                  <div className="absolute bottom-[4px] md:bottom-[6px] h-1 w-1 rounded-full bg-red-500 md:h-1.5 md:w-1.5" />
+                  <div className="absolute bottom-[4px] h-1 w-1 rounded-full bg-red-500 md:bottom-[6px] md:h-1.5 md:w-1.5" />
                 )}
               </button>
             );
