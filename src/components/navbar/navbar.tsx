@@ -38,7 +38,8 @@ export const Navbar = () => {
             <NavIconLink
               linkTo="/authenticated"
               aria-label="View Calendar"
-              icon={<Calendar className="h-5 w-5" />}
+              desktopIcon={<Calendar className="h-5 w-5" />}
+              mobileIcon={<Calendar className="h-7 w-7" />}
               text="Calendar"
               isActive={pathname === '/get-calendar'}
             />
@@ -46,7 +47,8 @@ export const Navbar = () => {
             <NavIconLink
               linkTo="/add-entry"
               aria-label="Add Entry"
-              icon={<CalendarPlus className="h-5 w-5" />}
+              desktopIcon={<CalendarPlus className="h-5 w-5" />}
+              mobileIcon={<CalendarPlus className="h-7 w-7" />}
               text="Add Entry"
               isActive={pathname === '/add-entry'}
             />
@@ -61,7 +63,8 @@ export const Navbar = () => {
             <NavIconLink
               linkTo="/signout"
               aria-label="Sign Out"
-              icon={<UserAvatar {...authenticatedUser} />}
+              desktopIcon={<UserAvatar {...authenticatedUser} />}
+              mobileIcon={<UserAvatar {...authenticatedUser} />}
               className="px-0"
             />
           </div>
