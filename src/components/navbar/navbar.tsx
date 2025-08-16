@@ -1,4 +1,4 @@
-import { Link, useLocation } from '@tanstack/react-router';
+import { useLocation } from '@tanstack/react-router';
 import SharcLogo from '@/assets/logo/sharc_logo_blue.svg';
 import SharcIcon from '@/assets/logo/sharc_icon_white.svg';
 import { useEffect, useRef, useState, type ReactElement } from 'react';
@@ -33,6 +33,7 @@ export const Navbar = () => {
       {authenticatedUser && (
         <>
           <img src={SharcLogo} alt="Sharc Calendar Logo" className={`ml-8 hidden h-8 md:block`} />
+
           <div className="bg-primary flex h-14 w-18 items-center justify-center md:hidden">
             <img src={SharcIcon} alt="Sharc Calendar Logo" className="block h-7 md:hidden" />
           </div>
@@ -74,19 +75,6 @@ export const Navbar = () => {
         </>
       )}
     </nav>
-  );
-};
-
-type LogoProps = {
-  className?: string;
-};
-
-export const Logo = ({ className }: LogoProps) => {
-  return (
-    <Link to="/" aria-label="Home" className="flex h-full items-center">
-      <img src={SharcLogo} alt="Sharc Calendar Logo" className={`ml-5 hidden h-8 md:block ${className}`} />
-      <img src={SharcIcon} alt="Sharc Calendar Logo" className={`ml-5 block h-8 md:hidden ${className}`} />
-    </Link>
   );
 };
 
