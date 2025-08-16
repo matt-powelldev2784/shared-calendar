@@ -1,5 +1,5 @@
 import { Button } from '@/components/ui/button';
-import { addDays, addWeeks, format, isToday, startOfWeek, subWeeks } from 'date-fns';
+import { addDays, addWeeks, format, isSameDay, isToday, startOfWeek, subWeeks } from 'date-fns';
 import { useState } from 'react';
 import type { CalendarEntriesData, Timeslot, TimeslotHeaders, TimeslotEntry } from '@/ts/Calendar';
 import { CalendarCard } from '../ui/calendarCard';
@@ -23,10 +23,10 @@ type CalendarViewProps = {
 };
 
 export const CalendarView = ({ calendarEntries, timeslotHeaders }: CalendarViewProps) => {
-  const { calendarIds, startDate, startHour, endHour } = useSearch({
+  const { calendarIds, startHour, endHour, selectedDate } = useSearch({
     from: '/get-calendar',
   });
-  const date = new Date(startDate);
+  const parsedSelectedDate = new Date(selectedDate)
   const isSmallScreen = window.innerWidth < smallScreenSize;
   const navigate = useNavigate();
   const responsiveCalendarEntries = useResponsiveCalendarEntries(calendarEntries);
@@ -38,6 +38,7 @@ export const CalendarView = ({ calendarEntries, timeslotHeaders }: CalendarViewP
       daysToView: DEFAULT_DAYS_TO_VIEW,
       startHour,
       endHour,
+      selectedDate: format(selectedDate, 'yyyy-MM-dd'),
     });
     navigate({ to: calendarUrl });
   };
@@ -45,10 +46,11 @@ export const CalendarView = ({ calendarEntries, timeslotHeaders }: CalendarViewP
   const toggleHoursToView = () => {
     const calendarUrl = getCalendarUrl({
       calendarIds: calendarIds,
-      startDate: format(date, 'yyyy-MM-dd'),
+      startDate: format(parsedSelectedDate, 'yyyy-MM-dd'),
       startHour: startHour === OFFICE_START_HOUR ? FULL_DAYS_START_HOUR : OFFICE_START_HOUR,
       endHour: startHour === OFFICE_START_HOUR ? FULL_DAYS_END_HOUR : OFFICE_END_HOUR,
       daysToView: DEFAULT_DAYS_TO_VIEW,
+      selectedDate,
     });
     navigate({ to: calendarUrl });
   };
@@ -56,7 +58,7 @@ export const CalendarView = ({ calendarEntries, timeslotHeaders }: CalendarViewP
   return (
     <div className="flex w-full flex-col items-center justify-center pb-20">
       {/* Custom Date Selector */}
-      <CustomDateSelector selectedDate={date} handleDateSelect={handleDateSelect} />
+      <CustomDateSelector selectedDate={parsedSelectedDate} handleDateSelect={handleDateSelect} />
 
       <div className="flex w-full flex-row items-center justify-center">
         {/* Hour timeslots headers displayed to the left of calendar */}
@@ -156,7 +158,6 @@ export const CustomDateSelector = ({ selectedDate, handleDateSelect }: CustomDat
 
   const handleDateClick = (date: Date) => {
     handleDateSelect(date);
-
   };
 
   return (
@@ -189,12 +190,13 @@ export const CustomDateSelector = ({ selectedDate, handleDateSelect }: CustomDat
         <section className="auto-row-[minmax(100px,1fr)] m-auto mr-3 ml-3 grid w-full grid-flow-col gap-2 lg:auto-cols-[minmax(100px,1fr)]">
           {weekDays.map((day, index) => {
             const isCurrentDay = isToday(day);
+            const isSelectedDay = isSameDay(day, selectedDate);
 
             return (
               <button
                 key={index}
                 onClick={() => handleDateClick(day)}
-                className="hover:bg-primary/15 relative flex flex-col items-center justify-center p-3 transition-all duration-200 focus:outline-none"
+                className={`relative flex flex-col items-center justify-center p-3 transition-all duration-200 ${isSelectedDay && 'bg-primary text-white'} ${!isSelectedDay && 'hover:bg-primary/15'}`}
               >
                 {/* Day name */}
                 <span className="mb-1 text-xs tracking-wide uppercase">{format(day, 'EEE')}</span>
