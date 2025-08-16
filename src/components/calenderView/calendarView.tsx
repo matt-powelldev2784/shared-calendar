@@ -29,7 +29,7 @@ export const CalendarView = ({ calendarEntries, timeslotHeaders }: CalendarViewP
   const parsedSelectedDate = new Date(selectedDate)
   const isSmallScreen = window.innerWidth < smallScreenSize;
   const navigate = useNavigate();
-  const responsiveCalendarEntries = useResponsiveCalendarEntries(calendarEntries);
+  const responsiveCalendarEntries = useResponsiveCalendarEntries({ calendarEntries, selectedDate: parsedSelectedDate });
 
   const handleDateSelect = (selectedDate: Date) => {
     const calendarUrl = getCalendarUrl({
