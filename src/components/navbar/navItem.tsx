@@ -10,7 +10,7 @@ export type NavItemProps = {
   onClick?: (event: any) => void;
 };
 
-const NavItem = ({ id, text, route, icon, description, onClick }: NavItemProps) => {
+const DropDownMenuItem = ({ id, text, route, icon, description, onClick }: NavItemProps) => {
   return (
     <li key={id} className="calendar-entry-bg flex items-center justify-center text-black">
       <Link to={route} onClick={onClick} className="hover:bg-primary/20 flex h-full w-full flex-col p-4">
@@ -25,7 +25,7 @@ const NavItem = ({ id, text, route, icon, description, onClick }: NavItemProps) 
   );
 };
 
-const NavItemPlaceholder = ({ id, text, icon, onClick }: NavItemProps) => {
+const DropDownMenuPlaceHolder = ({ id, text, icon, onClick }: NavItemProps) => {
   return (
     <li key={id} className="calendar-entry-bg flex items-center justify-center text-black">
       <div onClick={onClick} className="flex h-full w-full flex-col p-4">
@@ -38,4 +38,4 @@ const NavItemPlaceholder = ({ id, text, icon, onClick }: NavItemProps) => {
   );
 };
 
-export { NavItem, NavItemPlaceholder };
+export { DropDownMenuItem, DropDownMenuPlaceHolder };

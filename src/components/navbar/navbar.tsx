@@ -6,7 +6,7 @@ import { NavIconButton, NavIconLink } from './navIcon';
 import { Bell, Calendar, CalendarPlus } from 'lucide-react';
 import { useQuery } from '@tanstack/react-query';
 import checkAuth from '@/db/auth/checkAuth';
-import { NavItem, NavItemPlaceholder, type NavItemProps } from './navItem';
+import { DropDownMenuItem, DropDownMenuPlaceHolder, type NavItemProps } from './navItem';
 import { useRequestMenuItems } from './useRequestMenuItems';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { type User } from 'firebase/auth';
@@ -163,10 +163,17 @@ const DropDownMenu = ({ icon, menuName, navigationItems, notificationCount = 0 }
         <p className="bg-primary w-full p-2 text-center font-bold text-white">Notifications</p>
 
         {menuIsOpen &&
-          navigationItems.map((item) => <NavItem key={item.id} {...item} onClick={() => setMenuIsOpen(false)} />)}
+          navigationItems.map((item) => (
+            <DropDownMenuItem key={item.id} {...item} onClick={() => setMenuIsOpen(false)} />
+          ))}
 
         {menuIsOpen && navigationItems.length === 0 && (
-          <NavItemPlaceholder id={menuName} text={`No ${menuName}`} icon={icon} onClick={() => setMenuIsOpen(false)} />
+          <DropDownMenuPlaceHolder
+            id={menuName}
+            text={`No ${menuName}`}
+            icon={icon}
+            onClick={() => setMenuIsOpen(false)}
+          />
         )}
       </ul>
     </div>
