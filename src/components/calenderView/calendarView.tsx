@@ -163,10 +163,10 @@ export const CustomDateSelector = ({ selectedDate, handleDateSelect }: CustomDat
   return (
     <div className="bg-primary/25 w-full">
       {/* Month/Year Header */}
-      <div className="border-primary/20 flex items-center justify-between px-4 py-1">
+      <div className="border-primary/20 flex items-center justify-between px-4 py-1 md:py-2">
         <button
           onClick={goToPreviousWeek}
-          className="text-primary hover:bg-primary/10 flex h-8 w-8 items-center justify-center hover:rounded-lg"
+          className="text-primary hover:bg-primary/15 flex h-8 w-8 items-center justify-center hover:rounded-lg"
         >
           <ChevronLeft className="h-6 w-6" />
         </button>
@@ -175,7 +175,7 @@ export const CustomDateSelector = ({ selectedDate, handleDateSelect }: CustomDat
 
         <button
           onClick={goToNextWeek}
-          className="text-primary hover:bg-primary/10 flex h-8 w-8 items-center justify-center hover:rounded-lg"
+          className="text-primary hover:bg-primary/15 flex h-8 w-8 items-center justify-center hover:rounded-lg"
         >
           <ChevronRight className="h-6 w-6" />
         </button>
@@ -184,10 +184,10 @@ export const CustomDateSelector = ({ selectedDate, handleDateSelect }: CustomDat
       {/* Days Grid */}
       <div className="flex w-full flex-row items-center justify-center">
         {/* Placeholder div to match timeslot header section exactly */}
-        <div className="ml-3 w-8 sm:ml-4" />
+        <div className="ml-3 hidden w-8 sm:ml-4 md:block" />
 
         {/* Date Selector */}
-        <section className="auto-row-[minmax(100px,1fr)] m-auto mr-3 ml-3 grid w-full grid-flow-col gap-2 lg:auto-cols-[minmax(100px,1fr)]">
+        <section className="md:auto-row-[minmax(100px,1fr)] m-auto mr-3 ml-3 grid w-full grid-cols-7 gap-1 md:grid-flow-row md:gap-2 lg:auto-cols-[minmax(100px,1fr)] lg:grid-flow-col">
           {weekDays.map((day, index) => {
             const isCurrentDay = isToday(day);
             const isSelectedDay = isSameDay(day, selectedDate);
@@ -196,16 +196,18 @@ export const CustomDateSelector = ({ selectedDate, handleDateSelect }: CustomDat
               <button
                 key={index}
                 onClick={() => handleDateClick(day)}
-                className={`relative flex flex-col items-center justify-center p-3 transition-all duration-200 ${isSelectedDay && 'bg-primary text-white'} ${!isSelectedDay && 'hover:bg-primary/15'}`}
+                className={`relative flex flex-col items-center justify-center p-1 transition-all duration-200 focus:outline-none md:p-2 ${isSelectedDay && 'bg-primary text-white'} ${!isSelectedDay && 'hover:bg-primary/15'}`}
               >
                 {/* Day name */}
-                <span className="mb-1 text-xs tracking-wide uppercase">{format(day, 'EEE')}</span>
+                <span className="text-[10px] uppercase md:text-sm">{format(day, 'EEE')}</span>
 
                 {/* Day number */}
-                <span className="text-lg font-semibold">{format(day, 'd')}</span>
+                <span className="text-sm font-semibold md:text-lg mb-1">{format(day, 'd')}</span>
 
                 {/* Today indicator dot */}
-                {isCurrentDay && <div className="absolute bottom-1 h-1.5 w-1.5 rounded-full bg-red-500" />}
+                {isCurrentDay && (
+                  <div className="absolute bottom-[4px] md:bottom-[6px] h-1 w-1 rounded-full bg-red-500 md:h-1.5 md:w-1.5" />
+                )}
               </button>
             );
           })}
