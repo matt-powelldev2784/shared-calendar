@@ -196,11 +196,9 @@ export const CustomDateSelector = () => {
 
       {/* Date Selector Container */}
       <div className="relative flex w-full flex-row items-center justify-center">
-        {/* Placeholder div to match position of calendar dates to calendar entries list */}
-        <div className="ml-3 hidden w-8 sm:ml-4 md:block" />
-
+       
         {/* Date Selector */}
-        <section className="md:auto-row-[minmax(100px,1fr)] m-auto mr-3 ml-[14px] grid w-full grid-cols-7 md:grid-flow-row lg:auto-cols-[minmax(100px,1fr)] lg:grid-flow-col">
+        <section className="md:auto-row-[minmax(100px,1fr)] m-auto mr-3 ml-[60px] grid w-full grid-cols-7 md:grid-flow-row lg:auto-cols-[minmax(100px,1fr)] lg:grid-flow-col">
           {weekDays.map((day, index) => {
             const isCurrentDay = isToday(day);
             const isSelectedDay = isSameDay(day, selectedDate);
