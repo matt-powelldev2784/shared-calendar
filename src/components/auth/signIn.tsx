@@ -45,7 +45,7 @@ export const SignIn = () => {
   const [currentView, setCurrentView] = useState<CurrentView>('main');
 
   return (
-    <Card className="border-secondary/25 mx-4 max-w-[400px] min-w-0 rounded-2xl border-2 md:mx-auto md:min-w-0">
+    <Card className="border-secondary/25 mx-4 w-full min-w-0 rounded-2xl border-2 md:mx-auto md:max-w-[400px] md:min-w-0">
       {currentView === 'main' && <MainView setCurrentView={setCurrentView} />}
       {currentView === 'signInWithEmail' && <SignInWithEmail />}
       {currentView === 'signUpWithEmail' && <SignUpWithEmail />}
@@ -132,11 +132,12 @@ const SignInWithEmail = () => {
 
   return (
     <>
-      <CardHeader>
-        <Mail className="text-primary mx-auto" size={32} />
+      <CardHeader className="rounded-t-xl">
+        <Mail className="mx-auto text-white" size={32} />
         <CardTitle className="text-center">Sign In With Email</CardTitle>
-        <CardDescription className="text-center">Enter your details below to sign in</CardDescription>
       </CardHeader>
+
+      <CardDescription className="px-4 text-center">Enter your details below to sign in</CardDescription>
 
       {isError && (
         <p className="px-8 text-center text-sm text-red-500">
@@ -144,14 +145,14 @@ const SignInWithEmail = () => {
         </p>
       )}
 
-      <CardContent>
+      <CardContent className="flex w-full flex-col items-center md:max-w-[400px]">
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="flex w-full flex-col items-center">
+          <form onSubmit={form.handleSubmit(onSubmit)} className="flex w-full flex-col items-center px-4">
             <FormField
               control={form.control}
               name="email"
               render={({ field }) => (
-                <FormItem className="w-full max-w-[700px]">
+                <FormItem className="w-full">
                   <FormLabel>Email</FormLabel>
                   <FormControl>
                     <Input placeholder="Enter your email" autoComplete="email" {...field} />
@@ -165,7 +166,7 @@ const SignInWithEmail = () => {
               control={form.control}
               name="password"
               render={({ field }) => (
-                <FormItem className="mt-2 w-full max-w-[700px]">
+                <FormItem className="mt-2 w-full">
                   <FormLabel>Password</FormLabel>
                   <FormControl>
                     <Input placeholder="Password" type="password" {...field} />
@@ -175,7 +176,7 @@ const SignInWithEmail = () => {
               )}
             />
 
-            <Button className="mt-8 w-full" variant="loginButtonPrimary" size="xl">
+            <Button className="mt-8" variant="loginButtonPrimary" size="xl">
               {isSubmitting ? <Loading variant={'sm'} /> : 'Sign In with Email'}
             </Button>
           </form>
@@ -206,11 +207,12 @@ const SignUpWithEmail = () => {
 
   return (
     <>
-      <CardHeader>
-        <Mail className="text-primary mx-auto" size={32} />
+      <CardHeader className="rounded-t-xl">
+        <Mail className="mx-auto text-white" size={32} />
         <CardTitle className="text-center">Create Account</CardTitle>
-        <CardDescription className="text-center">Enter email and password to create account</CardDescription>
       </CardHeader>
+
+      <CardDescription className="text-center">Enter email and password to create account</CardDescription>
 
       {errorType === 'email-already-in-use' && (
         <p className="px-8 text-center text-sm text-red-500">
@@ -224,14 +226,14 @@ const SignUpWithEmail = () => {
         </p>
       )}
 
-      <CardContent>
+      <CardContent className="flex w-full flex-col items-center md:max-w-[400px]">
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="flex w-full flex-col items-center">
+          <form onSubmit={form.handleSubmit(onSubmit)} className="flex w-full flex-col items-center px-4">
             <FormField
               control={form.control}
               name="email"
               render={({ field }) => (
-                <FormItem className="w-full max-w-[700px]">
+                <FormItem className="w-full">
                   <FormLabel>Email</FormLabel>
                   <FormControl>
                     <Input placeholder="Enter your email" autoComplete="email" {...field} />
