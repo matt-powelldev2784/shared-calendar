@@ -5,14 +5,14 @@ import { ClockIcon } from 'lucide-react';
 
 const variantClasses = {
   default: 'relative cursor-pointer flex',
-  blue: 'bg-lightBlue text-grey-900',
+  blue: 'bg-primary/10 text-grey-900',
   yellow: 'bg-lightYellow text-grey-900',
   white: '',
 };
 
 const tabClasses = {
   default: '',
-  blue: 'border-lightBlue absolute h-full w-3 border-4 bg-blue-800',
+  blue: 'absolute h-full w-1.5 bg-primary',
   yellow: 'border-lightYellow absolute h-full w-3 border-4 bg-yellow-800',
   white: '',
 };

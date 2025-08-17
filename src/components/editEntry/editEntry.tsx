@@ -38,11 +38,8 @@ import { useState } from 'react';
 import { hasDuplicates } from '@/lib/hasDuplicates';
 import { CustomError } from '@/ts/errorClass';
 import { getEmailsFromUserIds } from '@/db/auth/getEmailsFromUserIds';
-import updateCalendarEntry, {
-  type UpdateCalendarEntry,
-} from '@/db/entry/updateCalendarEntry';
-import { getResponsiveStartDate } from '@/lib/getResponsiveStartDate';
-import { FULL_DAYS_END_HOUR, FULL_DAYS_START_HOUR, OFFICE_END_HOUR, OFFICE_START_HOUR, smallScreenSize } from '@/lib/globalVariables';
+import updateCalendarEntry, { type UpdateCalendarEntry } from '@/db/entry/updateCalendarEntry';
+import { FULL_DAYS_END_HOUR, FULL_DAYS_START_HOUR, OFFICE_END_HOUR, OFFICE_START_HOUR } from '@/lib/globalVariables';
 
 const convertFormValuesToEntry = (values: z.infer<typeof formSchema>) => {
   const startDate = new Date(values.date);
@@ -109,7 +106,6 @@ const EditEntry = ({ entry, currentUser }: EditEntryProps) => {
   const [isSelectDateOpen, setIsSelectDateOpen] = useState(false);
   const [isSubscribedUserAdded, setIsSubscribedUserAdded] = useState(false);
   const navigate = useNavigate();
-  const isSmallScreen = window.innerWidth < smallScreenSize;
 
   const populateSubscribedUser = async (userId: string) => {
     try {
@@ -174,7 +170,6 @@ const EditEntry = ({ entry, currentUser }: EditEntryProps) => {
       if (calendarEntry) {
         const calendarUrl = getCalendarUrl({
           calendarIds: calendarId,
-          startDate: getResponsiveStartDate(isSmallScreen, entry.startDate),
           startHour: entryIsExtendedHours ? FULL_DAYS_START_HOUR : OFFICE_START_HOUR,
           endHour: entryIsExtendedHours ? FULL_DAYS_END_HOUR : OFFICE_END_HOUR,
           selectedDate: format(entry.startDate, 'yyyy-MM-dd'),

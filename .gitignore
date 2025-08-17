@@ -12,3 +12,4 @@ firestore.rules
 /playwright-report/
 /blob-report/
 /playwright/.cache/
+coverage

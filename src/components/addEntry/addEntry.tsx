@@ -40,14 +40,7 @@ import getUserIdByEmail from '@/db/auth/getUserIdByEmail';
 import { useState } from 'react';
 import { hasDuplicates } from '@/lib/hasDuplicates';
 import { CustomError } from '@/ts/errorClass';
-import { getResponsiveStartDate } from '@/lib/getResponsiveStartDate';
-import {
-  FULL_DAYS_END_HOUR,
-  FULL_DAYS_START_HOUR,
-  OFFICE_END_HOUR,
-  OFFICE_START_HOUR,
-  smallScreenSize,
-} from '@/lib/globalVariables';
+import { FULL_DAYS_END_HOUR, FULL_DAYS_START_HOUR, OFFICE_END_HOUR, OFFICE_START_HOUR } from '@/lib/globalVariables';
 
 const convertFormValuesToEntry = (values: z.infer<typeof formSchema>) => {
   const startDate = new Date(values.date);
@@ -110,7 +103,6 @@ const AddEntry = ({ calendars }: AddEntryProps) => {
   const [usersToRequest, setUsersToRequest] = useState<UserToRequest[]>([]);
   const [isSelectDateOpen, setIsSelectDateOpen] = useState(false);
   const navigate = useNavigate();
-  const isSmallScreen = window.innerWidth < smallScreenSize;
 
   // submit calendar entry and navigate to calendar
   const mutation = useMutation({
@@ -132,7 +124,6 @@ const AddEntry = ({ calendars }: AddEntryProps) => {
       if (calendarEntry) {
         const calendarUrl = getCalendarUrl({
           calendarIds: calendarId,
-          startDate: getResponsiveStartDate(isSmallScreen, entry.startDate),
           startHour: entryIsExtendedHours ? FULL_DAYS_START_HOUR : OFFICE_START_HOUR,
           endHour: entryIsExtendedHours ? FULL_DAYS_END_HOUR : OFFICE_END_HOUR,
           selectedDate: format(entry.startDate, 'yyyy-MM-dd'),

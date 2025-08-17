@@ -2,8 +2,6 @@ import { Button } from '@/components/ui/button';
 import acceptPendingEntry from '@/db/request/acceptPendingEntry';
 import rejectPendingEntry from '@/db/request/rejectPendingEntry';
 import { getCalendarUrl } from '@/lib/getCalendarUrl';
-import { getResponsiveStartDate } from '@/lib/getResponsiveStartDate';
-import { smallScreenSize } from '@/lib/globalVariables';
 import type { CalendarEntry } from '@/ts/Calendar';
 import type { CustomError } from '@/ts/errorClass';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
@@ -35,7 +33,6 @@ const PendingEntryCard = ({ entry, requestId, variant }: PendingEntryCardProps) 
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const { title, startDate, endDate } = entry;
-  const isSmallScreen = window.innerWidth < smallScreenSize;
 
   const navigateToEntry = () => {
     navigate({
@@ -50,7 +47,6 @@ const PendingEntryCard = ({ entry, requestId, variant }: PendingEntryCardProps) 
     onSuccess: () => {
       const calendarUrl = getCalendarUrl({
         calendarIds: entry.calendarId,
-        startDate: getResponsiveStartDate(isSmallScreen, entry.startDate),
         selectedDate: format(entry.startDate, 'yyyy-MM-dd'),
       });
 
