@@ -184,7 +184,7 @@ export const CustomDateSelector = () => {
           </Popover>
         </div>
 
-        { /* Go to next week button */}
+        {/* Go to next week button */}
         <button
           onClick={goToNextWeek}
           className="text-primary hover:bg-primary/15 flex h-8 w-8 items-center justify-center hover:rounded-lg"
@@ -199,7 +199,7 @@ export const CustomDateSelector = () => {
         <div className="ml-3 hidden w-8 sm:ml-4 md:block" />
 
         {/* Date Selector */}
-        <section className="md:auto-row-[minmax(100px,1fr)] m-auto mr-3 ml-3 grid w-full grid-cols-7 gap-1 md:grid-flow-row md:gap-0 lg:auto-cols-[minmax(100px,1fr)] lg:grid-flow-col">
+        <section className="ml-[14px] auto-row-[minmax(100px,1fr)] m-auto mr-3 grid w-full grid-flow-row lg:auto-cols-[minmax(100px,1fr)] lg:grid-flow-col">
           {weekDays.map((day, index) => {
             const isCurrentDay = isToday(day);
             const isSelectedDay = isSameDay(day, selectedDate);
