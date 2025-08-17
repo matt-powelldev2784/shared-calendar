@@ -71,6 +71,7 @@ const PendingEntryCard = ({ entry, requestId, variant }: PendingEntryCardProps) 
     onSuccess: () => {
       const calendarUrl = getCalendarUrl({
         calendarIds: entry.calendarId,
+        startDate: getResponsiveStartDate(isSmallScreen, new Date()),
         selectedDate: format(new Date(), 'yyyy-MM-dd'),
       });
 

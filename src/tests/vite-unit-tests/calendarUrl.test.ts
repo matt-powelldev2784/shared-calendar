@@ -22,6 +22,7 @@ describe('getCalendarUrl', () => {
     const today = format(new Date(), 'yyyy-MM-dd');
     const url = getCalendarUrl({
       calendarIds: 'abcdefgh',
+      startDate: today,
       daysToView: 5,
       startHour: 10,
       endHour: 20,
@@ -49,6 +50,7 @@ describe('getCalendarUrl', () => {
     const today = format(new Date(), 'yyyy-MM-dd');
     const url = getCalendarUrl({
       calendarIds: 'abcdefgh',
+      startDate: today,
       uniqueRefreshString: 111111111,
       selectedDate: today,
     });

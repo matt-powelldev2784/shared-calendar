@@ -2,7 +2,7 @@ import { format } from 'date-fns';
 
 type getCalendarUrlProps = {
   calendarIds: string;
-  startDate?: string;
+  startDate: string;
   daysToView?: number;
   startHour?: number;
   endHour?: number;
@@ -20,6 +20,7 @@ export const getCalendarUrl = ({
   uniqueRefreshString,
 }: getCalendarUrlProps) => {
   const today = format(new Date(), 'yyyy-MM-dd');
+
   return (
     `/get-calendar?calendarIds=${calendarIds}` +
     `&startDate=${startDate || today}` +

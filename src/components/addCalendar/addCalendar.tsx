@@ -25,6 +25,8 @@ import { CalendarIcon } from 'lucide-react';
 import addCalendar from '@/db/calendar/addCalendar';
 import { getCalendarUrl } from '@/lib/getCalendarUrl';
 import { format } from 'date-fns';
+import { smallScreenSize } from '@/lib/globalVariables';
+import { getResponsiveStartDate } from '@/lib/getResponsiveStartDate';
 
 export type AddCalendar = {
   name: string;
@@ -43,6 +45,7 @@ const formSchema = z.object({
 const AddCalendar = () => {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
+  const isSmallScreen = window.innerWidth < smallScreenSize;
 
   // submit calendar entry and navigate to calendar
   const mutation = useMutation({
@@ -53,6 +56,7 @@ const AddCalendar = () => {
         queryClient.invalidateQueries({ queryKey: ['subscribedCalendars'] });
         const calendarUrl = getCalendarUrl({
           calendarIds: calendarId,
+          startDate: getResponsiveStartDate(isSmallScreen, new Date()),
           selectedDate: format(new Date(), 'yyyy-MM-dd'),
         });
         navigate({
