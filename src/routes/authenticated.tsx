@@ -12,6 +12,7 @@ import getSubscribedCalendars from '@/db/calendar/getSubscribedCalendars';
 import { getCalendarUrl } from '@/lib/getCalendarUrl';
 import { getResponsiveStartDate } from '@/lib/getResponsiveStartDate';
 import { smallScreenSize } from '@/lib/globalVariables';
+import { format } from 'date-fns';
 
 export const Route = createFileRoute('/authenticated')({
   component: AuthenticatedPage,
@@ -38,7 +39,11 @@ function AuthenticatedPage() {
   const startDate = getResponsiveStartDate(isSmallScreen, new Date());
 
   useEffect(() => {
-    const calendarUrl = getCalendarUrl({ calendarIds: defaultCalendarId, startDate });
+    const calendarUrl = getCalendarUrl({
+      calendarIds: defaultCalendarId,
+      startDate,
+      selectedDate: format(new Date(), 'yyyy-MM-dd'),
+    });
     if (user?.firstTimeUser) {
       setTimeout(() => {
         navigate({ to: calendarUrl });

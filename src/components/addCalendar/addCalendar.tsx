@@ -24,6 +24,7 @@ import {
 import { CalendarIcon } from 'lucide-react';
 import addCalendar from '@/db/calendar/addCalendar';
 import { getCalendarUrl } from '@/lib/getCalendarUrl';
+import { format } from 'date-fns';
 
 export type AddCalendar = {
   name: string;
@@ -50,7 +51,10 @@ const AddCalendar = () => {
 
       if (calendarId) {
         queryClient.invalidateQueries({ queryKey: ['subscribedCalendars'] });
-        const calendarUrl = getCalendarUrl({ calendarIds: calendarId });
+        const calendarUrl = getCalendarUrl({
+          calendarIds: calendarId,
+          selectedDate: format(new Date(), 'yyyy-MM-dd'),
+        });
         navigate({
           to: calendarUrl,
         });
@@ -85,10 +89,7 @@ const AddCalendar = () => {
 
       <CardContent className="p-0">
         <Form {...form}>
-          <form
-            onSubmit={form.handleSubmit(onSubmit)}
-            className="flex w-full flex-col items-center p-4"
-          >
+          <form onSubmit={form.handleSubmit(onSubmit)} className="flex w-full flex-col items-center p-4">
             <FormField
               control={form.control}
               name="name"
@@ -117,11 +118,7 @@ const AddCalendar = () => {
               )}
             />
 
-            <Button
-              type="submit"
-              className="m-4 mt-10 w-full max-w-[700px]"
-              size="lg"
-            >
+            <Button type="submit" className="m-4 mt-10 w-full max-w-[700px]" size="lg">
               {mutation.isPending ? <Loading variant="sm" /> : 'Submit'}
             </Button>
           </form>

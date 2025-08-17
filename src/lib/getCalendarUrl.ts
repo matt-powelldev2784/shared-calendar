@@ -6,7 +6,7 @@ type getCalendarUrlProps = {
   daysToView?: number;
   startHour?: number;
   endHour?: number;
-  selectedDate?: string;
+  selectedDate: string;
   uniqueRefreshString?: number;
 };
 

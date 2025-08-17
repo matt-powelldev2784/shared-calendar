@@ -177,6 +177,7 @@ const EditEntry = ({ entry, currentUser }: EditEntryProps) => {
           startDate: getResponsiveStartDate(isSmallScreen, entry.startDate),
           startHour: entryIsExtendedHours ? FULL_DAYS_START_HOUR : OFFICE_START_HOUR,
           endHour: entryIsExtendedHours ? FULL_DAYS_END_HOUR : OFFICE_END_HOUR,
+          selectedDate: format(entry.startDate, 'yyyy-MM-dd'),
         });
         navigate({ to: calendarUrl });
         return calendarEntry;
