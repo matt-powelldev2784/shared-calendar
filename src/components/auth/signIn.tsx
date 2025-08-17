@@ -45,7 +45,7 @@ export const SignIn = () => {
   const [currentView, setCurrentView] = useState<CurrentView>('main');
 
   return (
-    <Card className="border-secondary/25 mx-4 w-full min-w-0 rounded-2xl border-2 md:mx-auto md:max-w-[400px] md:min-w-0">
+    <Card className="border-secondary/25 mx-4 mt-4 w-full min-w-0 rounded-2xl border-2 md:mx-auto md:mt-8 md:max-w-[400px] md:min-w-0">
       {currentView === 'main' && <MainView setCurrentView={setCurrentView} />}
       {currentView === 'signInWithEmail' && <SignInWithEmail />}
       {currentView === 'signUpWithEmail' && <SignUpWithEmail />}
