@@ -20,14 +20,15 @@ export const SignOut = () => {
   };
 
   return (
-    <Card className="mx-auto mt-4 w-[95%] max-w-[400px]">
+    <Card>
       <CardHeader>
         <CardTitle className="text-center">Sign Out</CardTitle>
-        <CardDescription className="text-center">Click the button below to sign out</CardDescription>
       </CardHeader>
 
-      <CardContent className="h-12">
-        <Button onClick={signOut} className="w-full" variant="loginButtonSecondary" size="xl">
+      <CardDescription className="text-center">Click the button below to sign out</CardDescription>
+
+      <CardContent className="h-12 px-4">
+        <Button onClick={signOut} variant="loginButtonSecondary" size="xl">
           Sign Out
         </Button>
       </CardContent>
