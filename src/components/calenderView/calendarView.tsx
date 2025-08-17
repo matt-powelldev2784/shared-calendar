@@ -199,7 +199,7 @@ export const CustomDateSelector = () => {
         <div className="ml-3 hidden w-8 sm:ml-4 md:block" />
 
         {/* Date Selector */}
-        <section className="ml-[14px] auto-row-[minmax(100px,1fr)] m-auto mr-3 grid w-full grid-flow-row lg:auto-cols-[minmax(100px,1fr)] lg:grid-flow-col">
+        <section className="ml-[14px] md:auto-row-[minmax(100px,1fr)] m-auto mr-3 grid w-full grid-cols-7 md:grid-flow-row lg:auto-cols-[minmax(100px,1fr)] lg:grid-flow-col">
           {weekDays.map((day, index) => {
             const isCurrentDay = isToday(day);
             const isSelectedDay = isSameDay(day, selectedDate);
