@@ -7,14 +7,12 @@ import { useSearch, useNavigate } from '@tanstack/react-router';
 import { getCalendarUrl } from '@/lib/getCalendarUrl';
 import { useResponsiveCalendarEntries } from '@/lib/useResponsiveCalendarEntries';
 import {  CalendarDays, ChevronLeft, ChevronRight, ChevronsDown, Clock } from 'lucide-react';
-import { getResponsiveStartDate } from '@/lib/getResponsiveStartDate';
 import {
   DEFAULT_DAYS_TO_VIEW,
   FULL_DAYS_END_HOUR,
   FULL_DAYS_START_HOUR,
   OFFICE_END_HOUR,
   OFFICE_START_HOUR,
-  smallScreenSize,
 } from '@/lib/globalVariables';
 
 type CalendarViewProps = {
@@ -27,14 +25,12 @@ export const CalendarView = ({ calendarEntries, timeslotHeaders }: CalendarViewP
     from: '/get-calendar',
   });
   const parsedSelectedDate = new Date(selectedDate)
-  const isSmallScreen = window.innerWidth < smallScreenSize;
   const navigate = useNavigate();
   const responsiveCalendarEntries = useResponsiveCalendarEntries({ calendarEntries, selectedDate: parsedSelectedDate });
 
   const handleDateSelect = (selectedDate: Date) => {
     const calendarUrl = getCalendarUrl({
       calendarIds: calendarIds,
-      startDate: getResponsiveStartDate(isSmallScreen, selectedDate),
       daysToView: DEFAULT_DAYS_TO_VIEW,
       startHour,
       endHour,
@@ -46,7 +42,6 @@ export const CalendarView = ({ calendarEntries, timeslotHeaders }: CalendarViewP
   const toggleHoursToView = () => {
     const calendarUrl = getCalendarUrl({
       calendarIds: calendarIds,
-      startDate: format(parsedSelectedDate, 'yyyy-MM-dd'),
       startHour: startHour === OFFICE_START_HOUR ? FULL_DAYS_START_HOUR : OFFICE_START_HOUR,
       endHour: startHour === OFFICE_START_HOUR ? FULL_DAYS_END_HOUR : OFFICE_END_HOUR,
       daysToView: DEFAULT_DAYS_TO_VIEW,

@@ -1,8 +1,7 @@
-import { format } from 'date-fns';
+import { format, startOfWeek } from 'date-fns';
 
 type getCalendarUrlProps = {
   calendarIds: string;
-  startDate: string;
   daysToView?: number;
   startHour?: number;
   endHour?: number;
@@ -12,22 +11,22 @@ type getCalendarUrlProps = {
 
 export const getCalendarUrl = ({
   calendarIds,
-  startDate,
   daysToView,
   startHour,
   endHour,
   selectedDate,
   uniqueRefreshString,
 }: getCalendarUrlProps) => {
-  const today = format(new Date(), 'yyyy-MM-dd');
+  const startDate = startOfWeek(selectedDate, { weekStartsOn: 1 });
+  const formattedStartDate = format(startDate, 'yyyy-MM-dd');
 
   return (
     `/get-calendar?calendarIds=${calendarIds}` +
-    `&startDate=${startDate || today}` +
+    `&startDate=${formattedStartDate}` +
     `&daysToView=${daysToView ?? 7}` +
     `&startHour=${startHour ?? 8}` +
     `&endHour=${endHour ?? 17}` +
-    `&selectedDate=${selectedDate || today}` +
+    `&selectedDate=${selectedDate}` +
     `&uniqueRefreshString=${uniqueRefreshString ?? Date.now()}`
   );
 };

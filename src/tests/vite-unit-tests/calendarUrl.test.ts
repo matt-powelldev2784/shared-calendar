@@ -1,61 +1,51 @@
 import { describe, expect, test } from 'vitest';
-import { format } from 'date-fns';
 import { getCalendarUrl } from '@/lib/getCalendarUrl';
 
 describe('getCalendarUrl', () => {
   test('returns a URL with all parameters provided', () => {
     const url = getCalendarUrl({
       calendarIds: 'abcdefgh',
-      startDate: '2025-07-20',
       daysToView: 3,
       startHour: 9,
       endHour: 18,
-      selectedDate: '2025-07-20',
+      selectedDate: '2025-01-12',
       uniqueRefreshString: 1234567890,
     });
     expect(url).toBe(
-      '/get-calendar?calendarIds=abcdefgh&startDate=2025-07-20&daysToView=3&startHour=9&endHour=18&selectedDate=2025-07-20&uniqueRefreshString=1234567890',
-    );
-  });
-
-  test('uses today as default startDate if not provided', () => {
-    const today = format(new Date(), 'yyyy-MM-dd');
-    const url = getCalendarUrl({
-      calendarIds: 'abcdefgh',
-      startDate: today,
-      daysToView: 5,
-      startHour: 10,
-      endHour: 20,
-      uniqueRefreshString: 987654321,
-      selectedDate: today,
-    });
-    expect(url).toBe(
-      `/get-calendar?calendarIds=abcdefgh&startDate=${today}&daysToView=5&startHour=10&endHour=20&selectedDate=${today}&uniqueRefreshString=987654321`,
+      '/get-calendar?calendarIds=abcdefgh&startDate=2025-01-06&daysToView=3&startHour=9&endHour=18&selectedDate=2025-01-12&uniqueRefreshString=1234567890',
     );
   });
 
   test('uses default daysToView, startHour, and endHour if not provided', () => {
     const url = getCalendarUrl({
       calendarIds: 'abcdefgh',
-      startDate: '2025-01-01',
       uniqueRefreshString: 555555555,
-      selectedDate: '2025-01-02',
+      selectedDate: '2025-01-12',
     });
     expect(url).toBe(
-      '/get-calendar?calendarIds=abcdefgh&startDate=2025-01-01&daysToView=7&startHour=8&endHour=17&selectedDate=2025-01-02&uniqueRefreshString=555555555',
+      '/get-calendar?calendarIds=abcdefgh&startDate=2025-01-06&daysToView=7&startHour=8&endHour=17&selectedDate=2025-01-12&uniqueRefreshString=555555555',
     );
   });
 
-  test('uses all defaults if only calendarIds is provided', () => {
-    const today = format(new Date(), 'yyyy-MM-dd');
+  test('calculates startDate correctly when crossing month boundary', () => {
     const url = getCalendarUrl({
       calendarIds: 'abcdefgh',
-      startDate: today,
-      uniqueRefreshString: 111111111,
-      selectedDate: today,
+      uniqueRefreshString: 444444444,
+      selectedDate: '2025-02-02',
     });
     expect(url).toBe(
-      `/get-calendar?calendarIds=abcdefgh&startDate=${today}&daysToView=7&startHour=8&endHour=17&selectedDate=${today}&uniqueRefreshString=111111111`,
+      '/get-calendar?calendarIds=abcdefgh&startDate=2025-01-27&daysToView=7&startHour=8&endHour=17&selectedDate=2025-02-02&uniqueRefreshString=444444444',
+    );
+  });
+
+  test('calculates startDate correctly when crossing year boundary', () => {
+    const url = getCalendarUrl({
+      calendarIds: 'abcdefgh',
+      uniqueRefreshString: 555555555,
+      selectedDate: '2025-01-05',
+    });
+    expect(url).toBe(
+      '/get-calendar?calendarIds=abcdefgh&startDate=2024-12-30&daysToView=7&startHour=8&endHour=17&selectedDate=2025-01-05&uniqueRefreshString=555555555',
     );
   });
 });
