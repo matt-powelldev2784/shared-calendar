@@ -1,4 +1,3 @@
-import { Button } from '@/components/ui/button';
 import { addDays, addWeeks, format, isSameDay, isToday, startOfWeek, subWeeks } from 'date-fns';
 import { useState } from 'react';
 import type { CalendarEntriesData, Timeslot, TimeslotHeaders, TimeslotEntry } from '@/ts/Calendar';
@@ -39,26 +38,15 @@ export const CalendarView = ({ calendarEntries, timeslotHeaders }: CalendarViewP
     navigate({ to: calendarUrl });
   };
 
-  const toggleHoursToView = () => {
-    const calendarUrl = getCalendarUrl({
-      calendarIds: calendarIds,
-      startHour: startHour === OFFICE_START_HOUR ? FULL_DAYS_START_HOUR : OFFICE_START_HOUR,
-      endHour: startHour === OFFICE_START_HOUR ? FULL_DAYS_END_HOUR : OFFICE_END_HOUR,
-      daysToView: DEFAULT_DAYS_TO_VIEW,
-      selectedDate,
-    });
-    navigate({ to: calendarUrl });
-  };
-
   return (
     <div className="flex w-full flex-col items-center justify-center pb-20">
       {/* Custom Date Selector */}
-      <CustomDateSelector selectedDate={parsedSelectedDate} handleDateSelect={handleDateSelect} />
+      <CustomDateSelector handleDateSelect={handleDateSelect} />
 
       <div className="flex w-full flex-row items-center justify-center">
         {/* Hour timeslots headers displayed to the left of calendar */}
         <section className="relative ml-3 flex h-full w-8 flex-col items-end sm:ml-4">
-          <Button
+          {/* <Button
             variant="default"
             className="absolute top-2 -left-1 flex h-11 w-10 flex-col items-center justify-center gap-0 text-[10px] leading-tight"
             onClick={toggleHoursToView}
@@ -66,9 +54,9 @@ export const CalendarView = ({ calendarEntries, timeslotHeaders }: CalendarViewP
             <Clock size={2} />
             <span>{`${String(startHour).padStart(2, '0')}:00`}</span>
             <span>{`${String(endHour + 1).padStart(2, '0')}:00`}</span>
-          </Button>
+          </Button> */}
 
-          <div className="mt-13">
+          <div>
             {timeslotHeaders.map((timeslot) => (
               <TimeslotHeader key={timeslot.hour} {...timeslot} />
             ))}
@@ -76,7 +64,7 @@ export const CalendarView = ({ calendarEntries, timeslotHeaders }: CalendarViewP
         </section>
 
         {/* Calendar entries */}
-        <section className="auto-row-[minmax(100px,1fr)] m-auto mt-2 mr-3 ml-3 grid w-full grid-flow-row gap-2 lg:auto-cols-[minmax(100px,1fr)] lg:grid-flow-col">
+        <section className="auto-row-[minmax(100px,1fr)] m-auto mt-0 mr-3 ml-3 grid w-full grid-flow-row gap-2 lg:auto-cols-[minmax(100px,1fr)] lg:grid-flow-col">
           {responsiveCalendarEntries.map((calendarDay) => {
             return <CalendarDay key={calendarDay.date.toString()} {...calendarDay} />;
           })}
@@ -95,16 +83,17 @@ const TimeslotHeader = (timeslot: TimeslotHeaders) => {
 };
 
 const CalendarDay = (calendarDay: CalendarEntriesData) => {
-  const { date } = calendarDay;
   const hourTimeslots = calendarDay.entries;
 
   return (
     <div className={`calendar-entry-bg flex flex-col flex-nowrap lg:flex-col`}>
-      <div className="flex h-11 flex-col justify-center bg-blue-500 p-2 text-center font-bold text-white">
-        <p className="h-4.5 text-[14px] lg:text-[13px] xl:text-[14px]">{format(date, 'EEEE')}</p>
-        <p className="text-[15px] lg:hidden xl:block">{format(date, 'dd MMMM yyyy')}</p>
-        <p className="hidden text-[14px] lg:block xl:hidden">{format(date, 'dd MMM yy')}</p>
-      </div>
+      {/* Uncomment below to view calendar dates for each day */}
+      {/* This can be used to check the date selector is matching the returned days */}
+      {/* <div className="flex h-11 flex-col justify-center bg-blue-500 p-2 text-center font-bold text-white">
+        <p className="h-4.5 text-[14px] lg:text-[13px] xl:text-[14px]">{format(calendarDay.date, 'EEEE')}</p>
+        <p className="text-[15px] lg:hidden xl:block">{format(calendarDay.date, 'dd MMMM yyyy')}</p>
+        <p className="hidden text-[14px] lg:block xl:hidden">{format(calendarDay.date, 'dd MMM yy')}</p>
+      </div> */}
 
       {/* Calendar entries for each hour */}
       {hourTimeslots.map((hourTimeslot: Timeslot) => {
@@ -132,12 +121,16 @@ const CalendarDay = (calendarDay: CalendarEntriesData) => {
 };
 
 interface CustomDateSelectorProps {
-  selectedDate: Date;
   handleDateSelect: (date: Date) => void;
 }
 
-export const CustomDateSelector = ({ selectedDate, handleDateSelect }: CustomDateSelectorProps) => {
-  const [currentWeek, setCurrentWeek] = useState(() => startOfWeek(selectedDate, { weekStartsOn: 1 }));
+export const CustomDateSelector = ({  handleDateSelect }: CustomDateSelectorProps) => {
+    const navigate = useNavigate();
+  const { calendarIds, startHour, selectedDate } = useSearch({
+    from: '/get-calendar',
+  });
+   const parsedSelectedDate = new Date(selectedDate);
+  const [currentWeek, setCurrentWeek] = useState(() => startOfWeek(parsedSelectedDate, { weekStartsOn: 1 }));
 
   const weekDays = Array.from({ length: 7 }, (_, i) => addDays(currentWeek, i));
 
@@ -155,8 +148,19 @@ export const CustomDateSelector = ({ selectedDate, handleDateSelect }: CustomDat
     handleDateSelect(date);
   };
 
+    const toggleHoursToView = () => {
+      const calendarUrl = getCalendarUrl({
+        calendarIds: calendarIds,
+        startHour: startHour === OFFICE_START_HOUR ? FULL_DAYS_START_HOUR : OFFICE_START_HOUR,
+        endHour: startHour === OFFICE_START_HOUR ? FULL_DAYS_END_HOUR : OFFICE_END_HOUR,
+        daysToView: DEFAULT_DAYS_TO_VIEW,
+        selectedDate,
+      });
+      navigate({ to: calendarUrl });
+    };
+
   return (
-    <div className="bg-primary/10 w-full">
+    <section className="bg-primary/10 w-full">
       {/* Month/Year Header */}
       <div className="border-primary/20 flex items-center justify-between px-4 py-1 md:py-2">
         <button
@@ -167,7 +171,11 @@ export const CustomDateSelector = ({ selectedDate, handleDateSelect }: CustomDat
         </button>
 
         <div className="flex flex-row items-center justify-center gap-4">
-         
+         <button className="bg-primary my-2 rounded-lg p-2 flex flex-col items-center justify-center text-white text-[10px] font-bold w-10 h-10" onClick={toggleHoursToView}>
+            <Clock className='text-white' />
+            {/* <span>{`${String(startHour).padStart(2, '0')}:00`}</span>
+            <span>{`${String(endHour + 1).padStart(2, '0')}:00`}</span> */}
+          </button>
 
           <h2 className="text-primary text-xl font-semibold">{format(currentWeek, 'MMMM yyyy')}</h2>
 
@@ -185,7 +193,7 @@ export const CustomDateSelector = ({ selectedDate, handleDateSelect }: CustomDat
       </div>
 
       {/* Days Grid */}
-      <div className="flex w-full flex-row items-center justify-center">
+      <div className="relative flex w-full flex-row items-center justify-center">
         {/* Placeholder div to match timeslot header section exactly */}
         <div className="ml-3 hidden w-8 sm:ml-4 md:block" />
 
@@ -216,6 +224,6 @@ export const CustomDateSelector = ({ selectedDate, handleDateSelect }: CustomDat
           })}
         </section>
       </div>
-    </div>
+    </section>
   );
 };
