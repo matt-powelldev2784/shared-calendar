@@ -22,7 +22,7 @@ export const NavIconLink = ({
   isActive,
 }: NavIconLinkProps) => {
   const isActiveStyleDesktop = isActive
-    ? { borderBottom: '2px solid #2f75eb', color: '#2f75eb' }
+    ? { borderBottom: '3px solid #2f75eb', color: '#2f75eb' }
     : { color: '#676767' };
   const isActiveStyleMobile = isActive ? { color: '#2f75eb' } : { color: '#676767' };
 

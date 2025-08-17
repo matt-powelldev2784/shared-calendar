@@ -73,6 +73,8 @@ export const Navbar = () => {
           </div>
         </>
       )}
+
+      <div className="border-secondary/25 absolute bottom-0 hidden w-full border-b-2 md:block" />
     </nav>
   );
 };
