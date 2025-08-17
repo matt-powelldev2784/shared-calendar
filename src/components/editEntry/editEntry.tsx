@@ -324,6 +324,7 @@ const EditEntry = ({ entry, currentUser }: EditEntryProps) => {
                         onSelect={field.onChange}
                         disabled={(date) => date < new Date('1900-01-01')}
                         onDateSelect={() => setIsSelectDateOpen(false)}
+                        weekStartsOn={1}
                         initialFocus
                       />
                     </PopoverContent>
