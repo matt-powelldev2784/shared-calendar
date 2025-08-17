@@ -15,7 +15,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useState, type Dispatch, type SetStateAction } from 'react';
 import { signInWithGoogle } from '@/db/auth/signInWithGoogle';
-import SharcIcon from '@/assets/logo/sharc_icon_blue.svg';
+import SharcIcon from '@/assets/logo/sharc_icon_white.svg';
 import { Mail } from 'lucide-react';
 import Loading from '../ui/loading';
 
@@ -45,7 +45,7 @@ export const SignIn = () => {
   const [currentView, setCurrentView] = useState<CurrentView>('main');
 
   return (
-    <Card className="relative mx-auto mt-4 h-auto w-[95%] max-w-[400px]">
+    <Card className="border-secondary/25 mx-4 max-w-[400px] min-w-0 rounded-2xl border-2 md:mx-auto md:min-w-0">
       {currentView === 'main' && <MainView setCurrentView={setCurrentView} />}
       {currentView === 'signInWithEmail' && <SignInWithEmail />}
       {currentView === 'signUpWithEmail' && <SignUpWithEmail />}
@@ -62,22 +62,23 @@ const MainView = ({ setCurrentView }: MainViewProps) => {
 
   return (
     <>
-      <CardHeader>
+      <CardHeader className="rounded-t-xl">
         <img src={SharcIcon} alt="Sharc Logo" className="mx-auto h-8" />
         <CardTitle className="text-center">Sign In</CardTitle>
-        <CardDescription className="text-center">Welcome to Sharc Shared Calendar</CardDescription>
-
-        {/* Demo sign in description */}
-        <p className="text-center">
-          To demo the project, click the{' '}
-          <span onClick={handleSignInWithEmailForDemo} className="text-primary cursor-pointer font-bold">
-            Demo Sign In
-          </span>{' '}
-          button. This will create a dummy account with a single click.
-        </p>
       </CardHeader>
 
-      <CardContent className="flex flex-col gap-4">
+      <CardDescription className="text-center">Welcome to Sharc Shared Calendar</CardDescription>
+
+      {/* Demo sign in description */}
+      <p className="px-8 text-center">
+        To demo this project, click the{' '}
+        <span onClick={handleSignInWithEmailForDemo} className="text-primary cursor-pointer font-bold">
+          Demo Sign In
+        </span>{' '}
+        button. This will create a dummy account with a single click.
+      </p>
+
+      <CardContent className="flex flex-col items-center justify-center gap-4 px-4 md:px-8">
         {/* Demo sign in button */}
         <Button className="w-full" variant="loginButtonPrimary" size="xl" onClick={handleSignInWithEmailForDemo}>
           {demoLoginIsLoading ? <Loading variant={'sm'} /> : 'Demo Sign In'}

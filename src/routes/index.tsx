@@ -22,7 +22,7 @@ function App() {
   }, [auth]);
 
   return (
-    <section className="flex h-full w-full items-center pb-24">
+    <section className="flex h-full w-full items-center justify-center">
       <SignIn />
     </section>
   );
