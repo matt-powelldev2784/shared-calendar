@@ -22,7 +22,7 @@ function SignOutPage() {
   }, [navigate]);
 
   return (
-    <section className="flex h-full w-full items-center">
+    <section className="flex h-full w-full items-center justify-center">
       <SignOut />
     </section>
   );

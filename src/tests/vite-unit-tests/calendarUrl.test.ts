@@ -18,7 +18,7 @@ describe('getCalendarUrl', () => {
     );
   });
 
-  test('uses today as default startDate and selected date if not provided', () => {
+  test('uses today as default startDate if not provided', () => {
     const today = format(new Date(), 'yyyy-MM-dd');
     const url = getCalendarUrl({
       calendarIds: 'abcdefgh',
@@ -26,6 +26,7 @@ describe('getCalendarUrl', () => {
       startHour: 10,
       endHour: 20,
       uniqueRefreshString: 987654321,
+      selectedDate: today,
     });
     expect(url).toBe(
       `/get-calendar?calendarIds=abcdefgh&startDate=${today}&daysToView=5&startHour=10&endHour=20&selectedDate=${today}&uniqueRefreshString=987654321`,
@@ -49,6 +50,7 @@ describe('getCalendarUrl', () => {
     const url = getCalendarUrl({
       calendarIds: 'abcdefgh',
       uniqueRefreshString: 111111111,
+      selectedDate: today,
     });
     expect(url).toBe(
       `/get-calendar?calendarIds=abcdefgh&startDate=${today}&daysToView=7&startHour=8&endHour=17&selectedDate=${today}&uniqueRefreshString=111111111`,

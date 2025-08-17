@@ -135,6 +135,7 @@ const AddEntry = ({ calendars }: AddEntryProps) => {
           startDate: getResponsiveStartDate(isSmallScreen, entry.startDate),
           startHour: entryIsExtendedHours ? FULL_DAYS_START_HOUR : OFFICE_START_HOUR,
           endHour: entryIsExtendedHours ? FULL_DAYS_END_HOUR : OFFICE_END_HOUR,
+          selectedDate: format(entry.startDate, 'yyyy-MM-dd'),
         });
         navigate({ to: calendarUrl });
         return calendarEntry;
@@ -222,22 +223,24 @@ const AddEntry = ({ calendars }: AddEntryProps) => {
   };
 
   return (
-    <Card className="my-8 mb-32 w-full max-w-[700px] border-0 p-0 shadow-none md:border md:p-4 md:shadow-sm">
-      <CardHeader className="flex flex-col items-center">
-        <CalendarPlusIcon className="text-primary mr-2 inline-block h-12 w-12" />
+    <Card>
+      <CardHeader>
+        <CalendarPlusIcon className="inline-block h-12 w-12" />
         <CardTitle className="text-center">Add Calendar Entry</CardTitle>
-        <CardDescription className="text-center">
-          Fill in the form below and click submit to add a calendar entry.
-        </CardDescription>
       </CardHeader>
-      <CardContent className="p-0">
+
+      <CardDescription className="text-center">
+        Fill in the form below and click submit to add a calendar entry.
+      </CardDescription>
+
+      <CardContent>
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="flex w-full flex-col items-center p-4">
+          <form onSubmit={form.handleSubmit(onSubmit)} className="flex w-full flex-col items-center px-4">
             <FormField
               control={form.control}
               name="title"
               render={({ field }) => (
-                <FormItem className="mt-5 w-full max-w-[700px]">
+                <FormItem className="w-full">
                   <FormLabel>Title</FormLabel>
                   <FormControl>
                     <Input placeholder="Title" {...field} />
