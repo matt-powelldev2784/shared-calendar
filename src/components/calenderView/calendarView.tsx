@@ -40,7 +40,7 @@ export const CalendarView = ({ calendarEntries, timeslotHeaders }: CalendarViewP
         </section>
 
         {/* Calendar entries */}
-        <section className="auto-row-[minmax(100px,1fr)] m-auto mt-0 mr-3 ml-3 grid w-full grid-flow-row gap-2 lg:auto-cols-[minmax(100px,1fr)] lg:grid-flow-col">
+        <section className="auto-row-[minmax(100px,1fr)] m-auto mt-0 mr-3 ml-3 grid w-full grid-flow-row lg:auto-cols-[minmax(100px,1fr)] lg:grid-flow-col">
           {responsiveCalendarEntries.map((calendarDay) => {
             return <CalendarDay key={calendarDay.date.toString()} {...calendarDay} />;
           })}
@@ -199,7 +199,7 @@ export const CustomDateSelector = () => {
         <div className="ml-3 hidden w-8 sm:ml-4 md:block" />
 
         {/* Date Selector */}
-        <section className="md:auto-row-[minmax(100px,1fr)] m-auto mr-3 ml-3 grid w-full grid-cols-7 gap-1 md:grid-flow-row md:gap-2 lg:auto-cols-[minmax(100px,1fr)] lg:grid-flow-col">
+        <section className="md:auto-row-[minmax(100px,1fr)] m-auto mr-3 ml-3 grid w-full grid-cols-7 gap-1 md:grid-flow-row md:gap-0 lg:auto-cols-[minmax(100px,1fr)] lg:grid-flow-col">
           {weekDays.map((day, index) => {
             const isCurrentDay = isToday(day);
             const isSelectedDay = isSameDay(day, selectedDate);
