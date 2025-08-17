@@ -5,7 +5,7 @@ import { CalendarCard } from '../ui/calendarCard';
 import { useSearch, useNavigate } from '@tanstack/react-router';
 import { getCalendarUrl } from '@/lib/getCalendarUrl';
 import { useResponsiveCalendarEntries } from '@/lib/useResponsiveCalendarEntries';
-import {  CalendarDays, ChevronLeft, ChevronRight, ChevronsDown, Clock } from 'lucide-react';
+import { CalendarDays, ChevronLeft, ChevronRight, ChevronsDown, Clock } from 'lucide-react';
 import {
   DEFAULT_DAYS_TO_VIEW,
   FULL_DAYS_END_HOUR,
@@ -13,6 +13,8 @@ import {
   OFFICE_END_HOUR,
   OFFICE_START_HOUR,
 } from '@/lib/globalVariables';
+import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover';
+import { Calendar } from '../ui/calendar';
 
 type CalendarViewProps = {
   calendarEntries: CalendarEntriesData[];
@@ -20,47 +22,21 @@ type CalendarViewProps = {
 };
 
 export const CalendarView = ({ calendarEntries, timeslotHeaders }: CalendarViewProps) => {
-  const { calendarIds, startHour, endHour, selectedDate } = useSearch({
-    from: '/get-calendar',
-  });
-  const parsedSelectedDate = new Date(selectedDate)
-  const navigate = useNavigate();
+  const { selectedDate } = useSearch({ from: '/get-calendar' });
+  const parsedSelectedDate = new Date(selectedDate);
   const responsiveCalendarEntries = useResponsiveCalendarEntries({ calendarEntries, selectedDate: parsedSelectedDate });
-
-  const handleDateSelect = (selectedDate: Date) => {
-    const calendarUrl = getCalendarUrl({
-      calendarIds: calendarIds,
-      daysToView: DEFAULT_DAYS_TO_VIEW,
-      startHour,
-      endHour,
-      selectedDate: format(selectedDate, 'yyyy-MM-dd'),
-    });
-    navigate({ to: calendarUrl });
-  };
 
   return (
     <div className="flex w-full flex-col items-center justify-center pb-20">
       {/* Custom Date Selector */}
-      <CustomDateSelector handleDateSelect={handleDateSelect} />
+      <CustomDateSelector />
 
       <div className="flex w-full flex-row items-center justify-center">
         {/* Hour timeslots headers displayed to the left of calendar */}
         <section className="relative ml-3 flex h-full w-8 flex-col items-end sm:ml-4">
-          {/* <Button
-            variant="default"
-            className="absolute top-2 -left-1 flex h-11 w-10 flex-col items-center justify-center gap-0 text-[10px] leading-tight"
-            onClick={toggleHoursToView}
-          >
-            <Clock size={2} />
-            <span>{`${String(startHour).padStart(2, '0')}:00`}</span>
-            <span>{`${String(endHour + 1).padStart(2, '0')}:00`}</span>
-          </Button> */}
-
-          <div>
-            {timeslotHeaders.map((timeslot) => (
-              <TimeslotHeader key={timeslot.hour} {...timeslot} />
-            ))}
-          </div>
+          {timeslotHeaders.map((timeslot) => (
+            <TimeslotHeader key={timeslot.hour} {...timeslot} />
+          ))}
         </section>
 
         {/* Calendar entries */}
@@ -120,18 +96,14 @@ const CalendarDay = (calendarDay: CalendarEntriesData) => {
   );
 };
 
-interface CustomDateSelectorProps {
-  handleDateSelect: (date: Date) => void;
-}
-
-export const CustomDateSelector = ({  handleDateSelect }: CustomDateSelectorProps) => {
-    const navigate = useNavigate();
+export const CustomDateSelector = () => {
+  const navigate = useNavigate();
   const { calendarIds, startHour, selectedDate } = useSearch({
     from: '/get-calendar',
   });
-   const parsedSelectedDate = new Date(selectedDate);
+  const [isSelectDateOpen, setIsSelectDateOpen] = useState(false);
+  const parsedSelectedDate = new Date(selectedDate);
   const [currentWeek, setCurrentWeek] = useState(() => startOfWeek(parsedSelectedDate, { weekStartsOn: 1 }));
-
   const weekDays = Array.from({ length: 7 }, (_, i) => addDays(currentWeek, i));
 
   const goToPreviousWeek = () => {
@@ -148,21 +120,35 @@ export const CustomDateSelector = ({  handleDateSelect }: CustomDateSelectorProp
     handleDateSelect(date);
   };
 
-    const toggleHoursToView = () => {
-      const calendarUrl = getCalendarUrl({
-        calendarIds: calendarIds,
-        startHour: startHour === OFFICE_START_HOUR ? FULL_DAYS_START_HOUR : OFFICE_START_HOUR,
-        endHour: startHour === OFFICE_START_HOUR ? FULL_DAYS_END_HOUR : OFFICE_END_HOUR,
-        daysToView: DEFAULT_DAYS_TO_VIEW,
-        selectedDate,
-      });
-      navigate({ to: calendarUrl });
-    };
+  const handleDateSelect = (date: Date) => {
+    const calendarUrl = getCalendarUrl({
+      calendarIds: calendarIds,
+      startHour,
+      endHour: startHour === OFFICE_START_HOUR ? FULL_DAYS_END_HOUR : OFFICE_END_HOUR,
+      daysToView: DEFAULT_DAYS_TO_VIEW,
+      selectedDate: format(date, 'yyyy-MM-dd'),
+    });
+    navigate({ to: calendarUrl });
+    setIsSelectDateOpen(false);
+    setCurrentWeek(startOfWeek(date, { weekStartsOn: 1 }));
+  };
+
+  const toggleHoursToView = () => {
+    const calendarUrl = getCalendarUrl({
+      calendarIds: calendarIds,
+      startHour: startHour === OFFICE_START_HOUR ? FULL_DAYS_START_HOUR : OFFICE_START_HOUR,
+      endHour: startHour === OFFICE_START_HOUR ? FULL_DAYS_END_HOUR : OFFICE_END_HOUR,
+      daysToView: DEFAULT_DAYS_TO_VIEW,
+      selectedDate,
+    });
+    navigate({ to: calendarUrl });
+  };
 
   return (
     <section className="bg-primary/10 w-full">
-      {/* Month/Year Header */}
+      {/* Week Selector Container */}
       <div className="border-primary/20 flex items-center justify-between px-4 py-1 md:py-2">
+        {/* Go to previous week button*/}
         <button
           onClick={goToPreviousWeek}
           className="text-primary hover:bg-primary/15 flex h-8 w-8 items-center justify-center hover:rounded-lg"
@@ -171,19 +157,34 @@ export const CustomDateSelector = ({  handleDateSelect }: CustomDateSelectorProp
         </button>
 
         <div className="flex flex-row items-center justify-center gap-4">
-         <button className="bg-primary my-2 rounded-lg p-2 flex flex-col items-center justify-center text-white text-[10px] font-bold w-10 h-10" onClick={toggleHoursToView}>
-            <Clock className='text-white' />
-            {/* <span>{`${String(startHour).padStart(2, '0')}:00`}</span>
-            <span>{`${String(endHour + 1).padStart(2, '0')}:00`}</span> */}
+          {/* Clock button which which toggles hours to display. Toggles between office hours and 24 hour display */}
+          <button
+            className="bg-primary my-2 flex h-10 w-10 flex-col items-center justify-center rounded-lg p-2 text-[10px] font-bold text-white"
+            onClick={toggleHoursToView}
+          >
+            <Clock className="text-white" />
           </button>
 
           <h2 className="text-primary text-xl font-semibold">{format(currentWeek, 'MMMM yyyy')}</h2>
 
-          <button className="bg-primary my-2 rounded-lg p-2">
-            <CalendarDays size={24} className="text-white" />
-          </button>
+          {/* Calendar icon button to open calendar date selector */}
+          <Popover open={isSelectDateOpen} onOpenChange={setIsSelectDateOpen}>
+            <PopoverTrigger className="bg-primary my-2 rounded-lg p-2">
+              <CalendarDays size={24} className="text-white" />
+            </PopoverTrigger>
+
+            <PopoverContent>
+              <Calendar
+                mode="single"
+                onSelect={(date) => date && handleDateSelect(date)}
+                disabled={(date) => date < new Date('1900-01-01')}
+                initialFocus
+              />
+            </PopoverContent>
+          </Popover>
         </div>
 
+        { /* Go to next week button */}
         <button
           onClick={goToNextWeek}
           className="text-primary hover:bg-primary/15 flex h-8 w-8 items-center justify-center hover:rounded-lg"
@@ -192,9 +193,9 @@ export const CustomDateSelector = ({  handleDateSelect }: CustomDateSelectorProp
         </button>
       </div>
 
-      {/* Days Grid */}
+      {/* Date Selector Container */}
       <div className="relative flex w-full flex-row items-center justify-center">
-        {/* Placeholder div to match timeslot header section exactly */}
+        {/* Placeholder div to match position of calendar dates to calendar entries list */}
         <div className="ml-3 hidden w-8 sm:ml-4 md:block" />
 
         {/* Date Selector */}
