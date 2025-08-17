@@ -50,5 +50,9 @@ function ViewEntryPage() {
     from: '/view-entry',
   });
 
-  return <ViewEntry {...viewEntryProps} />;
+  return (
+    <section className="flex h-full w-full flex-col items-center justify-center">
+      <ViewEntry {...viewEntryProps} />
+    </section>
+  );
 }

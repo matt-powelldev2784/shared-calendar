@@ -265,22 +265,24 @@ const EditEntry = ({ entry, currentUser }: EditEntryProps) => {
   };
 
   return (
-    <Card className="my-8 mb-32 w-full max-w-[700px] border-0 p-0 shadow-none md:border md:p-4 md:shadow-sm">
-      <CardHeader className="flex flex-col items-center">
-        <CalendarPlusIcon className="text-primary mr-2 inline-block h-12 w-12" />
+    <Card>
+      <CardHeader>
+        <CalendarPlusIcon className="inline-block h-12 w-12 text-white" />
         <CardTitle className="text-center">Update Calendar Entry</CardTitle>
-        <CardDescription className="text-center">
-          Edit the form below and click the update button to make changes to the calendar entry.
-        </CardDescription>
       </CardHeader>
-      <CardContent className="p-0">
+
+      <CardDescription className="text-center">
+        Edit the form below and click the update button to make changes to the calendar entry.
+      </CardDescription>
+
+      <CardContent>
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="flex w-full flex-col items-center p-4">
+          <form onSubmit={form.handleSubmit(onSubmit)} className="flex w-full flex-col items-center px-4">
             <FormField
               control={form.control}
               name="title"
               render={({ field }) => (
-                <FormItem className="mt-5 w-full max-w-[700px]">
+                <FormItem className="w-full max-w-[700px]">
                   <FormLabel>Title</FormLabel>
                   <FormControl>
                     <Input placeholder="Title" {...field} />
