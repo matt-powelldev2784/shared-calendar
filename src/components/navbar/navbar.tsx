@@ -143,7 +143,7 @@ const DropDownMenu = ({ icon, menuName, navigationItems, notificationCount = 0 }
       />
 
       <ul
-        className={`border-secondary fixed top-15 right-0 left-0 z-[9999] mx-4 scroll-auto rounded-lg border-1 bg-white shadow-lg transition-all duration-500 ease-in-out md:top-16 md:right-4 md:left-auto md:mx-0 md:w-[300px] ${
+        className={`border-secondary fixed top-16 right-0 left-0 z-[9999] mx-4 scroll-auto rounded-lg border-1 bg-white shadow-lg transition-all duration-500 ease-in-out md:top-18 md:right-4 md:left-auto md:mx-0 md:w-[300px] ${
           menuIsOpen
             ? 'visible max-h-[400px] overflow-y-auto opacity-100'
             : 'invisible max-h-0 overflow-hidden opacity-0'

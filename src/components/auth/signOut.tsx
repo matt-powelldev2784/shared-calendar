@@ -20,8 +20,8 @@ export const SignOut = () => {
   };
 
   return (
-    <Card>
-      <CardHeader>
+    <Card className="border-secondary/25 mx-4 mt-4 w-full min-w-0 rounded-2xl border-2 md:mx-auto md:max-w-[400px] md:min-w-0">
+      <CardHeader className="rounded-t-xl">
         <CardTitle className="text-center">Sign Out</CardTitle>
       </CardHeader>
 
