@@ -1,8 +1,8 @@
 import { createFileRoute, useNavigate } from '@tanstack/react-router';
-import { SignIn } from '@/components/auth/signIn';
 import { useEffect } from 'react';
 import { onAuthStateChanged } from 'firebase/auth';
 import { auth } from '@/db/firebaseConfig';
+import Homepage from '@/components/homepage/homepage';
 
 export const Route = createFileRoute('/')({
   component: App,
@@ -23,7 +23,7 @@ function App() {
 
   return (
     <section className="flex h-full w-full items-center justify-center">
-      <SignIn />
+      <Homepage />
     </section>
   );
 }
