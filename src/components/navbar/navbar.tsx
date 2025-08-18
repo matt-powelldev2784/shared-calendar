@@ -45,7 +45,7 @@ export const Navbar = () => {
               linkTo="/authenticated"
               aria-label="View Calendar"
               desktopIcon={<Calendar className="h-5 w-5" />}
-              mobileIcon={<Calendar className="h-7 w-7" />}
+              mobileIcon={<Calendar className="h-8 w-8" />}
               text="Calendar"
               isActive={pathname === '/get-calendar'}
             />
@@ -53,7 +53,7 @@ export const Navbar = () => {
               linkTo="/add-entry"
               aria-label="Add Entry"
               desktopIcon={<CalendarPlus className="h-5 w-5" />}
-              mobileIcon={<CalendarPlus className="h-7 w-7" />}
+              mobileIcon={<CalendarPlus className="h-8 w-8" />}
               text="Add Entry"
               isActive={pathname === '/add-entry'}
             />
@@ -139,7 +139,7 @@ const DropDownMenu = ({ icon, menuName, navigationItems, notificationCount = 0 }
         onClick={handleMenuClick}
         icon={icon}
         aria-label={menuIsOpen ? `Close ${menuName} menu` : `Open ${menuName} menu`}
-        className={`rounded-lg border-2 p-1 ${notificationCount > 0 ? 'border-primary text-primary bg-yellow-300' : 'border-secondary text-secondary bg-none'}`}
+        className={`rounded-lg border-[2.5px] p-1 ${notificationCount > 0 ? 'border-primary text-primary bg-yellow-300' : 'border-secondary text-secondary bg-none'}`}
       />
 
       <ul
