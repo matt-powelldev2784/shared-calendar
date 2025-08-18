@@ -14,21 +14,25 @@ const Error = ({ error }: ErrorProps) => {
   const status = error.status || 500;
 
   return (
-    <Card className="m-4 mx-auto flex w-[90%] max-w-[700px] flex-col items-center justify-center p-4">
-      <CardHeader className="flex flex-col items-center justify-center">
-        <CircleX color="#FF0000" size={40} />
-        <CardTitle className="text-center">Error</CardTitle>
+    <section className="flex h-full w-full items-center justify-center">
+      <Card>
+        <CardHeader className="bg-primary/100">
+          <CircleX className="h-16 w-16 rounded-full border-2 border-white bg-red-500 text-white" />
+          <CardTitle className="text-center">Error</CardTitle>
+        </CardHeader>
 
-        <CardDescription className="text-center">
-          <p>Error Status Code: {status}</p>
-          <p>Error Message: {errorMessage}</p>
+        <CardDescription className="flex flex-col items-center gap-4 text-center">
+          <div>
+            <p className="text-secondary">Error Status Code: {status}</p>
+            <p className="text-secondary">Error Message: {errorMessage}</p>
+          </div>
+
+          <CardTitle className="text-center text-black">Please try again later</CardTitle>
+
+          <Button onClick={() => navigate({ to: '/' })}>Goto Home Page</Button>
         </CardDescription>
-      </CardHeader>
-
-      <CardTitle className="text-center">Please try again later</CardTitle>
-
-      <Button onClick={() => navigate({ to: '/' })}>Goto Home Page</Button>
-    </Card>
+      </Card>
+    </section>
   );
 };
 
