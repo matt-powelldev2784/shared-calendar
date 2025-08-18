@@ -7,6 +7,7 @@ import { z } from 'zod';
 import { getEmailsFromUserIds } from '@/db/auth/getEmailsFromUserIds';
 import getUserDocument from '@/db/auth/getUserDocument';
 import ViewEntry from '@/components/viewEntry/viewEntry';
+import { Navbar } from '@/components/navbar/navbar';
 
 const entrySearchSchema = z.object({
   entryId: z.string(),
@@ -25,12 +26,10 @@ export const Route = createFileRoute('/view-entry')({
   loader: async ({ deps: { entryId } }) => {
     const entry = await getCalendarEntryById(entryId);
     const entrySubscribers = await getEmailsFromUserIds(entry.subscribers);
-    const pendingSubscribers = await getEmailsFromUserIds(
-      entry.pendingRequests,
-    );
+    const pendingSubscribers = await getEmailsFromUserIds(entry.pendingRequests);
     const ownerEmails = await getEmailsFromUserIds(entry.ownerIds);
     const currentUser = await getUserDocument();
-    
+
     return {
       entry,
       entrySubscribers,
@@ -51,8 +50,11 @@ function ViewEntryPage() {
   });
 
   return (
-    <section className="flex h-full w-full flex-col items-center justify-center">
-      <ViewEntry {...viewEntryProps} />
-    </section>
+    <main>
+      <Navbar />
+      <section className="flex h-full w-full flex-col items-center justify-center">
+        <ViewEntry {...viewEntryProps} />
+      </section>
+    </main>
   );
 }

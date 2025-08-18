@@ -11,6 +11,7 @@ import { createInitialUserDocuments } from '@/db/auth/createInitialUserDocuments
 import getSubscribedCalendars from '@/db/calendar/getSubscribedCalendars';
 import { getCalendarUrl } from '@/lib/getCalendarUrl';
 import { format } from 'date-fns';
+import { Navbar } from '@/components/navbar/navbar';
 
 export const Route = createFileRoute('/authenticated')({
   component: AuthenticatedPage,
@@ -49,8 +50,11 @@ function AuthenticatedPage() {
   }, [user]);
 
   return (
-    <section className="flex h-full w-full items-center">
-      <SignIn />
-    </section>
+    <main>
+      <Navbar />
+      <section className="flex h-full w-full flex-col items-center justify-center">
+        <SignIn />
+      </section>
+    </main>
   );
 }

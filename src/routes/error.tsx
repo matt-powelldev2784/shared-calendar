@@ -1,3 +1,4 @@
+import { Navbar } from '@/components/navbar/navbar';
 import Error from '@/components/ui/error';
 import type { CustomError } from '@/ts/errorClass';
 import { createFileRoute, useLoaderData } from '@tanstack/react-router';
@@ -29,8 +30,11 @@ function ErrorPage() {
   const error = useLoaderData({ from: '/error' });
 
   return (
-    <section className="flex h-full w-full flex-col items-center justify-center">
-      <Error error={error as CustomError} />
-    </section>
+    <main>
+      <Navbar />
+      <section className="flex h-full w-full flex-col items-center justify-center">
+        <Error error={error as CustomError} />
+      </section>
+    </main>
   );
 }

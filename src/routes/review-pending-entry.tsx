@@ -13,6 +13,7 @@ import getCalendarEntryById from '@/db/entry/getCalendarEntryById';
 import getUserDocument from '@/db/auth/getUserDocument';
 import ReviewPendingEntry from '@/components/reviewPendingEntry/reviewPendingEntry';
 import generateCalendarData from '@/lib/generateCalendarData';
+import { Navbar } from '@/components/navbar/navbar';
 
 const calendarSearchSchema = z.object({
   entryId: z.string(),
@@ -80,8 +81,11 @@ function ReviewPendingEntryPage() {
   };
 
   return (
-    <section className="flex h-full w-full flex-col items-center">
-      <ReviewPendingEntry {...reviewPendingEntryProps} />
-    </section>
+    <main>
+      <Navbar />
+      <section className="flex h-full w-full flex-col items-center justify-center">
+        <ReviewPendingEntry {...reviewPendingEntryProps} />{' '}
+      </section>
+    </main>
   );
 }

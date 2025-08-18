@@ -3,6 +3,7 @@ import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from '@/db/firebaseConfig';
 import { useEffect } from "react";
+import { Navbar } from '@/components/navbar/navbar';
 
 export const Route = createFileRoute("/signout")({
   component: SignOutPage,
@@ -22,8 +23,11 @@ function SignOutPage() {
   }, [navigate]);
 
   return (
-    <section className="flex h-full w-full items-center justify-center">
-      <SignOut />
-    </section>
+    <main>
+      <Navbar />
+      <section className="flex h-full w-full flex-col items-center justify-center">
+        <SignOut />
+      </section>
+    </main>
   );
 }

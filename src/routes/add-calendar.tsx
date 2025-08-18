@@ -1,4 +1,5 @@
 import AddCalendar from '@/components/addCalendar/addCalendar';
+import { Navbar } from '@/components/navbar/navbar';
 import { createFileRoute } from '@tanstack/react-router';
 
 export const Route = createFileRoute('/add-calendar')({
@@ -7,8 +8,11 @@ export const Route = createFileRoute('/add-calendar')({
 
 function AddEntryPage() {
   return (
-    <section className="flex h-full w-full flex-col items-center justify-center">
-      <AddCalendar />
-    </section>
+    <main>
+      <Navbar />
+      <section className="flex h-full w-full flex-col items-center justify-center">
+        <AddCalendar />
+      </section>
+    </main>
   );
 }

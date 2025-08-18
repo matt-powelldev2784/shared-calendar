@@ -1,4 +1,5 @@
 import AddEntry from '@/components/addEntry/addEntry';
+import { Navbar } from '@/components/navbar/navbar';
 import Error from '@/components/ui/error';
 import Loading from '@/components/ui/loading';
 import getSubscribedCalendars from '@/db/calendar/getSubscribedCalendars';
@@ -23,8 +24,11 @@ function AddEntryPage() {
   const calendars = useLoaderData({ from: '/add-entry' });
 
   return (
-    <section className="flex h-full w-full flex-col items-center justify-center">
-      <AddEntry calendars={calendars} />
-    </section>
+    <main>
+      <Navbar />
+      <section className="flex h-full w-full flex-col items-center justify-center">
+        <AddEntry calendars={calendars} />
+      </section>
+    </main>
   );
 };
