@@ -25,7 +25,7 @@ function SignOutPage() {
   return (
     <main>
       <Navbar />
-      <section className="flex h-full w-full flex-col items-center justify-center">
+      <section className="flex h-full w-full flex-col items-center justify-center px-4">
         <SignOut />
       </section>
     </main>

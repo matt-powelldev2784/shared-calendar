@@ -27,8 +27,8 @@ export const Navbar = () => {
   return (
     <nav className="relative flex h-14 w-full items-center md:h-16">
       {!authenticatedUser && (
-        <Link to="/" className="hidden md:block">
-          <img src={SharcLogo} alt="Sharc Calendar Logo" className={`ml-0 flex h-8 w-full md:ml-8 md:w-fit`} />
+        <Link to="/" className="flex h-16 w-full items-center justify-center">
+          <img src={SharcLogo} alt="Sharc Calendar Logo" className="h-8" />
         </Link>
       )}
 
@@ -76,7 +76,7 @@ export const Navbar = () => {
         </>
       )}
 
-      <div className="border-secondary/25 absolute bottom-0 hidden w-full border-b-2 md:block" />
+      <div className="border-secondary/25 absolute bottom-0 w-full border-b-2" />
     </nav>
   );
 };
