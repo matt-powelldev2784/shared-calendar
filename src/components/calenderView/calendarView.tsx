@@ -147,7 +147,7 @@ export const CustomDateSelector = () => {
   return (
     <section className="bg-primary/10 w-full">
       {/* Week Selector Container */}
-      <div className="border-primary/20 flex items-center justify-between px-4 py-1 md:py-2">
+      <div className="border-primary/20 flex items-center justify-between px-2 md:px-4 py-1 md:py-2">
         {/* Go to previous week button*/}
         <button
           onClick={goToPreviousWeek}
@@ -165,7 +165,7 @@ export const CustomDateSelector = () => {
             <Clock className="text-white" />
           </button>
 
-          <h2 className="text-primary text-xl font-semibold">{format(currentWeek, 'MMMM yyyy')}</h2>
+          <h2 className="text-primary text-xl font-semibold text-center">{format(currentWeek, 'MMMM yyyy')}</h2>
 
           {/* Calendar icon button to open calendar date selector */}
           <Popover open={isSelectDateOpen} onOpenChange={setIsSelectDateOpen}>

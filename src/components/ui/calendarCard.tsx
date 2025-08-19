@@ -1,10 +1,8 @@
 import type { TimeslotEntry } from '@/ts/Calendar';
 import { useNavigate } from '@tanstack/react-router';
-import { format } from 'date-fns';
-import { ClockIcon } from 'lucide-react';
 
 const variantClasses = {
-  default: 'relative cursor-pointer flex',
+  default: 'relative flex',
   blue: 'bg-primary/10 text-grey-900',
   yellow: 'bg-lightYellow text-grey-900',
   white: '',
@@ -24,7 +22,7 @@ interface CalendarCardProps {
 
 const CalendarCard = ({ entry, variant }: CalendarCardProps) => {
   const navigate = useNavigate();
-  const { title, startDate, endDate } = entry;
+  const { title } = entry;
 
   // Converts minutes to pixels (1 minute = 1.33px)
   // parent container height is 80px, 60mins === 80px
@@ -40,7 +38,6 @@ const CalendarCard = ({ entry, variant }: CalendarCardProps) => {
     });
   };
 
-
   return (
     <button
       className={`${variantClasses.default} ${variantClasses[variant]} w-full`}
@@ -50,21 +47,9 @@ const CalendarCard = ({ entry, variant }: CalendarCardProps) => {
       {/* Vertical line on the left side of the card */}
       <div className={`${tabClasses[variant]}`}></div>
 
-      <div className="flex w-full flex-row items-stretch justify-between overflow-hidden">
-        <p className="mr-1 flex w-full items-center justify-start truncate overflow-hidden pl-4 text-left text-sm text-ellipsis whitespace-nowrap">
-          {title}
-        </p>
-
-        <div className="flex w-full min-w-22 flex-row flex-nowrap items-center justify-end gap-0 overflow-hidden">
-          <div className="flex h-3 w-3 items-center justify-center">
-            <ClockIcon size={10} />
-          </div>
-
-          <p className="w-[75px] overflow-clip pr-3 text-[10px]">
-            {format(startDate, 'HH:mm')}-{format(endDate, 'HH:mm')}
-          </p>
-        </div>
-      </div>
+      <p className="mr-1 ml-3 flex w-full min-w-0 items-start overflow-hidden text-left text-sm leading-tight break-words">
+        {title}
+      </p>
     </button>
   );
 };
