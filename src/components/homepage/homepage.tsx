@@ -1,6 +1,6 @@
 import { Link, useNavigate } from '@tanstack/react-router';
 import SharcLogo from '@/assets/logo/sharc_logo_blue.svg';
-import SharcScreenShot from '@/assets/images/sharc_screenshot_sm2.png';
+import SharcScreenShot from '@/assets/images/sharc_screenshot_sm3.png';
 import { Button } from '../ui/button';
 import { Calendar, RefreshCcw, Users } from 'lucide-react';
 
@@ -61,7 +61,7 @@ const Hero = () => {
           </Button>
         </div>
 
-        <img src={SharcScreenShot} alt="Sharc screenshot" className="mt-4 w-full px-2 sm:w-7/8" />
+        <img src={SharcScreenShot} alt="Sharc screenshot" className="mt-4 w-full rounded-xl px-2 sm:w-7/8" />
       </div>
     </article>
   );
