@@ -7,6 +7,7 @@ import generateCalendarData from '@/lib/generateCalendarData';
 import { CalendarView } from '@/components/calenderView/calendarView';
 import Loading from '@/components/ui/loading';
 import type { CustomError } from '@/ts/errorClass';
+import { Navbar } from '@/components/navbar/navbar';
 
 const calendarSearchSchema = z.object({
   calendarIds: z.string(),
@@ -68,11 +69,11 @@ function GetCalendarPage() {
   });
 
   return (
-    <section className="flex h-full w-full flex-col items-center">
-      <CalendarView
-        calendarEntries={calendarEntries}
-        timeslotHeaders={timeslotHeaders}
-      />
-    </section>
+    <main>
+      <Navbar />
+      <section className="flex h-full w-full flex-col items-center justify-center">
+        <CalendarView calendarEntries={calendarEntries} timeslotHeaders={timeslotHeaders} />
+      </section>
+    </main>
   );
 }

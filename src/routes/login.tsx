@@ -1,14 +1,15 @@
 import { createFileRoute, useNavigate } from '@tanstack/react-router';
+import { SignIn } from '@/components/auth/signIn';
 import { useEffect } from 'react';
 import { onAuthStateChanged } from 'firebase/auth';
 import { auth } from '@/db/firebaseConfig';
-import Homepage from '@/components/homepage/homepage';
+import { Navbar } from '@/components/navbar/navbar';
 
-export const Route = createFileRoute('/')({
-  component: App,
+export const Route = createFileRoute('/login')({
+  component: Login,
 });
 
-function App() {
+function Login() {
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -21,5 +22,12 @@ function App() {
     return () => unsubscribe();
   }, [auth]);
 
-  return <Homepage />;
+  return (
+    <main>
+      <Navbar />
+      <section className="flex h-full w-full flex-col items-center justify-center">
+        <SignIn />
+      </section>
+    </main>
+  );
 }
