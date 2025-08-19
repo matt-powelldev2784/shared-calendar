@@ -93,7 +93,7 @@ const Features = () => {
     <>
       <section className="mt-4 mb-4 w-full px-4 text-center md:px-12 lg:px-24">
         <h2 className="text-secondary text-3xl font-bold sm:text-2xl md:text-4xl">Why Choose Our Platform?</h2>
-        <p className="text-normal mx-auto max-w-[400px] text-gray-600 md:max-w-[500px] lg:max-w-[800px] lg:text-lg">
+        <p className="text-normal mx-auto max-w-[400px] px-2 text-gray-600 md:max-w-[500px] lg:max-w-[800px] lg:text-lg">
           Discover the powerful features that make calendar management effortless for teams of all sizes.
         </p>
       </section>
