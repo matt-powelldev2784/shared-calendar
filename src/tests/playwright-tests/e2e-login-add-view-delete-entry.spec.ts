@@ -6,6 +6,10 @@ test('user can sign in, add a entry, view the entry and delete the entry', async
   await page.goto('http://localhost:3000/');
   await expect(page).toHaveTitle(/Sharc - Shared Calendars Simplified/);
 
+  // Navigate to the login page
+  await page.getByRole('button', { name: 'Login' }).click();
+  await page.waitForURL(/login/);
+
   // Sign in with test user
   await page.getByRole('button', { name: 'Sign in with Email' }).click();
   await page.getByLabel('Email').fill('testuser@testuser.com');
