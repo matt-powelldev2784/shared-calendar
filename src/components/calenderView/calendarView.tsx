@@ -98,7 +98,7 @@ const CalendarDay = (calendarDay: CalendarEntriesData) => {
 
 export const CustomDateSelector = () => {
   const navigate = useNavigate();
-  const { calendarIds, startHour, selectedDate } = useSearch({
+  const { calendarIds, startHour, endHour,selectedDate } = useSearch({
     from: '/get-calendar',
   });
   const [isSelectDateOpen, setIsSelectDateOpen] = useState(false);
@@ -124,7 +124,7 @@ export const CustomDateSelector = () => {
     const calendarUrl = getCalendarUrl({
       calendarIds: calendarIds,
       startHour,
-      endHour: startHour === OFFICE_START_HOUR ? FULL_DAYS_END_HOUR : OFFICE_END_HOUR,
+      endHour,
       daysToView: DEFAULT_DAYS_TO_VIEW,
       selectedDate: format(date, 'yyyy-MM-dd'),
     });
