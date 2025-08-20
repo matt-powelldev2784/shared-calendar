@@ -27,6 +27,7 @@ export default defineConfig({
           'form-vendor': ['react-hook-form', '@hookform/resolvers'],
           'query-vendor': ['@tanstack/react-query'],
           validation: ['zod'],
+          'date-vendor': ['date-fns'],
         },
       },
     },
@@ -35,6 +36,10 @@ export default defineConfig({
       compress: {
         drop_console: true,
         drop_debugger: true,
+        passes: 2,
+      },
+      mangle: {
+        safari10: true,
       },
     },
   },
