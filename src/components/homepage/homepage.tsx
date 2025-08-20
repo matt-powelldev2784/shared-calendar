@@ -1,6 +1,6 @@
 import { Link, useNavigate } from '@tanstack/react-router';
 import SharcLogo from '@/assets/logo/sharc_logo_blue.svg';
-import SharcScreenShot from '@/assets/images/sharc_screenshot_sm3.png';
+import SharcScreenShot from '@/assets/images/sharc_screenshot_sm4.webp';
 import { Button } from '../ui/button';
 import { Calendar, RefreshCcw, Users } from 'lucide-react';
 
